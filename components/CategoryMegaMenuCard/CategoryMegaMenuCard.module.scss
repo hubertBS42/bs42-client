@@ -1,0 +1,19 @@
+.subCategoryLabel {
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	color: var(--mantine-color-gray-9);
+	text-transform: uppercase;
+	margin-bottom: 10px !important;
+	font-family: var(--font-rajdhani);
+}
+
+.link {
+	color: var(--mantine-color-gray-6);
+	font-size: 14px !important;
+	font-weight: 400;
+	transition: ease-in 0.3s all;
+
+	&:hover {
+		color: var(--mantine-color-cRed-0);
+	}
+}

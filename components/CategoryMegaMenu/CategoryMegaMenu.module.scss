@@ -1,0 +1,13 @@
+.categoryLabel {
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	text-transform: uppercase;
+	padding: 0.7em;
+	transition: ease-in 0.3s all;
+	cursor: pointer;
+	font-family: var(--font-rajdhani);
+
+	&:hover {
+		color: var(--mantine-color-cRed-0);
+	}
+}

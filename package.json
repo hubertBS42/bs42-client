@@ -1,18 +1,35 @@
 {
-  "name": "bs42-client",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "eslint": "8.49.0",
-    "eslint-config-next": "13.5.1",
-    "next": "13.5.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-  }
+	"name": "bs42-client",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "node_modules/next/dist/bin/next build",
+		"start": "node_modules/next/dist/bin/next start",
+		"lint": "next lint"
+	},
+	"dependencies": {
+		"@mantine/carousel": "^7.0.0",
+		"@mantine/core": "^7.0.0",
+		"@mantine/hooks": "^7.0.0",
+		"@mantine/notifications": "^7.0.0",
+		"@mantine/nprogress": "^7.0.0",
+		"@reduxjs/toolkit": "^1.9.5",
+		"@tabler/icons-react": "^2.34.0",
+		"embla-carousel-react": "^7.1.0",
+		"eslint": "8.49.0",
+		"eslint-config-next": "13.5.1",
+		"next": "13.5.1",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-redux": "^8.1.2",
+		"sharp": "^0.32.6"
+	},
+	"devDependencies": {
+		"encoding": "^0.1.13",
+		"postcss": "^8.4.30",
+		"postcss-preset-mantine": "^1.7.0",
+		"postcss-simple-vars": "^7.0.1",
+		"sass": "^1.67.0"
+	}
 }
