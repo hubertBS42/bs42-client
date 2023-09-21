@@ -24,11 +24,17 @@ const CartDrawer = () => {
 	const cartItems = useSelector(selectAllCartItems)
 	return (
 		<>
-			<ActionIcon variant='transparent' color='dark' onClick={open}>
-				<Indicator inline label={cartItemsTotal} size={18}>
+			{cartItemsTotal > 0 ? (
+				<ActionIcon variant='transparent' color='dark' onClick={open}>
+					<Indicator inline label={cartItemsTotal} size={18}>
+						<IconShoppingCart size='1.4em' stroke={1.2} />
+					</Indicator>
+				</ActionIcon>
+			) : (
+				<ActionIcon variant='transparent' color='dark' onClick={open}>
 					<IconShoppingCart size='1.4em' stroke={1.2} />
-				</Indicator>
-			</ActionIcon>
+				</ActionIcon>
+			)}
 			<Drawer
 				opened={opened}
 				onClose={close}

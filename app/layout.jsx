@@ -1,7 +1,7 @@
 import { ColorSchemeScript } from '@mantine/core'
 import Providers from '@/components/Providers/Providers'
 import Header from '@/components/Header/Header'
-// import Footer from '@/components/Footer/Footer'
+import Footer from '@/components/Footer/Footer'
 
 import './globals.scss'
 import { arimo, rajdhani } from '@/utils/font'
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
 				<Providers>
 					<Header />
 					{children}
-					{/* <Footer /> */}
+					<Footer />
 				</Providers>
 			</body>
 		</html>

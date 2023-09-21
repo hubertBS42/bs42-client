@@ -50,8 +50,9 @@ a {
 }
 
 .mantine-TextInput-input {
-	font-size: 15px;
+	font-size: 15px !important;
 }
+
 .mantine-Tabs-tabLabel {
 	text-transform: uppercase;
 	font-family: var(--font-rajdhani);
@@ -139,14 +140,10 @@ a {
 	color: var(--mantine-color-gray-8);
 
 	@media (max-width: var(--mantine-breakpoint-md)) {
-		fontsize: 19;
+		fontsize: 19px;
 	}
 
 	@media (max-width: var(--mantine-breakpoint-xs)) {
-		fontsize: 17;
+		fontsize: 17px;
 	}
-}
-
-.mantine-Indicator-root {
-	color: 'red';
 }

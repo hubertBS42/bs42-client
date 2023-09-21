@@ -16,6 +16,7 @@
 		"@mantine/nprogress": "^7.0.0",
 		"@reduxjs/toolkit": "^1.9.5",
 		"@tabler/icons-react": "^2.34.0",
+		"embla-carousel-autoplay": "^8.0.0-rc14",
 		"embla-carousel-react": "^7.1.0",
 		"eslint": "8.49.0",
 		"eslint-config-next": "13.5.1",

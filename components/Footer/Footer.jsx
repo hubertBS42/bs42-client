@@ -9,7 +9,6 @@ import {
 	Text,
 	TextInput,
 	Title,
-	createStyles,
 } from '@mantine/core'
 import BenefitsCarousel from '../BenefitsCarousel/BenefitsCarousel'
 import Benefits from '../Benefits/Benefits'
@@ -25,54 +24,11 @@ import {
 	IconMapPin,
 	IconPhoneCall,
 } from '@tabler/icons-react'
-
-const useStyles = createStyles(theme => ({
-	top: {
-		background: theme.colors.cRed[0],
-		paddingTop: theme.spacing.sm,
-		paddingBottom: theme.spacing.sm,
-	},
-	middle: {
-		background: theme.colors.dark[6],
-	},
-	needHelp: {
-		paddingTop: theme.spacing.md,
-		paddingBottom: theme.spacing.md,
-		borderBottom: `1px solid ${theme.colors.gray[8]}`,
-	},
-	footerMenu: {
-		paddingTop: theme.spacing.xl,
-		paddingBottom: theme.spacing.xl,
-	},
-	footerHeading: {
-		color: 'white',
-		textTransform: 'uppercase',
-		marginBottom: theme.spacing.md,
-	},
-	footerLink: {
-		display: 'flex',
-		columnGap: 7,
-		alignItems: 'flex-start',
-		color: theme.colors.gray[3],
-		transition: 'ease-in .3s all',
-
-		'&:hover': {
-			color: 'white',
-		},
-	},
-	copyright: {
-		background: theme.colors.dark[4],
-		fontSize: 12,
-		color: 'white',
-		paddingTop: theme.spacing.sm,
-		paddingBottom: theme.spacing.sm,
-	},
-}))
+import classes from './Footer.module.scss'
 
 const Footer = () => {
-	const { classes } = useStyles()
 	return (
-		<Stack spacing={0}>
+		<Stack gap={0}>
 			<Box className={classes.top}>
 				<Container size='xl'>
 					<Benefits />
@@ -82,31 +38,26 @@ const Footer = () => {
 			<Box className={classes.middle}>
 				<Container size='xl'>
 					<Box className={classes.needHelp}>
-						<Text
-							c='white'
-							fz={20}
-							fw={600}
-							align='center'
-							ff={rajdhani.style.fontFamily}
-						>
+						<Text fz={20} fw={600}>
 							Need help? Call our award-winning support team at +233 24 8983
 							272
 						</Text>
 					</Box>
-					<Grid className={classes.footerMenu} gutterMd={30} gutterXl={50}>
+					<Grid
+						className={classes.footerMenu}
+						gutter={{ base: 30, xl: 50 }}
+						mx='auto'
+						py='xl'
+					>
 						<Grid.Col
-							sm={12}
-							md={4}
-							sx={theme => ({
-								[theme.fn.smallerThan('md')]: {
-									textAlign: 'center',
-								},
-							})}
+							span={{ sm: 12, md: 4 }}
+							className={classes.left}
+							ta={{ base: 'center', md: 'left' }}
 						>
 							<Title order={5} className={classes.footerHeading}>
 								Subscribe to our newsletter
 							</Title>
-							<Stack>
+							<Stack gap={18}>
 								<Text c='gray.3' fz={12}>
 									Get the latest updates on new products and upcoming sales
 								</Text>
@@ -114,23 +65,15 @@ const Footer = () => {
 								<TextInput
 									radius='xl'
 									size='md'
-									sx={theme => ({
-										'.mantine-TextInput-input': {
-											fontSize: 15,
-										},
-										[theme.fn.smallerThan('md')]: {
-											marginLeft: 'auto',
-											marginRight: 'auto',
-											width: '100%',
-											maxWidth: 400,
-										},
-									})}
+									mx={{ base: 'auto', md: 'unset' }}
+									maw={400}
+									w='100%'
 									rightSection={
 										<ActionIcon
 											size={32}
 											radius='xl'
-											color='cRed.0'
 											variant='filled'
+											className={classes.emailInputBtn}
 										>
 											<IconArrowRight size='1.1rem' stroke={1.5} />
 										</ActionIcon>
@@ -139,18 +82,12 @@ const Footer = () => {
 									rightSectionWidth={42}
 								/>
 
-								<Group
-									sx={theme => ({
-										[theme.fn.smallerThan('md')]: {
-											justifyContent: 'center',
-										},
-									})}
-								>
+								<Group className={classes.socials}>
 									<ActionIcon
 										size='lg'
 										radius='xl'
 										variant='outline'
-										sx={{ color: 'white' }}
+										color='gray.1'
 									>
 										<IconBrandTwitterFilled size='1em' />
 									</ActionIcon>
@@ -158,7 +95,7 @@ const Footer = () => {
 										size='lg'
 										radius='xl'
 										variant='outline'
-										sx={{ color: 'white' }}
+										color='gray.1'
 									>
 										<IconBrandMeta size='1em' />
 									</ActionIcon>
@@ -166,7 +103,7 @@ const Footer = () => {
 										size='lg'
 										radius='xl'
 										variant='outline'
-										sx={{ color: 'white' }}
+										color='gray.1'
 									>
 										<IconBrandInstagram size='1em' />
 									</ActionIcon>
@@ -174,30 +111,18 @@ const Footer = () => {
 										size='lg'
 										radius='xl'
 										variant='outline'
-										sx={{ color: 'white' }}
+										color='gray.1'
 									>
 										<IconBrandYoutube size='1em' />
 									</ActionIcon>
 								</Group>
 							</Stack>
 						</Grid.Col>
-						<Grid.Col sm={4} md={2}>
+						<Grid.Col span={{ sm: 4, md: 2 }} className={classes.middle}>
 							<Title order={5} className={classes.footerHeading}>
 								Shop
 							</Title>
-							<Stack
-								sx={theme => ({
-									fontFamily: arimo.style.fontFamily,
-									fontSize: 12,
-									color: theme.colors.gray[3],
-									transition: 'ease-in .3s all',
-
-									'& a:hover': {
-										color: 'white',
-									},
-								})}
-								spacing={10}
-							>
+							<Stack gap={10} className={classes.footerNavLinks}>
 								<Link href='#' className='animated-link'>
 									Computers
 								</Link>
@@ -209,23 +134,11 @@ const Footer = () => {
 								</Link>
 							</Stack>
 						</Grid.Col>
-						<Grid.Col sm={4} md={2}>
+						<Grid.Col span={{ sm: 4, md: 2 }}>
 							<Title order={5} className={classes.footerHeading}>
 								Information
 							</Title>
-							<Stack
-								sx={theme => ({
-									fontFamily: arimo.style.fontFamily,
-									fontSize: 12,
-									color: theme.colors.gray[3],
-									transition: 'ease-in .3s all',
-
-									'& a:hover': {
-										color: 'white',
-									},
-								})}
-								spacing={10}
-							>
+							<Stack gap={10} className={classes.footerNavLinks}>
 								<Link href='#' className='animated-link'>
 									Computers
 								</Link>
@@ -237,18 +150,11 @@ const Footer = () => {
 								</Link>
 							</Stack>
 						</Grid.Col>
-						<Grid.Col sm={4} md={4}>
+						<Grid.Col span={{ sm: 4, md: 4 }}>
 							<Title order={5} className={classes.footerHeading}>
 								Contact
 							</Title>
-							<Stack
-								sx={{
-									fontFamily: arimo.style.fontFamily,
-									fontSize: 12,
-									color: 'white',
-								}}
-								spacing={13}
-							>
+							<Stack gap={10}>
 								<Link href='#' className={classes.footerLink}>
 									<IconMapPin stroke={1.7} size={16} />
 									Tycan House, House NO. 43 <br />
@@ -260,7 +166,7 @@ const Footer = () => {
 									+233 26 1989 626
 								</Link>
 
-								<Box
+								{/* <Box
 									component={Link}
 									href='#'
 									className={classes.footerLink}
@@ -271,7 +177,7 @@ const Footer = () => {
 									pl='xl'
 								>
 									Ask an expert
-								</Box>
+								</Box> */}
 
 								<Link href='#' className={classes.footerLink}>
 									<IconMail stroke={1.7} size={16} />
@@ -283,7 +189,7 @@ const Footer = () => {
 				</Container>
 			</Box>
 			<Box className={classes.copyright}>
-				<Text align='center'>
+				<Text align='center' fz={12}>
 					© 2023 Online Shop. All Rights Reserved.
 				</Text>
 			</Box>
