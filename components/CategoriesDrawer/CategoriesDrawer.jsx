@@ -7,7 +7,6 @@ import {
 	NavLink,
 	Stack,
 	Text,
-	createStyles,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import {
@@ -30,7 +29,7 @@ const CategoriesDrawer = () => {
 		<Stack>
 			<NavLink
 				label='Categories'
-				icon={<IconCategory size='1.1em' stroke={1.5} />}
+				leftSection={<IconCategory size='1.1em' stroke={1.5} />}
 				rightSection={<IconChevronRight size='1.1em' stroke={1.5} />}
 				onClick={toggle}
 			/>
@@ -40,15 +39,14 @@ const CategoriesDrawer = () => {
 						<Drawer.Title ff={rajdhani.style.fontFamily}>
 							Categories
 						</Drawer.Title>
-						<Drawer.CloseButton>
-							<IconArrowNarrowLeft />
-						</Drawer.CloseButton>
+						{/* <IconArrowNarrowLeft /> */}
+						<Drawer.CloseButton></Drawer.CloseButton>
 					</Drawer.Header>
 					<Drawer.Body>
 						<Accordion>
 							{categories.map(category => (
 								<Accordion.Item key={category.id} value={category.name}>
-									<Accordion.Control>
+									<Accordion.Control className={classes.accordionTitleWrapper}>
 										<Text className={classes.accordionTitle}>
 											{category.name}
 										</Text>

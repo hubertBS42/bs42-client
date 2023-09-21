@@ -32,10 +32,10 @@ const MobileNavDrawer = () => {
 				style={{ fontFamily: rajdhani.style.fontFamily }}
 				overlayProps={{ opacity: 0.5, blur: 4 }}
 			>
-				<Stack spacing='.5em'>
+				<Stack gap={0.8}>
 					<NavLink
 						label='Home'
-						icon={<IconHome size='1.1em' stroke={1.5} />}
+						leftSection={<IconHome size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
 					/>
@@ -44,35 +44,35 @@ const MobileNavDrawer = () => {
 
 					<NavLink
 						label='Shop'
-						icon={<IconBuildingStore size='1.1em' stroke={1.5} />}
+						leftSection={<IconBuildingStore size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='#'
 					/>
 
 					<NavLink
 						label='Voip'
-						icon={<IconPhoneCall size='1.1em' stroke={1.5} />}
+						leftSection={<IconPhoneCall size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='#'
 					/>
 
 					<NavLink
 						label='Academy'
-						icon={<IconSchool size='1.1em' stroke={1.5} />}
+						leftSection={<IconSchool size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
 					/>
 
 					<NavLink
 						label='Contact us'
-						icon={<IconSend size='1.1em' stroke={1.5} />}
+						leftSection={<IconSend size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
 					/>
 
 					<NavLink
 						label='Blog'
-						icon={<IconArticle size='1.1em' stroke={1.5} />}
+						leftSection={<IconArticle size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
 					/>

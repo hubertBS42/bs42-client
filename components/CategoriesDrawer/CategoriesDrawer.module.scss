@@ -1,14 +1,11 @@
-.label {
-	font-size: 16px;
-	font-weight: 600;
-	color: var(--mantine-colors-gray-8);
-	text-transform: uppercase;
-	padding: 0;
-}
-
-.accordionTitle {
-	font-size: 16px;
-	font-weight: 600;
-	color: var(--mantine-colors-gray-8);
-	text-transform: uppercase;
+.accordionTitleWrapper {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	.accordionTitle {
+		font-size: 16px !important;
+		font-weight: 600 !important;
+		color: var(--mantine-color-gray-8) !important;
+		text-transform: uppercase;
+		font-family: var(--font-rajdhani);
+	}
 }
