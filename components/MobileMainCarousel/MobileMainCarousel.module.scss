@@ -1,0 +1,107 @@
+@mixin keyframes($animation-name) {
+	@-webkit-keyframes #{$animation-name} {
+		@content;
+	}
+	@keyframes #{$animation-name} {
+		@content;
+	}
+}
+
+@mixin animation($str) {
+	-webkit-animation: #{$str};
+	animation: #{$str};
+}
+
+@include keyframes(slideDown) {
+	0% {
+		transform: translate(0, -2em);
+		opacity: 0;
+	}
+	100% {
+		transform: translate(0, 0);
+		opacity: 1;
+	}
+}
+
+@include keyframes(slideInLeft) {
+	0% {
+		transform: translate(-2em, 0);
+		opacity: 0;
+	}
+	100% {
+		transform: translate(0, 0);
+		opacity: 1;
+	}
+}
+
+@include keyframes(fadeIn) {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.innerTextWrapper {
+	position: absolute;
+	z-index: 9999;
+	align-items: center;
+	top: 50px;
+}
+
+.title {
+	font-size: 2em;
+	font-weight: 800;
+	font-family: var(--font-rajdhani);
+	text-transform: capitalize;
+	color: white;
+	transform: translate(0, -2em);
+	opacity: 0;
+}
+.titleActive {
+	@include animation('slideDown 1s linear 0s 1 forwards');
+}
+
+.text {
+	max-width: 500px;
+	font-size: 16px;
+	text-align: center;
+	font-weight: 400;
+	color: white;
+	opacity: 0;
+}
+.textActive {
+	@include animation('slideInLeft 1s linear 1s 1 forwards');
+}
+
+.button {
+	font-size: 16px;
+	font-weight: 700;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	transition: ease-in 0.3s all;
+	opacity: 0;
+
+	&:hover {
+		background-color: white;
+		color: var(--mantine-color-cRed-0);
+	}
+}
+
+.buttonActive {
+	@include animation('fadeIn 1s linear 1s 1 forwards');
+}
+
+.controls {
+	transition: opacity 150ms ease;
+	opacity: 0;
+}
+
+.root {
+	&:hover {
+		.controls {
+			opacity: 1;
+		}
+	}
+}

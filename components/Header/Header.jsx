@@ -23,6 +23,7 @@ import { setCategories } from '@/redux/features/categories/categoriesSlice'
 import { setProducts } from '@/redux/features/products/productsSlice'
 import { setBrands } from '@/redux/features/brands/brandsSlice'
 import CategoryMenu from '../CategoryMenu/CategoryMenu'
+import { setSettings } from '@/redux/features/settings/settingsSlice'
 
 const Header = () => {
 	const dispatch = useDispatch()
@@ -31,7 +32,7 @@ const Header = () => {
 			const {
 				status,
 				message,
-				data: { products, categories, brands },
+				data: { products, categories, brands, settings },
 			} = await fetcher('https://portal.bs42.net/api/frontendInitData')
 
 			if (status === 'error') {
@@ -41,6 +42,7 @@ const Header = () => {
 			dispatch(setCategories(categories))
 			dispatch(setProducts(products))
 			dispatch(setBrands(brands))
+			dispatch(setSettings(settings))
 		}
 		fetchAllData()
 	}, [])

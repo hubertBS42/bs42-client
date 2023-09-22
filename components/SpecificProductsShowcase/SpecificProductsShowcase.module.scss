@@ -1,0 +1,15 @@
+.label {
+	font-family: var(--font-rajdhani);
+	font-size: 22px;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: var(--mantine-color-gray-8);
+
+	@media (max-width: 64em) {
+		font-size: 19px;
+	}
+
+	@media (max-width: 30em) {
+		font-size: 17px;
+	}
+}

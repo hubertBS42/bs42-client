@@ -1,0 +1,58 @@
+.imgWrapper {
+	position: relative;
+	height: 280px;
+
+	@media (max-width: 62em) {
+		height: 200px;
+	}
+
+	@media (max-width: 36em) {
+		height: 130px;
+	}
+}
+
+.blogTitle {
+	font-size: 18px;
+	font-weight: 700;
+	text-align: left;
+	color: var(--mantine-color-blue-9) !important;
+	font-family: var(--font-arimo);
+
+	@media (max-width: 62em) {
+		font-size: 14px;
+	}
+
+	@media (max-width: 36em) {
+		font-size: 13px;
+	}
+}
+
+.metadata {
+	font-size: 13px;
+	font-weight: 400;
+	color: var(--mantine-color-gray-7);
+	font-family: var(--font-arimo);
+
+	@media (max-width: 62em) {
+		font-size: 12px;
+	}
+
+	@media (max-width: 36em) {
+		font-size: 11px;
+	}
+}
+
+.text {
+	font-size: 14px;
+	font-weight: 400;
+	font-family: var(--font-arimo);
+	color: var(--mantine-color-gray-9);
+
+	@media (max-width: 62em) {
+		font-size: 13px;
+	}
+
+	@media (max-width: 36em) {
+		font-size: 12px;
+	}
+}
