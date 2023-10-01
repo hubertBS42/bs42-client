@@ -4,7 +4,6 @@ import { Carousel } from '@mantine/carousel'
 import {
 	Button,
 	Container,
-	MediaQuery,
 	Overlay,
 	Stack,
 	Text,
@@ -15,25 +14,22 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRef, useState } from 'react'
 import classes from './MobileMainCarousel.module.scss'
-
-const images = [
-	'/images/img1.webp',
-	'/images/img2.webp',
-	'/images/img3.webp',
-]
+import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { useSelector } from 'react-redux'
 
 const MobileMainCarousel = () => {
 	const autoplay = useRef(Autoplay({ delay: 5000 }))
 	const [carouselIndex, setCarouselIndex] = useState(0)
+	const settings = useSelector(getSettings)
 
-	const slides = images.map((url, i) => (
+	const slides = settings[0]?.carouselSlides.map((slide, i) => (
 		<Carousel.Slide key={i}>
 			<Image
-				src={url}
+				src={slide.image.url}
 				fill
 				sizes='100vw'
 				style={{ objectFit: 'cover' }}
-				alt=''
+				alt={slide.title}
 				priority
 			/>
 			<Overlay color='#000' opacity={0.5} />
@@ -45,7 +41,7 @@ const MobileMainCarousel = () => {
 							carouselIndex === i && classes.titleActive
 						}`}
 					>
-						Smart Homes
+						{slide.title}
 					</Title>
 
 					<Text
@@ -53,18 +49,17 @@ const MobileMainCarousel = () => {
 							carouselIndex === i && classes.textActive
 						}`}
 					>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit.
-						Sapiente voluptates labore.
+						{slide.description}
 					</Text>
 					<Button
 						component={Link}
-						href='#'
+						href={slide.cta.url}
 						className={`${classes.button} ${
 							carouselIndex === i && classes.buttonActive
 						}`}
 						color='cRed.0'
 					>
-						Shop now
+						{slide.cta.label}
 					</Button>
 				</Stack>
 			</Container>
@@ -72,21 +67,23 @@ const MobileMainCarousel = () => {
 	))
 	return (
 		<>
-			<Carousel
-				height={300}
-				plugins={[autoplay.current]}
-				onMouseEnter={autoplay.current.stop}
-				onMouseLeave={autoplay.current.reset}
-				loop
-				onSlideChange={setCarouselIndex}
-				classNames={{
-					root: classes.root,
-					controls: classes.controls,
-				}}
-				hiddenFrom='xs'
-			>
-				{slides}
-			</Carousel>
+			{settings[0]?.carouselSlides.length > 0 && (
+				<Carousel
+					height={300}
+					plugins={[autoplay.current]}
+					onMouseEnter={autoplay.current.stop}
+					onMouseLeave={autoplay.current.reset}
+					loop
+					onSlideChange={setCarouselIndex}
+					classNames={{
+						root: classes.root,
+						controls: classes.controls,
+					}}
+					hiddenFrom='xs'
+				>
+					{slides}
+				</Carousel>
+			)}
 		</>
 	)
 }
