@@ -69,7 +69,7 @@ const DesktopMainCarousel = () => {
 		<>
 			{settings[0]?.carouselSlides.length > 0 && (
 				<Carousel
-					height={500}
+					height={550}
 					plugins={[autoplay.current]}
 					onMouseEnter={autoplay.current.stop}
 					onMouseLeave={autoplay.current.reset}

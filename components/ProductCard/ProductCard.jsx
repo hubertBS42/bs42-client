@@ -23,6 +23,9 @@ const ProductCard = ({ product, border }) => {
 	const settings = useSelector(getSettings)
 	const currentRate = settings[0].exchangeRate.currentRate
 	const roundedSellPrice = roundMoney(product?.sellPrice * currentRate)
+	const roundedDiscountPrice = roundMoney(
+		(20 / 100) * product?.sellPrice * currentRate
+	)
 	return (
 		<Card padding={!border ? 0 : 'sm'} withBorder={border} radius='sm'>
 			<Link href={`/products/${product?.slug}`}>
@@ -96,27 +99,29 @@ const ProductCard = ({ product, border }) => {
 					withinPortal
 					style={{ fontSize: 11 }}
 				>
-					<Title
-						order={3}
+					<Text
+						lineClamp={1}
 						className={classes.productTitle}
 						mb={6}
 						fz={{ base: '11px', xs: '12px' }}
 						lh={{ base: '20px', xs: '22px' }}
 					>
 						{product?.title}
-					</Title>
+					</Text>
 				</Tooltip>
 
 				<Rating value={0} fractions={2} readOnly size='xs' mb={5} />
 
 				{product?.onSale ? (
 					<Group gap={5} className={classes.productPriceDiscount} mb={10}>
-						<span className={classes.original}>GHC 20</span>
-						<span className={classes.discounted}>GHC 20</span>
+						<span className={classes.original}>GHS {roundedSellPrice}</span>
+						<span className={classes.discounted}>
+							GHS {roundedDiscountPrice}
+						</span>
 					</Group>
 				) : (
 					<Text className={classes.productPrice} mb={10}>
-						GHC {roundedSellPrice}
+						GHS {roundedSellPrice}
 					</Text>
 				)}
 				<Button
