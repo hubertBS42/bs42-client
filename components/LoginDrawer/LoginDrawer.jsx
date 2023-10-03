@@ -68,7 +68,7 @@ const LoginDrawer = () => {
 								transition: 'ease-in-out .3s all',
 							})}
 							component={Link}
-							href='/signup'
+							href='/create-account'
 						>
 							SIGN UP
 						</Button>

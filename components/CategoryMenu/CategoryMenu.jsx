@@ -12,7 +12,6 @@ const CategoryMenu = () => {
 		<Box
 			style={theme => ({
 				border: `1px solid ${theme.colors.gray[2]}`,
-				borderBottom: 'none',
 			})}
 			visibleFrom='sm'
 		>

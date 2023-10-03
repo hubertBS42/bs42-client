@@ -1,0 +1,41 @@
+.title {
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	font-weight: 700;
+	color: var(--mantine-color-gray-8);
+	font-size: 22px;
+
+	@media (max-width: 36em) {
+		font-size: 17px;
+	}
+
+	@media (max-width: 64em) {
+		font-size: 19px;
+	}
+}
+
+.signupBtn {
+	font-family: var(--font-rajdhani);
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	color: var(--mantine-color-gray-8);
+	font-weight: 700;
+	transition: ease-in-out 0.3s all;
+	text-transform: uppercase;
+
+	&:hover {
+		background-color: var(--mantine-color-gray-8);
+		color: white;
+		box-shadow: unset;
+	}
+}
+
+.signinBtn {
+	font-family: var(--font-rajdhani);
+	color: white;
+	background-color: var(--mantine-color-gray-8);
+	font-weight: 700;
+	transition: ease-in-out 0.3s all;
+	text-transform: uppercase;
+	width: 100%;
+	max-width: 220px;
+}
