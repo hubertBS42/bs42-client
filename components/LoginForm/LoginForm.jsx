@@ -55,10 +55,10 @@ const LoginForm = () => {
 				</Grid.Col>
 				<Grid.Col span={{ base: 12, md: 6 }} bg='gray.0' p='xl'>
 					<Title className={classes.title} mb='md'>
-						Don't have an account?
+						Don&apos;t have an account?
 					</Title>
 					<Text size='xs' mb={10}>
-						Create an account and you'll be able to:
+						Create an account and you&apos;ll be able to:
 					</Text>
 					<List size='xs' spacing={10} mb={20}>
 						<List.Item>Check out faster</List.Item>

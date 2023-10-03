@@ -47,7 +47,7 @@ const SignupForm = () => {
 						Already have an account?
 					</Title>
 					<Text size='xs' mb={10}>
-						Sign into your account and you'll be able to:
+						Sign into your account and you&apos;ll be able to:
 					</Text>
 					<List size='xs' spacing={10} mb={20}>
 						<List.Item>Check out faster</List.Item>
