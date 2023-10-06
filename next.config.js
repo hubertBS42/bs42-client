@@ -17,6 +17,10 @@ const nextConfig = {
 				source: '/api/user-account/add',
 				destination: 'https://portal.bs42.net/api/user-account/add',
 			},
+			{
+				source: '/api/user-account/signin',
+				destination: 'https://portal.bs42.net/api/user-account/signin',
+			},
 		]
 	},
 }

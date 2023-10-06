@@ -12,9 +12,58 @@ import {
 	Title,
 } from '@mantine/core'
 import classes from './LoginForm.module.scss'
+import { z } from 'zod'
 import Link from 'next/link'
+import { useForm, zodResolver } from '@mantine/form'
+import { useEffect, useState } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { notifications } from '@mantine/notifications'
+import { IconX } from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+
+const schema = z.object({
+	email: z.string().trim(),
+	password: z.string().trim(),
+})
 
 const LoginForm = () => {
+	const { status } = useSession()
+	const router = useRouter()
+	const [loading, setLoading] = useState(false)
+	const form = useForm({
+		validate: zodResolver(schema),
+		initialValues: {
+			email: '',
+			password: '',
+		},
+	})
+
+	useEffect(() => {
+		if (status === 'authenticated') router.push('/')
+	}, [router, status])
+
+	const handleSubmit = async values => {
+		setLoading(true)
+
+		const status = await signIn('credentials', {
+			redirect: false,
+			email: values.email,
+			password: values.password,
+			callbackUrl: '/',
+		})
+
+		if (status.error !== null) {
+			setLoading(false)
+			notifications.show({
+				title: 'Login Failed!',
+				message: `${status.error.split(':')[1]}`,
+				color: 'red',
+				icon: <IconX />,
+			})
+		} else {
+			router.push('/')
+		}
+	}
 	return (
 		<Section>
 			<Grid align='flex-start'>
@@ -26,15 +75,29 @@ const LoginForm = () => {
 					<Title className={classes.title} mb='md'>
 						Sign into account
 					</Title>
-					<form>
+					<form onSubmit={form.onSubmit(values => handleSubmit(values))}>
 						<Stack spacing='md'>
-							<TextInput label='Email Address' size='md' type='email' />
-							<PasswordInput label='Password' size='md' type='password' />
+							<TextInput
+								label='Email Address'
+								size='md'
+								type='email'
+								disabled={loading}
+								{...form.getInputProps('email')}
+							/>
+							<PasswordInput
+								label='Password'
+								size='md'
+								type='password'
+								disabled={loading}
+								{...form.getInputProps('password')}
+							/>
 							<Button
 								size='md'
 								variant='outline'
 								color='gray.4'
 								className={classes.signupBtn}
+								loading={loading}
+								type='submit'
 							>
 								Sign in
 							</Button>

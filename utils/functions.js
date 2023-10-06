@@ -56,3 +56,11 @@ export const roundMoney = amount => {
 		Math.round(amount * Math.pow(10, 2)) / Math.pow(10, 2)
 	return roundedAmount.toFixed(2)
 }
+
+export const getInitials = (firstName, lastName) => {
+	const firstInitial = firstName?.charAt(0)
+	const lastInitial = lastName?.charAt(0)
+
+	const initials = `${firstInitial}${lastInitial}`
+	return initials.toUpperCase()
+}

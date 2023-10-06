@@ -1,11 +1,14 @@
 import CustomMantineProvider from './CustomMantineProvider'
+import NextAuthProvider from './NextAuthProvider'
 import ReduxProvider from './ReduxProvider'
 
 const Providers = ({ children }) => {
 	return (
 		<>
 			<CustomMantineProvider>
-				<ReduxProvider>{children}</ReduxProvider>
+				<NextAuthProvider>
+					<ReduxProvider>{children}</ReduxProvider>
+				</NextAuthProvider>
 			</CustomMantineProvider>
 		</>
 	)

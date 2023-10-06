@@ -20,9 +20,11 @@ import isAlpha from 'validator/lib/isAlpha'
 import isAlphaNumeric from 'validator/lib/isAlphanumeric'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { z } from 'zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { fetcher } from '@/utils/functions'
 import { notifications } from '@mantine/notifications'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 const schema = z.object({
 	firstName: z
@@ -60,8 +62,11 @@ const schema = z.object({
 })
 
 const SignupForm = () => {
+	const { status } = useSession()
+	const router = useRouter()
 	const [loading, setLoading] = useState(false)
 	const [sent, setSent] = useState(false)
+
 	const form = useForm({
 		validate: zodResolver(schema),
 		initialValues: {
@@ -77,6 +82,10 @@ const SignupForm = () => {
 		},
 	})
 
+	useEffect(() => {
+		if (status === 'authenticated') router.push('/')
+	}, [router, status])
+
 	const handleSubmit = async values => {
 		setLoading(true)
 
@@ -91,13 +100,7 @@ const SignupForm = () => {
 				'email',
 				'An account with this email address already exists.'
 			)
-			// notifications.show({
-			// 	title: 'Email Address Taken!',
-			// 	message:
-			// 		'An account with this email address already exists. Use another email address.',
-			// 	color: 'red',
-			// 	icon: <IconX />,
-			// })
+
 			return
 		}
 

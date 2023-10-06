@@ -1,7 +1,7 @@
 import LoginForm from '@/components/LoginForm/LoginForm'
 
 export const metadata = {
-	title: 'Log into account - BS42.NET',
+	title: 'Account Login - BS42.NET',
 	description: '',
 }
 

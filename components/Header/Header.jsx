@@ -1,6 +1,14 @@
 'use client'
 
-import { Box, Container, Grid, Group, Stack } from '@mantine/core'
+import {
+	Avatar,
+	Box,
+	Container,
+	Grid,
+	Group,
+	Stack,
+	Text,
+} from '@mantine/core'
 import Link from 'next/link'
 import {
 	IconMail,
@@ -17,7 +25,7 @@ import MobileNavDrawer from '../MobileNavDrawer/MobileNavDrawer'
 import SearchModal from '../SearchModal/SearchModal'
 import MobileSearchModal from '../MobileSearchModal/MobileSearchModal'
 import { useEffect } from 'react'
-import { fetcher } from '@/utils/functions'
+import { fetcher, getInitials } from '@/utils/functions'
 import { useDispatch } from 'react-redux'
 import { setCategories } from '@/redux/features/categories/categoriesSlice'
 import { setProducts } from '@/redux/features/products/productsSlice'
@@ -25,9 +33,13 @@ import { setBrands } from '@/redux/features/brands/brandsSlice'
 import CategoryMenu from '../CategoryMenu/CategoryMenu'
 import { setSettings } from '@/redux/features/settings/settingsSlice'
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
+import { useSession } from 'next-auth/react'
+import CustomAvatar from '../CustomAvatar/CustomAvatar'
 
 const Header = () => {
 	const dispatch = useDispatch()
+	const { data: session, status } = useSession()
+
 	useEffect(() => {
 		const fetchAllData = async () => {
 			const {
@@ -143,8 +155,12 @@ const Header = () => {
 						>
 							<Group gap={5}>
 								<CartDrawer />
-								<LoginDrawer />
 								<SearchModal />
+								{session?.user ? (
+									<CustomAvatar user={session.user} />
+								) : (
+									<LoginDrawer />
+								)}
 							</Group>
 						</Grid.Col>
 					</Grid>

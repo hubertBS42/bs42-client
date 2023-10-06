@@ -69,6 +69,7 @@ const LoginDrawer = () => {
 							})}
 							component={Link}
 							href='/create-account'
+							onClick={close}
 						>
 							SIGN UP
 						</Button>

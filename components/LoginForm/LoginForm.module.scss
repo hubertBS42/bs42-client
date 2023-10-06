@@ -22,7 +22,13 @@
 	transition: ease-in-out 0.3s all;
 	text-transform: uppercase;
 
-	&:hover {
+	&:not([data-disabled]):hover {
+		background-color: var(--mantine-color-gray-8);
+		color: white;
+		box-shadow: unset;
+	}
+
+	&[data-loading] {
 		background-color: var(--mantine-color-gray-8);
 		color: white;
 		box-shadow: unset;
