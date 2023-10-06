@@ -60,6 +60,7 @@ const handler = NextAuth({
 					role: user?.role?.title,
 					firstName: user?.firstName,
 					lastName: user?.lastName,
+					profileImg: user?.profileImg?.url || null,
 				}
 			return token
 		},
@@ -69,6 +70,7 @@ const handler = NextAuth({
 			session.user.role = token.role
 			session.user.firstName = token.firstName
 			session.user.lastName = token.lastName
+			session.user.profileImg = token.profileImg
 
 			return session
 		},
