@@ -24,6 +24,7 @@ import { setProducts } from '@/redux/features/products/productsSlice'
 import { setBrands } from '@/redux/features/brands/brandsSlice'
 import CategoryMenu from '../CategoryMenu/CategoryMenu'
 import { setSettings } from '@/redux/features/settings/settingsSlice'
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
 
 const Header = () => {
 	const dispatch = useDispatch()
@@ -50,6 +51,12 @@ const Header = () => {
 	console.log('rendered')
 	return (
 		<Stack gap={0}>
+			<ProgressBar
+				height='4px'
+				color='#00A4E6'
+				options={{ showSpinner: false }}
+				shallowRouting
+			/>
 			<Box
 				style={theme => ({
 					backgroundColor: theme.colors.gray[0],
