@@ -14,8 +14,8 @@ const nextConfig = {
 	async rewrites() {
 		return [
 			{
-				source: '/api/user-account/add',
-				destination: 'https://portal.bs42.net/api/user-account/add',
+				source: '/api/applications/add',
+				destination: 'https://portal.bs42.net/api/applications/add',
 			},
 			{
 				source: '/api/user-account/signin',

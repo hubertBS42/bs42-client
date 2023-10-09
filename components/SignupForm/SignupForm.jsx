@@ -104,7 +104,7 @@ const SignupForm = () => {
 			return
 		}
 
-		const { status, message } = await fetcher('/api/user-account/add', {
+		const { status, message } = await fetcher('/api/applications/add', {
 			method: 'POST',
 			body: JSON.stringify(values),
 			headers: {
