@@ -21,6 +21,14 @@ const nextConfig = {
 				source: '/api/user-account/signin',
 				destination: 'https://portal.bs42.net/api/user-account/signin',
 			},
+			{
+				source: '/api/cart/update',
+				destination: 'http://localhost:3001/api/cart/update',
+			},
+			{
+				source: '/api/cart',
+				destination: 'http://localhost:3001/api/cart',
+			},
 		]
 	},
 }

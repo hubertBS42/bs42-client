@@ -8,6 +8,7 @@ const CategoryMenu = () => {
 	const categories = formatCategoriesForHeader(
 		useSelector(selectAllCategories)
 	)
+
 	return (
 		<Box
 			style={theme => ({

@@ -7,18 +7,13 @@ import {
 } from '@mantine/core'
 import CategoryMegaMenuCard from '../CategoryMegaMenuCard/CategoryMegaMenuCard'
 import classes from './CategoryMegaMenu.module.scss'
-import { useState } from 'react'
 
 const CategoryMegaMenu = ({ category }) => {
-	const [opened, setOpened] = useState(false)
-
 	return (
 		<HoverCard
 			width='100%'
 			shadow='xs'
 			offset={0}
-			onOpen={() => setOpened(true)}
-			onClose={() => setOpened(false)}
 			transitionProps={{ duration: 500 }}
 		>
 			<HoverCard.Target>
@@ -33,11 +28,7 @@ const CategoryMegaMenu = ({ category }) => {
 						breakpoints={[{ maxWidth: 'md', cols: 3, spacing: 'md' }]}
 					>
 						{category.children.map(category => (
-							<CategoryMegaMenuCard
-								key={category.id}
-								opened={opened}
-								category={category}
-							/>
+							<CategoryMegaMenuCard key={category.id} category={category} />
 						))}
 					</SimpleGrid>
 				</Container>

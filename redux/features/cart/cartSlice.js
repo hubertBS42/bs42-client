@@ -2,22 +2,28 @@ import { createSelector, createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
 	cartItems: [],
+	isLoading: false,
+	userId: null,
 }
 
 const cartSlice = createSlice({
 	name: 'cart',
 	initialState,
 	reducers: {
+		setItems: (state, action) => {
+			state.cartItems = action.payload
+			state.isLoading = false
+		},
 		addItem: (state, action) => {
 			const product = state.cartItems.find(
 				item => item.product._id === action.payload._id
 			)
 			if (product) {
-				product.qty++
+				product.quantity++
 			} else {
 				state.cartItems.push({
 					product: action.payload,
-					qty: 1,
+					quantity: 1,
 				})
 			}
 		},
@@ -27,13 +33,19 @@ const cartSlice = createSlice({
 			)
 
 			if (product) {
-				product.qty--
-				if (product.qty === 0) {
+				product.quantity--
+				if (product.quantity === 0) {
 					state.cartItems = state.cartItems.filter(
 						item => item.product._id !== action.payload._id
 					)
 				}
 			}
+		},
+		setIsLoading: (state, action) => {
+			state.isLoading = action.payload
+		},
+		setUserId: (state, action) => {
+			state.userId = action.payload
 		},
 		emptyCart: () => initialState,
 	},
@@ -42,18 +54,19 @@ const cartSlice = createSlice({
 const cartItems = state => state.cart.cartItems
 
 export const selectAllCartItems = state => state.cart.cartItems
+export const getLoadingState = state => state.cart.isLoading
 
 export const totalCartItemSelector = createSelector(
 	[cartItems],
 	cartItems =>
-		cartItems.reduce((total, curr) => (total += curr.qty), 0)
+		cartItems.reduce((total, curr) => (total += curr.quantity), 0)
 )
 
 export const totalPriceSelector = createSelector(
 	[cartItems],
 	cartItems =>
 		cartItems.reduce(
-			(total, curr) => (total += curr.qty * curr.product.sellPrice),
+			(total, curr) => (total += curr.quantity * curr.product.sellPrice),
 			0
 		)
 )
@@ -61,8 +74,15 @@ export const totalPriceSelector = createSelector(
 export const productQtySelector = createSelector(
 	[cartItems, (cartItems, productId) => productId],
 	(cartItems, productId) =>
-		cartItems.find(item => item.product._id === productId?.qty)
+		cartItems.find(item => item.product._id === productId?.quantity)
 )
 
-export const { addItem, removeItem, emptyCart } = cartSlice.actions
+export const {
+	setItems,
+	addItem,
+	removeItem,
+	setIsLoading,
+	setUserId,
+	emptyCart,
+} = cartSlice.actions
 export default cartSlice.reducer

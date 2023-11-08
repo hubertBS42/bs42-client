@@ -1,3 +1,4 @@
+import { loadCart } from '@/redux/features/cart/cartActions'
 import { fetcher } from '@/utils/functions'
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -57,6 +58,7 @@ const handler = NextAuth({
 			if (user)
 				return {
 					...token,
+					id: user?._id,
 					role: user?.role?.title,
 					firstName: user?.firstName,
 					lastName: user?.lastName,
@@ -67,6 +69,7 @@ const handler = NextAuth({
 		async session({ session, token, user }) {
 			// Send properties to the client, like an access_token and user id from a provider.
 			session.accessToken = token.accessToken
+			session.user.id = token.id
 			session.user.role = token.role
 			session.user.firstName = token.firstName
 			session.user.lastName = token.lastName

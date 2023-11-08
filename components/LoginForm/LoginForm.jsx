@@ -20,6 +20,7 @@ import { signIn, useSession } from 'next-auth/react'
 import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
+import { loadCart } from '@/redux/features/cart/cartActions'
 
 const schema = z.object({
 	email: z.string().trim(),
@@ -61,6 +62,7 @@ const LoginForm = () => {
 				icon: <IconX />,
 			})
 		} else {
+			loadCart()
 			router.push('/')
 		}
 	}

@@ -14,24 +14,40 @@ import Link from 'next/link'
 import { arimo, rajdhani } from '@/utils/font'
 import { useSelector } from 'react-redux'
 import {
+	getLoadingState,
 	selectAllCartItems,
 	totalCartItemSelector,
 } from '@/redux/features/cart/cartSlice'
+import { useEffect } from 'react'
 
 const CartDrawer = () => {
 	const [opened, { open, close }] = useDisclosure(false)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartItems = useSelector(selectAllCartItems)
+	const loading = useSelector(getLoadingState)
+	// useEffect(() => {
+	// 	console.log('changed')
+	// }, [cartItems])
 	return (
 		<>
 			{cartItemsTotal > 0 ? (
-				<ActionIcon variant='transparent' color='dark' onClick={open}>
+				<ActionIcon
+					variant='transparent'
+					color='dark'
+					onClick={open}
+					loading={loading}
+				>
 					<Indicator inline label={cartItemsTotal} size={18}>
 						<IconShoppingCart size='1.4em' stroke={1.2} />
 					</Indicator>
 				</ActionIcon>
 			) : (
-				<ActionIcon variant='transparent' color='dark' onClick={open}>
+				<ActionIcon
+					variant='transparent'
+					color='dark'
+					onClick={open}
+					loading={loading}
+				>
 					<IconShoppingCart size='1.4em' stroke={1.2} />
 				</ActionIcon>
 			)}

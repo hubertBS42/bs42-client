@@ -1,5 +1,7 @@
 'use client'
+import { loadCart } from '@/redux/features/cart/cartActions'
 import { rajdhani } from '@/utils/font'
+import { getCartToken } from '@/utils/functions'
 import {
 	ActionIcon,
 	Anchor,
@@ -26,6 +28,7 @@ const schema = z.object({
 const LoginDrawer = () => {
 	const [loading, setLoading] = useState(false)
 	const [opened, { open, close }] = useDisclosure(false)
+
 	const form = useForm({
 		validate: zodResolver(schema),
 		initialValues: {
@@ -53,6 +56,7 @@ const LoginDrawer = () => {
 				icon: <IconX />,
 			})
 		} else {
+			loadCart()
 			close()
 		}
 	}

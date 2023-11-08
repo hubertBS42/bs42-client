@@ -32,7 +32,7 @@ const CartProductCard = ({ item }) => {
 					</Title>
 				</Link>
 				<Text className={classes.price}>
-					{item.qty} x GHC {item.product.sellPrice}
+					{item.quantity} x GHC {item.product.sellPrice}
 				</Text>
 			</Stack>
 		</Flex>

@@ -35,12 +35,14 @@ import { setSettings } from '@/redux/features/settings/settingsSlice'
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
 import { useSession } from 'next-auth/react'
 import CustomAvatar from '../CustomAvatar/CustomAvatar'
+import { loadCart } from '@/redux/features/cart/cartActions'
 
 const Header = () => {
 	const dispatch = useDispatch()
 	const { data: session, status } = useSession()
 
 	useEffect(() => {
+		loadCart()
 		const fetchAllData = async () => {
 			const {
 				status,
