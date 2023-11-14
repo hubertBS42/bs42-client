@@ -29,6 +29,10 @@ const nextConfig = {
 				source: '/api/cart',
 				destination: 'https://portal.bs42.net/api/cart',
 			},
+			{
+				source: '/api/products',
+				destination: 'https://portal.bs42.net/api/products',
+			},
 		]
 	},
 }
