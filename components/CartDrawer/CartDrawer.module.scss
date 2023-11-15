@@ -1,0 +1,26 @@
+.checkoutBtnRoot {
+	font-weight: 700;
+	transition: ease-in 0.3s all;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+
+	&:hover {
+		background-color: white;
+		color: var(--mantine-color-cRed-0);
+		border: 1px solid var(--mantine-color-cRed-0);
+	}
+}
+
+.emptyCartBtnRoot {
+	font-weight: 700;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	transition: ease-in 0.3s all;
+
+	&:hover {
+		background-color: var(--mantine-color-gray-7);
+		color: white;
+		border: 1px solid var(--mantine-color-gray-7);
+	}
+}

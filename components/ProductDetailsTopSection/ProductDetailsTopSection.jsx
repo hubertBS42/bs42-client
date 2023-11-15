@@ -18,11 +18,17 @@ import { Carousel } from '@mantine/carousel'
 import Image from 'next/image'
 import classes from './ProductDetailsTopSection.module.scss'
 import { useState } from 'react'
-import { rajdhani } from '@/utils/font'
 import { IconFlame } from '@tabler/icons-react'
+import { useSelector } from 'react-redux'
+import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { roundMoney } from '@/utils/functions'
 
 const ProductDetailsTopSection = ({ data }) => {
 	const [currentImage, setCurrentImage] = useState(0)
+	const settings = useSelector(getSettings)
+
+	const currentRate = settings[0]?.exchangeRate.currentRate
+	const roundedSellPrice = roundMoney(data.sellPrice * currentRate)
 
 	const MainSlides = data.images.map(image => (
 		<Carousel.Slide key={image._id}>
@@ -104,7 +110,7 @@ const ProductDetailsTopSection = ({ data }) => {
 						</Group>
 					</Stack>
 					<Group gap='xl' mb='lg'>
-						<Text className={classes.price}>GHS {data.sellPrice}</Text>
+						<Text className={classes.price}>GHS {roundedSellPrice}</Text>
 						<Flex className={classes.salesHistory} align='center'>
 							<IconFlame className={classes.icon} />
 							<Text className={classes.text}>
@@ -138,7 +144,7 @@ const ProductDetailsTopSection = ({ data }) => {
 							<Text className={classes.value}>7</Text>
 						</Group>
 
-						<Flex align='flex-end' gap={150}>
+						<Flex align='flex-end' gap={20}>
 							<NumberInput
 								label='Quantity:'
 								classNames={{

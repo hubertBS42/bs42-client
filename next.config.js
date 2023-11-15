@@ -24,10 +24,12 @@ const nextConfig = {
 			{
 				source: '/api/cart/update',
 				destination: 'https://portal.bs42.net/api/cart/update',
+				// destination: 'http://localhost:3001/api/cart/update',
 			},
 			{
 				source: '/api/cart',
 				destination: 'https://portal.bs42.net/api/cart',
+				// destination: 'http://localhost:3001/api/cart',
 			},
 			{
 				source: '/api/products',

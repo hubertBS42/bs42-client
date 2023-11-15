@@ -18,16 +18,14 @@ import {
 	selectAllCartItems,
 	totalCartItemSelector,
 } from '@/redux/features/cart/cartSlice'
-import { useEffect } from 'react'
+import classes from './CartDrawer.module.scss'
+import { clearCart } from '@/redux/features/cart/cartActions'
 
 const CartDrawer = () => {
 	const [opened, { open, close }] = useDisclosure(false)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartItems = useSelector(selectAllCartItems)
 	const loading = useSelector(getLoadingState)
-	// useEffect(() => {
-	// 	console.log('changed')
-	// }, [cartItems])
 	return (
 		<>
 			{cartItemsTotal > 0 ? (
@@ -63,58 +61,47 @@ const CartDrawer = () => {
 						<CartProductCard key={item.product._id} item={item} />
 					))
 				) : (
-					<Text ff={arimo.style.fontFamily} fw={300} fz={14} ta='center'>
+					<Text
+						ff={arimo.style.fontFamily}
+						fw={300}
+						fz={14}
+						ta='center'
+						mt={100}
+					>
 						There are no items in your cart.
 					</Text>
 				)}
 
 				<Stack justify='stretch' mt='2em'>
 					{cartItems.length > 0 && (
-						<Button
-							size='md'
-							variant='filled'
-							color='cRed.0'
-							tt='uppercase'
-							ff={rajdhani.style.fontFamily}
-							style={theme => ({
-								fontWeight: 700,
-								transition: 'ease-in .3s all',
-
-								'&:hover': {
-									backgroundColor: 'white',
-									color: theme.colors.cRed[0],
-									border: `1px solid ${theme.colors.cRed[0]}`,
-								},
-							})}
-							component={Link}
-							href='/checkout'
-						>
-							Check out now
-						</Button>
+						<>
+							<Button
+								size='md'
+								variant='outline'
+								color='gray.7'
+								classNames={{
+									root: classes.emptyCartBtnRoot,
+								}}
+								onClick={clearCart}
+								loading={loading}
+							>
+								Clear cart
+							</Button>
+							<Button
+								size='md'
+								variant='filled'
+								color='cRed.0'
+								component={Link}
+								href='/checkout'
+								classNames={{
+									root: classes.checkoutBtnRoot,
+								}}
+								loading={loading}
+							>
+								Check out now
+							</Button>
+						</>
 					)}
-
-					<Button
-						size='md'
-						variant='outline'
-						color='gray.5'
-						tt='uppercase'
-						ff={rajdhani.style.fontFamily}
-						style={theme => ({
-							boxShadow: '0 0 3px rgba(0, 0, 0, 0.1)',
-							fontWeight: 700,
-							transition: 'ease-in .3s all',
-							color: theme.colors.gray[7],
-
-							'&:hover': {
-								backgroundColor: theme.colors.gray[7],
-								color: 'red',
-							},
-						})}
-						component={Link}
-						href='/cart'
-					>
-						View cart
-					</Button>
 				</Stack>
 			</Drawer>
 		</>

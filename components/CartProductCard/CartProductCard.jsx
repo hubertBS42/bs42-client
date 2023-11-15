@@ -3,8 +3,16 @@ import { Box, Flex, Stack, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 import classes from './CartProductCard.module.scss'
+import { useSelector } from 'react-redux'
+import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { roundMoney } from '@/utils/functions'
 
 const CartProductCard = ({ item }) => {
+	const settings = useSelector(getSettings)
+	const currentRate = settings[0].exchangeRate.currentRate
+	const roundedSellPrice = roundMoney(
+		item.product.sellPrice * currentRate
+	)
 	return (
 		<Flex
 			direction='row'
@@ -32,7 +40,7 @@ const CartProductCard = ({ item }) => {
 					</Title>
 				</Link>
 				<Text className={classes.price}>
-					{item.quantity} x GHC {item.product.sellPrice}
+					{item.quantity} x GHS {roundedSellPrice}
 				</Text>
 			</Stack>
 		</Flex>
