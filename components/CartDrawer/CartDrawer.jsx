@@ -3,9 +3,11 @@ import {
 	ActionIcon,
 	Button,
 	Drawer,
+	Flex,
 	Indicator,
 	Stack,
 	Text,
+	Title,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconShoppingCart } from '@tabler/icons-react'
@@ -17,15 +19,23 @@ import {
 	getLoadingState,
 	selectAllCartItems,
 	totalCartItemSelector,
+	totalPriceSelector,
 } from '@/redux/features/cart/cartSlice'
 import classes from './CartDrawer.module.scss'
 import { clearCart } from '@/redux/features/cart/cartActions'
+import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { roundMoney } from '@/utils/functions'
 
 const CartDrawer = () => {
 	const [opened, { open, close }] = useDisclosure(false)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
+	const cartPriceTotal = useSelector(totalPriceSelector)
+	const settings = useSelector(getSettings)
 	const cartItems = useSelector(selectAllCartItems)
 	const loading = useSelector(getLoadingState)
+
+	const currentRate = settings[0]?.exchangeRate.currentRate
+	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
 	return (
 		<>
 			{cartItemsTotal > 0 ? (
@@ -72,7 +82,23 @@ const CartDrawer = () => {
 					</Text>
 				)}
 
-				<Stack justify='stretch' mt='2em'>
+				{cartItems.length > 0 && (
+					<Stack mt='1em' gap={0} align='flex-end'>
+						<Title
+							order={6}
+							classNames={{
+								root: classes.totalTitle,
+							}}
+						>
+							Total:
+						</Title>
+						<Title order={3} className={classes.totalValue}>
+							GHS {roundedPriceTotal}
+						</Title>
+					</Stack>
+				)}
+
+				<Stack justify='stretch' mt='1em'>
 					{cartItems.length > 0 && (
 						<>
 							<Button
@@ -96,7 +122,7 @@ const CartDrawer = () => {
 								classNames={{
 									root: classes.checkoutBtnRoot,
 								}}
-								loading={loading}
+								disabled={loading}
 							>
 								Check out now
 							</Button>

@@ -14,10 +14,31 @@ const cartSlice = createSlice({
 			state.cartItems = action.payload
 			state.isLoading = false
 		},
+		modifyItem: (state, action) => {
+			const product = state.cartItems.find(
+				item => item.product._id === action.payload.product._id
+			)
+
+			if (product) {
+				product.quantity = action.payload.quantity
+
+				if (product.quantity === 0) {
+					state.cartItems = state.cartItems.filter(
+						item => item.product._id !== action.payload.product._id
+					)
+				}
+			} else {
+				state.cartItems.push({
+					product: action.payload.product,
+					quantity: action.payload.quantity,
+				})
+			}
+		},
 		addItem: (state, action) => {
 			const product = state.cartItems.find(
 				item => item.product._id === action.payload._id
 			)
+
 			if (product) {
 				product.quantity++
 			} else {
@@ -33,12 +54,9 @@ const cartSlice = createSlice({
 			)
 
 			if (product) {
-				product.quantity--
-				if (product.quantity === 0) {
-					state.cartItems = state.cartItems.filter(
-						item => item.product._id !== action.payload._id
-					)
-				}
+				state.cartItems = state.cartItems.filter(
+					item => item.product._id !== action.payload._id
+				)
 			}
 		},
 		setIsLoading: (state, action) => {
@@ -71,15 +89,16 @@ export const totalPriceSelector = createSelector(
 		)
 )
 
-export const productQtySelector = createSelector(
-	[cartItems, (cartItems, productId) => productId],
-	(cartItems, productId) =>
-		cartItems.find(item => item.product._id === productId?.quantity)
-)
+export const productQtyInCartSelector = productId =>
+	createSelector([cartItems], cartItems => {
+		return cartItems.find(item => item.product._id === productId)
+			?.quantity
+	})
 
 export const {
 	setItems,
 	addItem,
+	modifyItem,
 	removeItem,
 	setIsLoading,
 	setUserId,

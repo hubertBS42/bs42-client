@@ -32,3 +32,21 @@
 	color: var(--mantine-colors-gray-8);
 	font-family: var(--font-rajdhani);
 }
+
+.numberInputLabel {
+	color: var(--mantine-color-gray-8);
+	font-weight: 700;
+	font-size: 12px;
+	font-family: var(--font-arimo);
+	margin-bottom: 0.6em;
+}
+
+.numberInputInput {
+	font-weight: 400;
+	font-size: 14px;
+	font-family: var(--font-arimo);
+}
+
+.numberInputRoot {
+	width: 60px;
+}

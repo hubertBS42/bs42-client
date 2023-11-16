@@ -18,16 +18,23 @@ import Link from 'next/link'
 import classes from './ProductCard.module.scss'
 import { useSelector } from 'react-redux'
 import { getSettings } from '@/redux/features/settings/settingsSlice'
-import { getLoadingState } from '@/redux/features/cart/cartSlice'
+import { useState } from 'react'
 
 const ProductCard = ({ product, border }) => {
+	const [loading, setLoading] = useState(false)
 	const settings = useSelector(getSettings)
 	const currentRate = settings[0].exchangeRate.currentRate
 	const roundedSellPrice = roundMoney(product?.sellPrice * currentRate)
 	const roundedDiscountPrice = roundMoney(
 		(20 / 100) * product?.sellPrice * currentRate
 	)
-	const loading = useSelector(getLoadingState)
+
+	const handleAdd = async () => {
+		setLoading(true)
+		await addToCart(product)
+		setLoading(false)
+	}
+
 	return (
 		<Card padding={!border ? 0 : 'sm'} withBorder={border} radius='sm'>
 			<Link href={`/products/${product?.slug}`}>
@@ -132,7 +139,7 @@ const ProductCard = ({ product, border }) => {
 					color='gray.5'
 					className={classes.addToCartBtn}
 					disabled={product.countInStock < 1}
-					onClick={() => addToCart(product)}
+					onClick={handleAdd}
 					loading={loading}
 				>
 					{product.countInStock < 1 ? 'Sold Out' : 'Add to Cart'}

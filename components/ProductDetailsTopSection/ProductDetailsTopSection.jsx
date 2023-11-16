@@ -17,15 +17,34 @@ import {
 import { Carousel } from '@mantine/carousel'
 import Image from 'next/image'
 import classes from './ProductDetailsTopSection.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IconFlame } from '@tabler/icons-react'
 import { useSelector } from 'react-redux'
 import { getSettings } from '@/redux/features/settings/settingsSlice'
 import { roundMoney } from '@/utils/functions'
+import { productQtyInCartSelector } from '@/redux/features/cart/cartSlice'
+import { modifyCart } from '@/redux/features/cart/cartActions'
 
 const ProductDetailsTopSection = ({ data }) => {
 	const [currentImage, setCurrentImage] = useState(0)
+	const [loading, setLoading] = useState(false)
+	const [quantity, setQuantity] = useState(1)
 	const settings = useSelector(getSettings)
+	const curQuantity = useSelector(productQtyInCartSelector(data._id))
+
+	useEffect(() => {
+		if (curQuantity) {
+			setQuantity(curQuantity)
+		}
+	}, [curQuantity])
+
+	const handleChange = value => setQuantity(value)
+
+	const handleAdd = async () => {
+		setLoading(true)
+		await modifyCart(data, quantity)
+		setLoading(false)
+	}
 
 	const currentRate = settings[0]?.exchangeRate.currentRate
 	const roundedSellPrice = roundMoney(data.sellPrice * currentRate)
@@ -102,7 +121,7 @@ const ProductDetailsTopSection = ({ data }) => {
 				<Grid.Col span={{ base: 12, sm: 6 }}>
 					<Stack mb='lg'>
 						<Title className={classes.brand}>{data.brand.name} &reg;</Title>
-						<Title className={classes.title}>{data.title} &reg;</Title>
+						<Title className={classes.title}>{data.title}</Title>
 						<Group className={classes.rating} gap='xl'>
 							<Rating />
 							<Text className={classes.text}>No Reviews Yet</Text>
@@ -141,7 +160,7 @@ const ProductDetailsTopSection = ({ data }) => {
 					<Stack>
 						<Group className={classes.metadata}>
 							<Text className={classes.metadataTitle}>Current Stock:</Text>
-							<Text className={classes.value}>7</Text>
+							<Text className={classes.value}>{data.countInStock}</Text>
 						</Group>
 
 						<Flex align='flex-end' gap={20}>
@@ -156,7 +175,11 @@ const ProductDetailsTopSection = ({ data }) => {
 								clampBehavior='strict'
 								allowDecimal={false}
 								size='md'
-								defaultValue={1}
+								value={quantity}
+								onChange={handleChange}
+								disabled={loading}
+								min={1}
+								max={data.countInStock}
 							/>
 							<Button
 								size='md'
@@ -164,9 +187,10 @@ const ProductDetailsTopSection = ({ data }) => {
 								classNames={{
 									root: classes.btnRoot,
 								}}
-								href=''
+								loading={loading}
+								onClick={handleAdd}
 							>
-								Add to cart
+								{curQuantity ? 'Update Cart' : 'Add to cart'}
 							</Button>
 						</Flex>
 					</Stack>

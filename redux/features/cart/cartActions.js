@@ -2,6 +2,8 @@ import { store } from '@/redux/store'
 import {
 	addItem,
 	emptyCart,
+	modifyItem,
+	removeItem,
 	setIsLoading,
 	setItems,
 	setUserId,
@@ -12,6 +14,60 @@ import { fetcher } from '@/utils/functions'
 import { getSession } from 'next-auth/react'
 
 const { dispatch, getState } = store
+
+export const modifyCart = async (product, quantity) => {
+	const session = await getSession()
+	let cartToken = localStorage.getItem('cartToken') || null
+	const userID = session?.user.id || null
+
+	if (cartToken) {
+		cartToken = JSON.parse(cartToken)
+	}
+
+	dispatch(modifyItem({ product, quantity }))
+
+	const currentCart = getState().cart
+
+	const preparedData = {
+		items: currentCart.cartItems.map(item => {
+			return { product: item.product._id, quantity: item.quantity }
+		}),
+	}
+
+	const { status, message, data } = await fetcher(
+		`/api/cart/update?cartToken=${cartToken}&userID=${userID}`,
+		{
+			method: 'PATCH',
+			body: JSON.stringify(preparedData),
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+			},
+		}
+	)
+
+	if (status === 'success') {
+		if (data.token) {
+			localStorage.setItem('cartToken', JSON.stringify(data.token))
+		}
+
+		notifications.show({
+			title: 'Cart updated',
+			message: 'Product has been added to cart successfully.',
+			color: 'green',
+			icon: <IconCheck />,
+		})
+	} else if (status === 'error' && message === 'jwt expired') {
+		localStorage.removeItem('cartToken')
+		dispatch(emptyCart())
+	} else {
+		notifications.show({
+			title: 'Error',
+			message: 'Failed to update cart.',
+			color: 'red',
+			icon: <IconX />,
+		})
+	}
+}
 
 export const addToCart = async product => {
 	const session = await getSession()
@@ -58,6 +114,60 @@ export const addToCart = async product => {
 		localStorage.removeItem('cartToken')
 		dispatch(emptyCart())
 		addToCart(product)
+	} else {
+		notifications.show({
+			title: 'Error',
+			message: 'Failed to update cart.',
+			color: 'red',
+			icon: <IconX />,
+		})
+	}
+}
+
+export const removeFromCart = async product => {
+	const session = await getSession()
+	let cartToken = localStorage.getItem('cartToken') || null
+	const userID = session?.user.id || null
+
+	if (cartToken) {
+		cartToken = JSON.parse(cartToken)
+	}
+
+	dispatch(removeItem(product))
+
+	const currentCart = getState().cart
+
+	const preparedData = {
+		items: currentCart.cartItems.map(item => {
+			return { product: item.product._id, quantity: item.quantity }
+		}),
+	}
+
+	const { status, message, data } = await fetcher(
+		`/api/cart/update?cartToken=${cartToken}&userID=${userID}`,
+		{
+			method: 'PATCH',
+			body: JSON.stringify(preparedData),
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8',
+			},
+		}
+	)
+
+	if (status === 'success') {
+		if (data.token) {
+			localStorage.setItem('cartToken', JSON.stringify(data.token))
+		}
+
+		notifications.show({
+			title: 'Cart updated',
+			message: 'Product has been removed from cart successfully.',
+			color: 'green',
+			icon: <IconCheck />,
+		})
+	} else if (status === 'error' && message === 'jwt expired') {
+		localStorage.removeItem('cartToken')
+		dispatch(emptyCart())
 	} else {
 		notifications.show({
 			title: 'Error',

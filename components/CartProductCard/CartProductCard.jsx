@@ -1,18 +1,47 @@
 import { arimo, rajdhani } from '@/utils/font'
-import { Box, Flex, Stack, Text, Title } from '@mantine/core'
+import {
+	ActionIcon,
+	Box,
+	Flex,
+	NumberInput,
+	Stack,
+	Text,
+	Title,
+} from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 import classes from './CartProductCard.module.scss'
 import { useSelector } from 'react-redux'
 import { getSettings } from '@/redux/features/settings/settingsSlice'
 import { roundMoney } from '@/utils/functions'
+import { IconTrash } from '@tabler/icons-react'
+import {
+	modifyCart,
+	removeFromCart,
+} from '@/redux/features/cart/cartActions'
+import { useState } from 'react'
+import { useDebouncedCallback } from 'use-debounce'
 
 const CartProductCard = ({ item }) => {
+	const [loading, setLoading] = useState(false)
 	const settings = useSelector(getSettings)
 	const currentRate = settings[0].exchangeRate.currentRate
 	const roundedSellPrice = roundMoney(
 		item.product.sellPrice * currentRate
 	)
+
+	const handleChange = useDebouncedCallback(async quantity => {
+		setLoading(true)
+		await modifyCart(item.product, quantity)
+		setLoading(false)
+	}, 500)
+
+	const handleRemove = async () => {
+		setLoading(true)
+		await removeFromCart(item.product)
+		setLoading(false)
+	}
+
 	return (
 		<Flex
 			direction='row'
@@ -39,10 +68,37 @@ const CartProductCard = ({ item }) => {
 						{item.product.title}
 					</Title>
 				</Link>
-				<Text className={classes.price}>
-					{item.quantity} x GHS {roundedSellPrice}
-				</Text>
+				<Flex align='center' gap='xs' mt={5}>
+					<NumberInput
+						classNames={{
+							label: classes.numberInputLabel,
+							input: classes.numberInputInput,
+							root: classes.numberInputRoot,
+						}}
+						allowNegative={false}
+						clampBehavior='strict'
+						allowDecimal={false}
+						size='xs'
+						defaultValue={item.quantity}
+						onChange={handleChange}
+						disabled={loading}
+						min={0}
+						max={item.product.countInStock}
+					/>
+					<Text className={classes.price}> @ GHS {roundedSellPrice}</Text>
+				</Flex>
 			</Stack>
+
+			<ActionIcon
+				variant='outline'
+				color='red'
+				aria-label='Delete'
+				ml='auto'
+				onClick={handleRemove}
+				disabled={loading}
+			>
+				<IconTrash style={{ width: '70%', height: '70%' }} stroke={1.5} />
+			</ActionIcon>
 		</Flex>
 	)
 }
