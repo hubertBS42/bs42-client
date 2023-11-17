@@ -34,7 +34,7 @@ const CartProductCard = ({ item }) => {
 		setLoading(true)
 		await modifyCart(item.product, quantity)
 		setLoading(false)
-	}, 500)
+	}, 800)
 
 	const handleRemove = async () => {
 		setLoading(true)
@@ -78,7 +78,7 @@ const CartProductCard = ({ item }) => {
 						allowNegative={false}
 						clampBehavior='strict'
 						allowDecimal={false}
-						size='xs'
+						size='sm'
 						defaultValue={item.quantity}
 						onChange={handleChange}
 						disabled={loading}

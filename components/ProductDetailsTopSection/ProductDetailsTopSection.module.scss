@@ -112,3 +112,11 @@
 		color: var(--mantine-color-cRed-0);
 	}
 }
+
+.disabledBtnRoot {
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var(--mantine-color-gray-8);
+	font-family: var(--font-rajdhani);
+	width: 250px;
+}

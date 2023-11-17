@@ -177,21 +177,35 @@ const ProductDetailsTopSection = ({ data }) => {
 								size='md'
 								value={quantity}
 								onChange={handleChange}
-								disabled={loading}
+								disabled={loading || data.countInStock === 0}
 								min={1}
 								max={data.countInStock}
 							/>
-							<Button
-								size='md'
-								variant='filled'
-								classNames={{
-									root: classes.btnRoot,
-								}}
-								loading={loading}
-								onClick={handleAdd}
-							>
-								{curQuantity ? 'Update Cart' : 'Add to cart'}
-							</Button>
+
+							{data.countInStock > 0 ? (
+								<Button
+									size='md'
+									variant='filled'
+									classNames={{
+										root: classes.btnRoot,
+									}}
+									loading={loading}
+									onClick={handleAdd}
+								>
+									{curQuantity ? 'Update Cart' : 'Add to cart'}
+								</Button>
+							) : (
+								<Button
+									size='md'
+									variant='filled'
+									classNames={{
+										root: classes.disabledBtnRoot,
+									}}
+									disabled
+								>
+									Sold out
+								</Button>
+							)}
 						</Flex>
 					</Stack>
 				</Grid.Col>

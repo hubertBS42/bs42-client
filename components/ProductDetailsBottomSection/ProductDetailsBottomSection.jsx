@@ -1,9 +1,10 @@
 'use client'
-import { Container, Flex, Grid, Tabs } from '@mantine/core'
+import { Accordion, Container, Flex, Grid, Tabs } from '@mantine/core'
 import classes from './ProductDetailsBottomSection.module.scss'
 import Link from 'next/link'
 import {
 	IconBook2,
+	IconPlus,
 	IconShieldCheck,
 	IconTruckReturn,
 } from '@tabler/icons-react'
@@ -37,25 +38,44 @@ const ProductDetailsBottomSection = ({ data }) => {
 
 						<Tabs.Panel value='resources'>
 							<Flex className={classes.resources} gap={16}>
-								<Link href=''>
-									<IconBook2 className={classes.icon} color='#5fb139' />{' '}
-									Instruction Manual
-								</Link>
+								{data.instructions && (
+									<Link href=''>
+										<IconBook2 className={classes.icon} color='#5fb139' />{' '}
+										Instruction Manual
+									</Link>
+								)}
 
-								<Link href=''>
-									<IconShieldCheck className={classes.icon} color='#b156d4' />{' '}
-									Warranty
-								</Link>
+								{data.warranty && (
+									<Link href=''>
+										<IconShieldCheck className={classes.icon} color='#b156d4' />{' '}
+										Warranty
+									</Link>
+								)}
 
-								<Link href=''>
-									<IconTruckReturn className={classes.icon} color='#b20000' />{' '}
-									Shipping & Returns
-								</Link>
+								{data.shippingAndReturns && (
+									<Link href=''>
+										<IconTruckReturn className={classes.icon} color='#b20000' />{' '}
+										Shipping & Returns
+									</Link>
+								)}
 							</Flex>
 						</Tabs.Panel>
 
-						<Tabs.Panel value='videos'>Settings tab content</Tabs.Panel>
-						<Tabs.Panel value='faq'>Settings tab content</Tabs.Panel>
+						<Tabs.Panel value='videos'></Tabs.Panel>
+						<Tabs.Panel value='faq'>
+							<Accordion
+								classNames={{ chevron: classes.chevron }}
+								chevron={<IconPlus className={classes.icon} />}
+							>
+								{data.faqs.length > 0 &&
+									data.faqs.map((faq, i) => (
+										<Accordion.Item key={i} value={faq.question}>
+											<Accordion.Control>{faq.question}</Accordion.Control>
+											<Accordion.Panel>{faq.answer}</Accordion.Panel>
+										</Accordion.Item>
+									))}
+							</Accordion>
+						</Tabs.Panel>
 					</Tabs>
 				</Grid.Col>
 			</Grid>
