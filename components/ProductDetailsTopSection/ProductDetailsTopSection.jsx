@@ -27,6 +27,7 @@ import { modifyCart } from '@/redux/features/cart/cartActions'
 
 const ProductDetailsTopSection = ({ data }) => {
 	const [currentImage, setCurrentImage] = useState(0)
+	const [embla, setEmbla] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [quantity, setQuantity] = useState(1)
 	const settings = useSelector(getSettings)
@@ -37,6 +38,8 @@ const ProductDetailsTopSection = ({ data }) => {
 			setQuantity(curQuantity)
 		}
 	}, [curQuantity])
+
+	const handleCarouselChange = index => embla.scrollTo(index)
 
 	const handleChange = value => setQuantity(value)
 
@@ -68,7 +71,7 @@ const ProductDetailsTopSection = ({ data }) => {
 				className={`${classes.carouselImageWrapper} ${
 					classes.thumbnail
 				} ${currentImage === i && classes.active}`}
-				onClick={() => setCurrentImage(i)}
+				onClick={() => handleCarouselChange(i)}
 			>
 				<Image
 					src={image.url}
@@ -95,6 +98,7 @@ const ProductDetailsTopSection = ({ data }) => {
 							height={400}
 							onSlideChange={index => setCurrentImage(index)}
 							// initialSlide={currentImage}
+							getEmblaApi={setEmbla}
 							className={`${classes.carouselContainer} ${classes.main}`}
 						>
 							{MainSlides}

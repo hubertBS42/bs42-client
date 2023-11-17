@@ -66,6 +66,7 @@ const ProductDetailsBottomSection = ({ data }) => {
 							<Accordion
 								classNames={{ chevron: classes.chevron }}
 								chevron={<IconPlus className={classes.icon} />}
+								variant='contained'
 							>
 								{data.faqs.length > 0 &&
 									data.faqs.map((faq, i) => (
