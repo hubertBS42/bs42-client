@@ -4,7 +4,8 @@ import { fetcher } from '@/utils/functions'
 
 const ProductDetails = async ({ params: { slug } }) => {
 	const { data } = await fetcher(
-		`https://portal.bs42.net/api/products/${slug}`
+		`https://portal.bs42.net/api/products/${slug}`,
+		{ cache: 'no-store' }
 	)
 
 	return (
