@@ -8,7 +8,7 @@ const TopNavLinks = () => {
 			<Link href='/' className={classes.link}>
 				Home
 			</Link>
-			<Link href='/shop' className={classes.link}>
+			<Link href='/products' className={classes.link}>
 				Shop
 			</Link>
 			<Link href='/voip' className={classes.link}>

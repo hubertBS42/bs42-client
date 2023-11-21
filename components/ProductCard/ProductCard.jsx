@@ -23,7 +23,7 @@ import { useState } from 'react'
 const ProductCard = ({ product, border }) => {
 	const [loading, setLoading] = useState(false)
 	const settings = useSelector(getSettings)
-	const currentRate = settings[0].exchangeRate.currentRate
+	const currentRate = settings[0]?.exchangeRate.currentRate
 	const roundedSellPrice = roundMoney(product?.sellPrice * currentRate)
 	const roundedDiscountPrice = roundMoney(
 		(20 / 100) * product?.sellPrice * currentRate

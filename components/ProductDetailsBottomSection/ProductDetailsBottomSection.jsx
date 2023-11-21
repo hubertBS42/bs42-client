@@ -1,5 +1,12 @@
 'use client'
-import { Accordion, Container, Flex, Grid, Tabs } from '@mantine/core'
+import {
+	Accordion,
+	Container,
+	Flex,
+	Grid,
+	Tabs,
+	TypographyStylesProvider,
+} from '@mantine/core'
 import classes from './ProductDetailsBottomSection.module.scss'
 import Link from 'next/link'
 import {
@@ -33,7 +40,9 @@ const ProductDetailsBottomSection = ({ data }) => {
 						</Tabs.List>
 
 						<Tabs.Panel value='description'>
-							<div dangerouslySetInnerHTML={{ __html: data.description }} />
+							<TypographyStylesProvider>
+								<div dangerouslySetInnerHTML={{ __html: data.description }} />
+							</TypographyStylesProvider>
 						</Tabs.Panel>
 
 						<Tabs.Panel value='resources'>

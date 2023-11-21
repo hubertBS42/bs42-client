@@ -1,0 +1,16 @@
+.cardSection {
+	padding: 0.5em 1.4em;
+}
+
+.linkRoot {
+	transition: ease-in 0.3s all;
+
+	&:hover {
+		background-color: transparent;
+		color: var(--mantine-color-cRed-0);
+	}
+}
+
+.linkLabel {
+	font-size: 13px;
+}

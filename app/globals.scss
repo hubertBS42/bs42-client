@@ -27,13 +27,6 @@ a {
 	font-size: 1.2em !important;
 	font-family: var(--font-rajdhani);
 }
-.mantine-NavLink-label {
-	font-family: var(--font-rajdhani);
-	font-size: 16px;
-	font-weight: 600;
-	color: var(--mantine-color-gray-8);
-	text-transform: uppercase;
-}
 
 .mantine-NavLink-root {
 	padding-left: 0 !important;
@@ -58,27 +51,6 @@ a {
 .mantine-TextInput-input {
 	font-size: 15px !important;
 }
-
-// .mantine-Tabs-tabLabel {
-// 	text-transform: uppercase;
-// 	font-family: var(--font-rajdhani);
-// 	font-weight: 700;
-// }
-
-// .mantine-Tabs-tab {
-// 	color: var(--mantine-colors-gray-5);
-
-// 	&[aria-selected='true'] {
-// 		color: var(--mantine-colors-gray-8);
-// 	}
-// 	&:hover {
-// 		background: none;
-// 		border-color: transparent;
-// 	}
-// }
-// .mantine-Tabs-tabsList {
-// 	border-bottom: 1px solid var(--mantine-colors-gray-3);
-// }
 
 .productsShowcase {
 	& .mantine-Select-input {

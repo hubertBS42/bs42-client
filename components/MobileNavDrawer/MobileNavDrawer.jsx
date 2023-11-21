@@ -13,6 +13,7 @@ import {
 import Link from 'next/link'
 import CategoriesDrawer from '../CategoriesDrawer/CategoriesDrawer'
 import { rajdhani } from '@/utils/font'
+import classes from './MobileNavDrawer.module.scss'
 
 const MobileNavDrawer = () => {
 	const [opened, { toggle }] = useDisclosure(false)
@@ -38,6 +39,9 @@ const MobileNavDrawer = () => {
 						leftSection={<IconHome size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
+						classNames={{
+							label: classes.navLinkLabel,
+						}}
 					/>
 
 					<CategoriesDrawer />
@@ -47,6 +51,9 @@ const MobileNavDrawer = () => {
 						leftSection={<IconBuildingStore size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='#'
+						classNames={{
+							label: classes.navLinkLabel,
+						}}
 					/>
 
 					<NavLink
@@ -54,6 +61,9 @@ const MobileNavDrawer = () => {
 						leftSection={<IconPhoneCall size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='#'
+						classNames={{
+							label: classes.navLinkLabel,
+						}}
 					/>
 
 					<NavLink
@@ -61,6 +71,9 @@ const MobileNavDrawer = () => {
 						leftSection={<IconSchool size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
+						classNames={{
+							label: classes.navLinkLabel,
+						}}
 					/>
 
 					<NavLink
@@ -68,6 +81,9 @@ const MobileNavDrawer = () => {
 						leftSection={<IconSend size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
+						classNames={{
+							label: classes.navLinkLabel,
+						}}
 					/>
 
 					<NavLink
@@ -75,6 +91,9 @@ const MobileNavDrawer = () => {
 						leftSection={<IconArticle size='1.1em' stroke={1.5} />}
 						component={Link}
 						href='/'
+						classNames={{
+							label: classes.navLinkLabel,
+						}}
 					/>
 				</Stack>
 			</Drawer>

@@ -7,7 +7,7 @@ import classes from './CategoryMegaMenuCard.module.scss'
 const CategoryMegaMenuCard = ({ category }) => {
 	return (
 		<Card>
-			<Link href='#'>
+			<Link href={`/products?category=${category.slug}`}>
 				<Title className={classes.subCategoryLabel}>
 					{category.name}
 				</Title>
@@ -15,7 +15,11 @@ const CategoryMegaMenuCard = ({ category }) => {
 
 			<Stack gap={10}>
 				{category.children.map(category => (
-					<Link key={category.id} className={classes.link} href='#'>
+					<Link
+						key={category.id}
+						className={classes.link}
+						href={`/products?category=${category.slug}`}
+					>
 						{category.name}
 					</Link>
 				))}

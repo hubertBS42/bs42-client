@@ -7,6 +7,7 @@ import {
 } from '@mantine/core'
 import CategoryMegaMenuCard from '../CategoryMegaMenuCard/CategoryMegaMenuCard'
 import classes from './CategoryMegaMenu.module.scss'
+import Link from 'next/link'
 
 const CategoryMegaMenu = ({ category }) => {
 	return (
@@ -18,7 +19,9 @@ const CategoryMegaMenu = ({ category }) => {
 		>
 			<HoverCard.Target>
 				<Title order={2} className={classes.categoryLabel}>
-					{category.name}
+					<Link href={`/products?category=${category.slug}`}>
+						{category.name}
+					</Link>
 				</Title>
 			</HoverCard.Target>
 			<HoverCard.Dropdown>
