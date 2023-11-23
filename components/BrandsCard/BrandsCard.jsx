@@ -1,8 +1,25 @@
 'use client'
 import { Card, NavLink, Title } from '@mantine/core'
 import classes from './BrandsCard.module.scss'
+import {
+	usePathname,
+	useRouter,
+	useSearchParams,
+} from 'next/navigation'
 
-const BrandsCard = ({ brands }) => {
+const BrandsCard = ({ brands, slug }) => {
+	const { replace } = useRouter()
+	const pathname = usePathname()
+	const searchParams = useSearchParams()
+
+	const params = new URLSearchParams(searchParams)
+
+	const handleClick = newSlug => {
+		if (slug === newSlug) return
+		params.set('brand', newSlug)
+		replace(`${pathname}?${params}`)
+	}
+
 	const renderBrands = brands.map(brand => (
 		<NavLink
 			key={brand._id}
@@ -11,6 +28,8 @@ const BrandsCard = ({ brands }) => {
 				root: classes.linkRoot,
 				label: classes.linkLabel,
 			}}
+			active={brand.slug === slug}
+			onClick={() => handleClick(brand.slug)}
 		/>
 	))
 	return (

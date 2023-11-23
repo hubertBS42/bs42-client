@@ -37,7 +37,7 @@ const ProductCard = ({ product, border }) => {
 
 	return (
 		<Card padding={!border ? 0 : 'sm'} withBorder={border} radius='sm'>
-			<Link href={`/products/${product?.slug}`}>
+			<Link href={`/product/${product?.slug}`}>
 				<Card.Section
 					className={classes.imgWrapper}
 					h={{ base: '100px', xs: '200px' }}
@@ -114,6 +114,8 @@ const ProductCard = ({ product, border }) => {
 						mb={6}
 						fz={{ base: '11px', xs: '12px' }}
 						lh={{ base: '20px', xs: '22px' }}
+						component={Link}
+						href={`/product/${product?.slug}`}
 					>
 						{product?.title}
 					</Text>

@@ -1,0 +1,18 @@
+.selectRoot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	column-gap: 0.8em;
+}
+
+.selectLabel {
+	font-family: var(--font-arimo);
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--mantine-color-gray-7);
+}
+
+.selectInput {
+	width: 80px;
+}

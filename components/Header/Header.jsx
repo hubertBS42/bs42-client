@@ -171,7 +171,7 @@ const Header = () => {
 				</Container>
 			</Box>
 
-			{pathname === '/' && <CategoryMenu />}
+			{pathname !== '/products' && <CategoryMenu />}
 		</Stack>
 	)
 }

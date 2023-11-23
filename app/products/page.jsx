@@ -3,7 +3,6 @@ import {
 	Box,
 	Container,
 	Flex,
-	Pagination,
 	SimpleGrid,
 	Stack,
 } from '@mantine/core'
@@ -13,9 +12,18 @@ import { fetcher } from '@/utils/functions'
 import PriceCard from '@/components/PriceCard/PriceCard'
 import BrandsCard from '@/components/BrandsCard/BrandsCard'
 import ProductCard from '@/components/ProductCard/ProductCard'
+import ProductsPageToolbar from '@/components/ProductsPageToolbar/ProductsPageToolbar'
+import CustomPagination from '@/components/CustomPagination/CustomPagination'
 
 const ProductsPage = async ({ searchParams }) => {
-	const slug = searchParams?.category || null
+	const category = searchParams?.category || null
+	const brand = searchParams?.brand || null
+	const priceMin = searchParams?.price_min || null
+	const priceMax = searchParams?.price_max || null
+	const sortBy = searchParams?.sort_by || 'newest'
+	const perPage = searchParams?.per_page || '25'
+	const page = searchParams?.page || '1'
+
 	const {
 		status,
 		message,
@@ -29,7 +37,7 @@ const ProductsPage = async ({ searchParams }) => {
 
 	return (
 		<>
-			<CustomBreadcrumbs categories={categories} slug={slug} />
+			<CustomBreadcrumbs categories={categories} slug={category} />
 			<Container size='xl' py='xl'>
 				<Flex gap='lg'>
 					<Stack
@@ -37,12 +45,13 @@ const ProductsPage = async ({ searchParams }) => {
 						visibleFrom='sm'
 						gap='xl'
 					>
-						<CategoriesCard categories={categories} />
-						<PriceCard />
-						<BrandsCard brands={brands} />
+						<CategoriesCard categories={categories} slug={category} />
+						<PriceCard priceMin={priceMin} priceMax={priceMax} />
+						<BrandsCard brands={brands} slug={brand} />
 					</Stack>
 
 					<Box w={{ base: '100%', sm: '65.8', md: '75.1%', lg: '80%' }}>
+						<ProductsPageToolbar slug={{ sortBy, perPage }} />
 						<SimpleGrid
 							cols={{ base: 2, sm: 3, md: 4 }}
 							spacing={{ base: 'sm', sm: 'sm', md: 'md' }}
@@ -51,9 +60,7 @@ const ProductsPage = async ({ searchParams }) => {
 								<ProductCard key={product._id} product={product} />
 							))}
 						</SimpleGrid>
-						<Flex mt={30} justify='center'>
-							<Pagination total={10} />
-						</Flex>
+						<CustomPagination slug={{ perPage, page }} />
 					</Box>
 				</Flex>
 			</Container>

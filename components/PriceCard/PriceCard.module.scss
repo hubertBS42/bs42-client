@@ -9,6 +9,11 @@
 		background-color: transparent;
 		color: var(--mantine-color-cRed-0);
 	}
+
+	&[data-active='true'] {
+		background-color: transparent;
+		color: var(--mantine-color-cRed-0);
+	}
 }
 
 .linkLabel {

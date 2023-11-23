@@ -63,7 +63,7 @@ const CartProductCard = ({ item }) => {
 					{item.product.brand.name}
 				</Title>
 
-				<Link href='/'>
+				<Link href={`/product/${item.product.slug}`}>
 					<Title order={3} className={classes.title}>
 						{item.product.title}
 					</Title>

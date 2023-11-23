@@ -1,11 +1,42 @@
 'use client'
 import { Card, NavLink, Title } from '@mantine/core'
 import classes from './CategoriesCard.module.scss'
-import { formatCategoriesForHeader } from '@/utils/functions'
+import {
+	findCategoryBySlugWithAncestors,
+	formatCategoriesForHeader,
+} from '@/utils/functions'
 import Link from 'next/link'
+import {
+	usePathname,
+	useRouter,
+	useSearchParams,
+} from 'next/navigation'
 
-const CategoriesCard = ({ categories }) => {
+const CategoriesCard = ({ categories, slug }) => {
+	const { replace } = useRouter()
+	const pathname = usePathname()
+	const searchParams = useSearchParams()
+
+	const params = new URLSearchParams(searchParams)
+
+	let displayCategories = null
 	const formattedCategories = formatCategoriesForHeader(categories)
+
+	if (slug) {
+		const ancestor = findCategoryBySlugWithAncestors(
+			formattedCategories,
+			slug
+		)[0]
+		displayCategories = [ancestor]
+	} else {
+		displayCategories = formattedCategories
+	}
+
+	const handleClick = newSlug => {
+		if (slug === newSlug) return
+		params.set('category', newSlug)
+		replace(`${pathname}?${params}`)
+	}
 
 	const renderCategories = data => {
 		return data.map(category => (
@@ -17,10 +48,12 @@ const CategoriesCard = ({ categories }) => {
 					root: classes.linkRoot,
 					label: classes.linkLabel,
 				}}
-				// component={Link}
-				// href={`/products/${category.slug}`}
+				active={category.slug === slug}
+				opened
+				onClick={() => handleClick(category.slug)}
 			>
-				{category.children &&
+				{slug &&
+					category.children &&
 					category.children.length > 0 &&
 					renderCategories(category.children)}
 			</NavLink>
@@ -41,7 +74,7 @@ const CategoriesCard = ({ categories }) => {
 				</Title>
 			</Card.Section>
 			<Card.Section withBorder>
-				{renderCategories(formattedCategories)}
+				{renderCategories(displayCategories)}
 			</Card.Section>
 		</Card>
 	)

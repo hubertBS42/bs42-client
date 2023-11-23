@@ -91,3 +91,31 @@ export const findCategoryBySlugWithAncestors = (
 	// If the category is not found
 	return []
 }
+
+export const findCategoryBySlugWithAncestorsAndChildren = (
+	categories,
+	targetSlug,
+	ancestors = []
+) => {
+	for (const category of categories) {
+		if (category.slug === targetSlug) {
+			return [...ancestors, category, ...(category.children || [])]
+		}
+
+		if (category.children && category.children.length > 0) {
+			const result = findCategoryBySlugWithAncestorsAndChildren(
+				category.children,
+				targetSlug,
+				[...ancestors, category]
+			)
+
+			if (result.length > ancestors.length) {
+				// If the category is found in children, return the result
+				return result
+			}
+		}
+	}
+
+	// If the category is not found
+	return []
+}
