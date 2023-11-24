@@ -48,7 +48,7 @@ const CustomBreadcrumbs = ({ categories, slug }) => {
 		<Box className={classes.container}>
 			<Container size='xl'>
 				<Title order={3} c='gray.7'>
-					{slug ? categoryWithAncestors.pop().name : 'All Products'}
+					{/* {slug ? categoryWithAncestors.pop().name : 'All Products'} */}
 				</Title>
 				{slug && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
 			</Container>

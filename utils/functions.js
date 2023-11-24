@@ -1,6 +1,12 @@
 export const fetcher = (...args) =>
 	fetch(...args).then(res => res.json())
 
+export const fetchProducts = async (...args) => {
+	const response = await fetch(...args)
+	const data = await response.json()
+	return data
+}
+
 export const extractCategoryIds = category => {
 	const categoryIds = []
 
@@ -63,6 +69,67 @@ export const getInitials = (firstName, lastName) => {
 
 	const initials = `${firstInitial}${lastInitial}`
 	return initials.toUpperCase()
+}
+
+const extractIds = categories => {
+	let ids = []
+
+	for (const category of categories) {
+		ids.push(category.id)
+
+		if (category.children && category.children.length > 0) {
+			// Recursively extract ids from children
+			ids.push(...extractIds(category.children))
+		}
+	}
+
+	return ids
+}
+
+export const groupCategories = (categories, parent = null) => {
+	return categories
+		.filter(category => category.parent === parent)
+		.map(category => ({
+			id: category._id,
+			name: category.name,
+			description: category.description,
+			parent: category.parent,
+			slug: category.slug,
+			images: category.images,
+			isActive: category.isActive,
+			createdAt: category.createdAt,
+			children: groupCategories(categories, category._id),
+		}))
+}
+
+export const findIdsBySlugWithChildren = (categories, targetSlug) => {
+	for (const category of categories) {
+		if (category.slug === targetSlug) {
+			const result = [category.id]
+
+			if (category.children && category.children.length > 0) {
+				// Recursively extract ids from children
+				result.push(...extractIds(category.children))
+			}
+
+			return result
+		}
+
+		if (category.children && category.children.length > 0) {
+			const result = findIdsBySlugWithChildren(
+				category.children,
+				targetSlug
+			)
+
+			if (result.length > 0) {
+				// If the category is found in children, return the result
+				return result
+			}
+		}
+	}
+
+	// If the category is not found
+	return []
 }
 
 export const findCategoryBySlugWithAncestors = (

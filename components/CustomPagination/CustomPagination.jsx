@@ -6,7 +6,7 @@ import {
 	useSearchParams,
 } from 'next/navigation'
 
-const CustomPagination = ({ slug }) => {
+const CustomPagination = ({ slug, total }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
@@ -22,7 +22,7 @@ const CustomPagination = ({ slug }) => {
 	return (
 		<Flex mt={30} justify='center'>
 			<Pagination
-				total={10}
+				total={total}
 				onChange={value => handlePage(value)}
 				defaultValue={parseInt(slug.page)}
 			/>

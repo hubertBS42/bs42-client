@@ -7,9 +7,9 @@ import {
 	useSearchParams,
 } from 'next/navigation'
 
-const PriceCard = ({ priceMin, priceMax }) => {
-	const parsedMin = priceMin ? parseInt(priceMin) : null
-	const parsedMax = priceMax ? parseInt(priceMax) : null
+const PriceCard = ({ minPrice, maxPrice }) => {
+	const parsedMin = minPrice ? parseInt(minPrice) : null
+	const parsedMax = maxPrice ? parseInt(maxPrice) : null
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
@@ -18,14 +18,14 @@ const PriceCard = ({ priceMin, priceMax }) => {
 
 	const handleClick = (min, max) => {
 		if (min) {
-			params.set('price_min', min)
+			params.set('min_price', min)
 		} else {
-			params.delete('price_min')
+			params.delete('min_price')
 		}
 		if (max) {
-			params.set('price_max', max)
+			params.set('max_price', max)
 		} else {
-			params.delete('price_max')
+			params.delete('max_price')
 		}
 		replace(`${pathname}?${params}`)
 	}

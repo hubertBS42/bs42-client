@@ -5,7 +5,6 @@ import {
 	findCategoryBySlugWithAncestors,
 	formatCategoriesForHeader,
 } from '@/utils/functions'
-import Link from 'next/link'
 import {
 	usePathname,
 	useRouter,

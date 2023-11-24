@@ -23,7 +23,7 @@ const ProductsPageToolbar = ({ slug }) => {
 		{ value: 'priceDescending', label: 'Price: Descending' },
 	]
 
-	const perPageData = ['25', '50', '75', '100']
+	const limitData = ['25', '50', '75', '100']
 
 	const handleSort = sortParam => {
 		if (sortParam) {
@@ -32,9 +32,9 @@ const ProductsPageToolbar = ({ slug }) => {
 		}
 	}
 
-	const handlePerPage = pagesParam => {
+	const handleLimit = pagesParam => {
 		if (pagesParam) {
-			params.set('per_page', pagesParam)
+			params.set('limit', pagesParam)
 			replace(`${pathname}?${params}`)
 		}
 	}
@@ -54,16 +54,16 @@ const ProductsPageToolbar = ({ slug }) => {
 			/>
 			<Select
 				label='Show:'
-				data={perPageData}
+				data={limitData}
 				withCheckIcon={false}
 				allowDeselect={false}
-				defaultValue={slug.perPage}
+				defaultValue={slug.limit}
 				classNames={{
 					root: classes.selectRoot,
 					label: classes.selectLabel,
 					input: classes.selectInput,
 				}}
-				onChange={value => handlePerPage(value)}
+				onChange={value => handleLimit(value)}
 			/>
 		</Flex>
 	)
