@@ -63,6 +63,10 @@ export const roundMoney = amount => {
 	return roundedAmount.toFixed(2)
 }
 
+export const calculateTotalPages = (totalRecords, limitPerPage) => {
+	return Math.ceil(totalRecords / limitPerPage)
+}
+
 export const getInitials = (firstName, lastName) => {
 	const firstInitial = firstName?.charAt(0)
 	const lastInitial = lastName?.charAt(0)

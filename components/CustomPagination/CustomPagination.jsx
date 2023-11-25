@@ -1,4 +1,5 @@
 'use client'
+import { calculateTotalPages } from '@/utils/functions'
 import { Flex, Pagination } from '@mantine/core'
 import {
 	usePathname,
@@ -6,10 +7,12 @@ import {
 	useSearchParams,
 } from 'next/navigation'
 
-const CustomPagination = ({ slug, total }) => {
+const CustomPagination = ({ slug, count }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
+
+	const totalPages = calculateTotalPages(count, slug.limit)
 
 	const params = new URLSearchParams(searchParams)
 
@@ -22,9 +25,9 @@ const CustomPagination = ({ slug, total }) => {
 	return (
 		<Flex mt={30} justify='center'>
 			<Pagination
-				total={total}
+				total={totalPages}
 				onChange={value => handlePage(value)}
-				defaultValue={parseInt(slug.page)}
+				value={parseInt(slug.page)}
 			/>
 		</Flex>
 	)

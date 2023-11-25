@@ -9,6 +9,7 @@
 	.link {
 		color: var(--mantine-color-gray-7);
 		transition: ease-in 0.3s all;
+		cursor: pointer;
 
 		&:not([active='true']):hover {
 			color: var(--mantine-color-cRed-0);

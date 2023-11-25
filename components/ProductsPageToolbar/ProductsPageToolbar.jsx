@@ -16,11 +16,10 @@ const ProductsPageToolbar = ({ slug }) => {
 	const sortByData = [
 		{ value: 'newest', label: 'Newest' },
 		{ value: 'featured', label: 'Featured' },
-		{ value: 'best-selling', label: 'Best Selling' },
 		{ value: 'a-z', label: 'A - Z' },
 		{ value: 'z-a', label: 'Z - A' },
-		{ value: 'priceAscending', label: 'Price: Ascending' },
-		{ value: 'priceDescending', label: 'Price: Descending' },
+		{ value: 'priceLow', label: 'Price: Lowest' },
+		{ value: 'priceHigh', label: 'Price: Highest' },
 	]
 
 	const limitData = ['25', '50', '75', '100']
@@ -28,6 +27,7 @@ const ProductsPageToolbar = ({ slug }) => {
 	const handleSort = sortParam => {
 		if (sortParam) {
 			params.set('sort_by', sortParam)
+			params.set('page', 1)
 			replace(`${pathname}?${params}`)
 		}
 	}
@@ -35,6 +35,7 @@ const ProductsPageToolbar = ({ slug }) => {
 	const handleLimit = pagesParam => {
 		if (pagesParam) {
 			params.set('limit', pagesParam)
+			params.set('page', 1)
 			replace(`${pathname}?${params}`)
 		}
 	}

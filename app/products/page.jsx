@@ -33,8 +33,10 @@ const ProductsPage = async ({ searchParams }) => {
 	const {
 		data: { products, count },
 	} = await fetcher(
-		`https://portal.bs42.net/api/frontend/products?category=${category}&brand=${brand}`
-		// `https://portal.bs42.net/api/frontend/products?category=${category}&brand=${brand}&minPrice=${minPrice}&maxPrice=${maxPrice}&sortBy=${sortBy}&limit=${limit}&page=${page}`
+		`https://portal.bs42.net/api/frontend/products?category=${category}&brand=${encodeURIComponent(
+			brand
+		)}&minPrice=${minPrice}&maxPrice=${maxPrice}&limit=${limit}&page=${page}&sortBy=${sortBy}`,
+		{ cache: 'no-store' }
 	)
 
 	const {
@@ -42,11 +44,6 @@ const ProductsPage = async ({ searchParams }) => {
 	} = await fetcher(
 		'https://portal.bs42.net/api/frontend/brandsAndCategories'
 	)
-
-	// const copy = [...products].sort(
-	// 	(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-	// )
-	// const newest20Products = copy.slice(0, 20)
 
 	return (
 		<>
@@ -73,7 +70,7 @@ const ProductsPage = async ({ searchParams }) => {
 								<ProductCard key={product._id} product={product} />
 							))}
 						</SimpleGrid>
-						<CustomPagination total={count} slug={{ limit, page }} />
+						<CustomPagination count={count} slug={{ limit, page }} />
 					</Box>
 				</Flex>
 			</Container>

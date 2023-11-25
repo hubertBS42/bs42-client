@@ -10,6 +10,8 @@ import {
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
+import Link from 'next/link'
+import { IconArrowNarrowLeft } from '@tabler/icons-react'
 
 const CategoriesCard = ({ categories, slug }) => {
 	const { replace } = useRouter()
@@ -32,8 +34,14 @@ const CategoriesCard = ({ categories, slug }) => {
 	}
 
 	const handleClick = newSlug => {
-		if (slug === newSlug) return
-		params.set('category', newSlug)
+		if (newSlug !== '') {
+			if (newSlug === slug) return
+			params.set('category', newSlug)
+			params.set('page', 1)
+		} else {
+			params.delete('category')
+		}
+
 		replace(`${pathname}?${params}`)
 	}
 
@@ -74,6 +82,17 @@ const CategoriesCard = ({ categories, slug }) => {
 			</Card.Section>
 			<Card.Section withBorder>
 				{renderCategories(displayCategories)}
+				{slug && (
+					<NavLink
+						label='All Categories'
+						leftSection={<IconArrowNarrowLeft size='1rem' stroke={1.5} />}
+						classNames={{
+							root: classes.linkRoot,
+							label: classes.linkLabel,
+						}}
+						onClick={() => handleClick('')}
+					/>
+				)}
 			</Card.Section>
 		</Card>
 	)

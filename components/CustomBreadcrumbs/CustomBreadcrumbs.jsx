@@ -7,8 +7,19 @@ import {
 	findCategoryBySlugWithAncestors,
 	formatCategoriesForHeader,
 } from '@/utils/functions'
+import {
+	usePathname,
+	useRouter,
+	useSearchParams,
+} from 'next/navigation'
 
 const CustomBreadcrumbs = ({ categories, slug }) => {
+	const { replace } = useRouter()
+	const pathname = usePathname()
+	const searchParams = useSearchParams()
+
+	const params = new URLSearchParams(searchParams)
+
 	const formattedCategories = formatCategoriesForHeader(categories)
 	const categoryWithAncestors = findCategoryBySlugWithAncestors(
 		formattedCategories,
@@ -18,37 +29,48 @@ const CustomBreadcrumbs = ({ categories, slug }) => {
 	const data = categoryWithAncestors.map(category => {
 		return {
 			title: category.name,
-			href: `/products?category=${category.slug}`,
+			slug: category.slug,
 		}
 	})
 
-	data.unshift({ title: 'All', href: '/products' })
+	data.unshift({ title: 'All', slug: '' })
+
+	const handleClick = slug => {
+		if (!slug || slug === '') {
+			params.delete('category')
+			params.set('page', 1)
+			replace(`${pathname}?${params}`)
+			return
+		}
+		params.set('category', slug)
+		params.set('page', 1)
+		replace(`${pathname}?${params}`)
+	}
 
 	const items = data.map((item, index) => {
 		if (index === data.length - 1) {
 			return (
-				<Link
-					href={item.href}
-					key={index}
-					className={classes.link}
-					active='true'
-				>
+				<span key={index} className={classes.link} active='true'>
 					{item.title}
-				</Link>
+				</span>
 			)
 		}
 
 		return (
-			<Link href={item.href} key={index} className={classes.link}>
+			<span
+				key={index}
+				className={classes.link}
+				onClick={() => handleClick(item.slug)}
+			>
 				{item.title}
-			</Link>
+			</span>
 		)
 	})
 	return (
 		<Box className={classes.container}>
 			<Container size='xl'>
 				<Title order={3} c='gray.7'>
-					{/* {slug ? categoryWithAncestors.pop().name : 'All Products'} */}
+					{slug ? categoryWithAncestors.pop().name : 'All Products'}
 				</Title>
 				{slug && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
 			</Container>

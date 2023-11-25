@@ -1,22 +1,37 @@
 'use client'
-import { Card, NavLink, Title } from '@mantine/core'
+import {
+	Box,
+	Button,
+	Card,
+	Group,
+	NavLink,
+	Radio,
+	Text,
+	Title,
+} from '@mantine/core'
 import classes from './PriceCard.module.scss'
 import {
 	usePathname,
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
+import { useState } from 'react'
 
 const PriceCard = ({ minPrice, maxPrice }) => {
 	const parsedMin = minPrice ? parseInt(minPrice) : null
 	const parsedMax = maxPrice ? parseInt(maxPrice) : null
+	const [currentRange, setCurrentRange] = useState(
+		JSON.stringify({ min: parsedMin, max: parsedMax })
+	)
+	const searchParams = useSearchParams()
 	const { replace } = useRouter()
 	const pathname = usePathname()
-	const searchParams = useSearchParams()
 
 	const params = new URLSearchParams(searchParams)
 
-	const handleClick = (min, max) => {
+	const handleChange = value => {
+		const { min, max } = JSON.parse(value)
+
 		if (min) {
 			params.set('min_price', min)
 		} else {
@@ -27,7 +42,17 @@ const PriceCard = ({ minPrice, maxPrice }) => {
 		} else {
 			params.delete('max_price')
 		}
+		params.set('page', 1)
 		replace(`${pathname}?${params}`)
+		setCurrentRange(JSON.stringify({ min, max }))
+	}
+
+	const handleClear = () => {
+		params.delete('max_price')
+		params.delete('min_price')
+		params.set('page', 1)
+		replace(`${pathname}?${params}`)
+		setCurrentRange(null)
 	}
 
 	const prices = [
@@ -39,17 +64,14 @@ const PriceCard = ({ minPrice, maxPrice }) => {
 	]
 
 	const renderPrices = prices.map((price, i) => (
-		<NavLink
+		<Radio
 			key={i}
+			value={JSON.stringify({ min: price.min, max: price.max })}
 			label={price.label}
-			classNames={{
-				root: classes.linkRoot,
-				label: classes.linkLabel,
-			}}
-			onClick={() => handleClick(price.min, price.max)}
-			active={parsedMin === price.min && parsedMax === price.max}
+			size='xs'
 		/>
 	))
+
 	return (
 		<Card
 			withBorder
@@ -63,7 +85,26 @@ const PriceCard = ({ minPrice, maxPrice }) => {
 					Shop By Price (GHS)
 				</Title>
 			</Card.Section>
-			<Card.Section withBorder>{renderPrices}</Card.Section>
+			<Card.Section withBorder py='lg'>
+				<Radio.Group
+					name='pricesFilter'
+					onChange={value => handleChange(value)}
+					value={currentRange}
+				>
+					<Group>{renderPrices}</Group>
+				</Radio.Group>
+				<Button
+					tt='uppercase'
+					color='gray'
+					fz={11}
+					p={0}
+					mt='md'
+					variant='transparent'
+					onClick={handleClear}
+				>
+					Clear
+				</Button>
+			</Card.Section>
 		</Card>
 	)
 }

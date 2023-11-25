@@ -1,35 +1,57 @@
 'use client'
-import { Card, NavLink, Title } from '@mantine/core'
+import {
+	Button,
+	Card,
+	Checkbox,
+	Group,
+	NavLink,
+	Stack,
+	Title,
+} from '@mantine/core'
 import classes from './BrandsCard.module.scss'
 import {
 	usePathname,
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
+import { useState } from 'react'
 
 const BrandsCard = ({ brands, slug }) => {
+	const [selectedBrands, setSelectedBrands] = useState(
+		slug?.split(',') || []
+	)
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
 	const params = new URLSearchParams(searchParams)
 
-	const handleClick = newSlug => {
-		if (slug === newSlug) return
-		params.set('brand', newSlug)
+	const handleChange = values => {
+		if (values.length < 1) {
+			params.delete('brand')
+			setSelectedBrands([])
+			replace(`${pathname}?${params}`)
+			return
+		}
+		setSelectedBrands(values)
+		params.set('brand', values)
+		params.set('page', 1)
 		replace(`${pathname}?${params}`)
 	}
 
+	const handleClear = () => {
+		params.delete('brand')
+		params.set('page', 1)
+		replace(`${pathname}?${params}`)
+		setSelectedBrands([])
+	}
+
 	const renderBrands = brands.map(brand => (
-		<NavLink
+		<Checkbox
+			size='xs'
 			key={brand._id}
+			value={brand.slug}
 			label={brand.name}
-			classNames={{
-				root: classes.linkRoot,
-				label: classes.linkLabel,
-			}}
-			active={brand.slug === slug}
-			onClick={() => handleClick(brand.slug)}
 		/>
 	))
 	return (
@@ -45,7 +67,25 @@ const BrandsCard = ({ brands, slug }) => {
 					Brands
 				</Title>
 			</Card.Section>
-			<Card.Section withBorder>{renderBrands}</Card.Section>
+			<Card.Section withBorder py='lg'>
+				<Checkbox.Group
+					onChange={values => handleChange(values)}
+					value={selectedBrands}
+				>
+					<Stack>{renderBrands}</Stack>
+				</Checkbox.Group>
+				<Button
+					tt='uppercase'
+					color='gray'
+					fz={11}
+					p={0}
+					mt='md'
+					variant='transparent'
+					onClick={handleClear}
+				>
+					Clear
+				</Button>
+			</Card.Section>
 		</Card>
 	)
 }
