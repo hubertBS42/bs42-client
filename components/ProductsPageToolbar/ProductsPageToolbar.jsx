@@ -6,12 +6,15 @@ import {
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
-const ProductsPageToolbar = ({ slug }) => {
+const ProductsPageToolbar = () => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
 	const params = new URLSearchParams(searchParams)
+
+	const sortBy = params.get('sort_by') || 'newest'
+	const limit = params.get('limit') || '25'
 
 	const sortByData = [
 		{ value: 'newest', label: 'Newest' },
@@ -40,13 +43,13 @@ const ProductsPageToolbar = ({ slug }) => {
 		}
 	}
 	return (
-		<Flex mb={30} justify='flex-end' gap={80}>
+		<Flex mb={30} justify='flex-end' gap={40}>
 			<Select
 				label='Sort by:'
 				data={sortByData}
 				withCheckIcon={false}
 				allowDeselect={false}
-				defaultValue={slug.sortBy}
+				defaultValue={sortBy}
 				classNames={{
 					root: classes.selectRoot,
 					label: classes.selectLabel,
@@ -58,7 +61,7 @@ const ProductsPageToolbar = ({ slug }) => {
 				data={limitData}
 				withCheckIcon={false}
 				allowDeselect={false}
-				defaultValue={slug.limit}
+				defaultValue={limit}
 				classNames={{
 					root: classes.selectRoot,
 					label: classes.selectLabel,

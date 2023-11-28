@@ -1,10 +1,39 @@
 export const fetcher = (...args) =>
 	fetch(...args).then(res => res.json())
 
-export const fetchProducts = async (...args) => {
-	const response = await fetch(...args)
-	const data = await response.json()
-	return data
+export const getProducts = async searchParams => {
+	const category = searchParams?.category || null
+	const brand = searchParams?.brand || null
+	const minPrice = searchParams?.min_price || null
+	const maxPrice = searchParams?.max_price || null
+	const sortBy = searchParams?.sort_by || 'newest'
+	const limit = searchParams?.limit || '25'
+	const page = searchParams?.page || '1'
+
+	const res = await fetch(
+		`https://portal.bs42.net/api/frontend/products?category=${category}&brand=${encodeURIComponent(
+			brand
+		)}&minPrice=${minPrice}&maxPrice=${maxPrice}&limit=${limit}&page=${page}&sortBy=${sortBy}`,
+		{ cache: 'no-store' }
+	)
+
+	return res.json()
+}
+
+export const getBrands = async () => {
+	const res = await fetch(
+		'https://portal.bs42.net/api/frontend/brands'
+	)
+
+	return res.json()
+}
+
+export const getCategories = async () => {
+	const res = await fetch(
+		'https://portal.bs42.net/api/frontend/categories'
+	)
+
+	return res.json()
 }
 
 export const extractCategoryIds = category => {

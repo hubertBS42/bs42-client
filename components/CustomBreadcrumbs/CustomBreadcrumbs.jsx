@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, Breadcrumbs, Container, Title } from '@mantine/core'
-import Link from 'next/link'
 import classes from './CustomBreadcrumbs.module.scss'
 import {
 	findCategoryBySlugWithAncestors,
@@ -13,17 +12,19 @@ import {
 	useSearchParams,
 } from 'next/navigation'
 
-const CustomBreadcrumbs = ({ categories, slug }) => {
+const CustomBreadcrumbs = ({ categories }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
 	const params = new URLSearchParams(searchParams)
 
+	const category = params.get('category')
+
 	const formattedCategories = formatCategoriesForHeader(categories)
 	const categoryWithAncestors = findCategoryBySlugWithAncestors(
 		formattedCategories,
-		slug
+		category
 	)
 
 	const data = categoryWithAncestors.map(category => {
@@ -70,9 +71,9 @@ const CustomBreadcrumbs = ({ categories, slug }) => {
 		<Box className={classes.container}>
 			<Container size='xl'>
 				<Title order={3} c='gray.7'>
-					{slug ? categoryWithAncestors.pop().name : 'All Products'}
+					{category ? categoryWithAncestors.pop().name : 'All Products'}
 				</Title>
-				{slug && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
+				{category && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
 			</Container>
 		</Box>
 	)

@@ -1,76 +1,73 @@
 import CustomBreadcrumbs from '@/components/CustomBreadcrumbs/CustomBreadcrumbs'
-import {
-	Box,
-	Container,
-	Flex,
-	SimpleGrid,
-	Stack,
-} from '@mantine/core'
+import { Box, Container, Flex, Stack } from '@mantine/core'
 import classes from './page.module.scss'
 import CategoriesCard from '@/components/CategoriesCard/CategoriesCard'
-import {
-	fetchProducts,
-	fetcher,
-	findIdsBySlugWithChildren,
-	formatCategoriesForHeader,
-	groupCategories,
-} from '@/utils/functions'
+import { getBrands, getCategories } from '@/utils/functions'
 import PriceCard from '@/components/PriceCard/PriceCard'
 import BrandsCard from '@/components/BrandsCard/BrandsCard'
-import ProductCard from '@/components/ProductCard/ProductCard'
+import FiltersCard from '@/components/FiltersCard/FiltersCard'
+import ProductsShowcase from '@/components/ProductsShowcase/ProductsShowcase'
 import ProductsPageToolbar from '@/components/ProductsPageToolbar/ProductsPageToolbar'
-import CustomPagination from '@/components/CustomPagination/CustomPagination'
 
-const ProductsPage = async ({ searchParams }) => {
-	const category = searchParams?.category || null
-	const brand = searchParams?.brand || null
-	const minPrice = searchParams?.min_price || null
-	const maxPrice = searchParams?.max_price || null
-	const sortBy = searchParams?.sort_by || 'newest'
-	const limit = searchParams?.limit || '25'
-	const page = searchParams?.page || '1'
+export async function generateMetadata({ searchParams }) {
+	let categoryName
+	const categoriesData = await getCategories()
 
-	const {
-		data: { products, count },
-	} = await fetcher(
-		`https://portal.bs42.net/api/frontend/products?category=${category}&brand=${encodeURIComponent(
-			brand
-		)}&minPrice=${minPrice}&maxPrice=${maxPrice}&limit=${limit}&page=${page}&sortBy=${sortBy}`,
-		{ cache: 'no-store' }
-	)
+	if (searchParams.category) {
+		const category = categoriesData.data.find(
+			category => category.slug === searchParams.category
+		)
 
-	const {
-		data: { brands, categories },
-	} = await fetcher(
-		'https://portal.bs42.net/api/frontend/brandsAndCategories'
-	)
+		categoryName = category.name
+	} else {
+		categoryName = 'All Products'
+	}
+
+	return {
+		title: `${categoryName} - BS42.NET`,
+	}
+}
+
+const ProductsPage = async () => {
+	const brandsData = getBrands()
+	const categoriesData = getCategories()
+
+	const [brands, categories] = await Promise.all([
+		brandsData,
+		categoriesData,
+	])
+
+	const prices = [
+		{ label: 'Under GHS1000', min: null, max: 1000 },
+		{ label: 'GHS1000 - GHS2000', min: 1000, max: 2000 },
+		{ label: 'GHS2000 - GHS3000', min: 2000, max: 3000 },
+		{ label: 'GHS3000 - GHS4000', min: 3000, max: 4000 },
+		{ label: 'Over GHS4000', min: 4000, max: null },
+	]
 
 	return (
 		<>
-			<CustomBreadcrumbs categories={categories} slug={category} />
+			<CustomBreadcrumbs categories={categories.data} />
 			<Container size='xl' py='xl'>
 				<Flex gap='lg'>
 					<Stack
 						w={{ base: '34.2%', md: '25.9%', lg: '20%' }}
 						visibleFrom='sm'
-						gap='xl'
+						gap='lg'
 					>
-						<CategoriesCard categories={categories} slug={category} />
-						<PriceCard minPrice={minPrice} maxPrice={maxPrice} />
-						<BrandsCard brands={brands} slug={brand} />
+						<FiltersCard
+							categories={categories.data}
+							brands={brands.data}
+							prices={prices}
+						/>
+						<CategoriesCard categories={categories.data} />
+						<PriceCard prices={prices} />
+						<BrandsCard brands={brands.data} />
 					</Stack>
 
 					<Box w={{ base: '100%', sm: '65.8', md: '75.1%', lg: '80%' }}>
-						<ProductsPageToolbar slug={{ sortBy, limit }} />
-						<SimpleGrid
-							cols={{ base: 2, sm: 3, md: 4 }}
-							spacing={{ base: 'sm', sm: 'sm', md: 'md' }}
-						>
-							{products.map(product => (
-								<ProductCard key={product._id} product={product} />
-							))}
-						</SimpleGrid>
-						<CustomPagination count={count} slug={{ limit, page }} />
+						<ProductsPageToolbar />
+						<ProductsShowcase />
 					</Box>
 				</Flex>
 			</Container>

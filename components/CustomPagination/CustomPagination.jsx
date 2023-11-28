@@ -7,14 +7,17 @@ import {
 	useSearchParams,
 } from 'next/navigation'
 
-const CustomPagination = ({ slug, count }) => {
+const CustomPagination = ({ count }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
-	const totalPages = calculateTotalPages(count, slug.limit)
-
 	const params = new URLSearchParams(searchParams)
+
+	const limit = params.get('limit') || '25'
+	const page = params.get('page') || '1'
+
+	const totalPages = calculateTotalPages(count, parseInt(limit))
 
 	const handlePage = page => {
 		if (page) {
@@ -27,7 +30,7 @@ const CustomPagination = ({ slug, count }) => {
 			<Pagination
 				total={totalPages}
 				onChange={value => handlePage(value)}
-				value={parseInt(slug.page)}
+				value={parseInt(page)}
 			/>
 		</Flex>
 	)

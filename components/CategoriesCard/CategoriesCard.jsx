@@ -13,30 +13,32 @@ import {
 import Link from 'next/link'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 
-const CategoriesCard = ({ categories, slug }) => {
+const CategoriesCard = ({ categories }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
 	const params = new URLSearchParams(searchParams)
 
+	const category = params.get('category')
+
 	let displayCategories = null
 	const formattedCategories = formatCategoriesForHeader(categories)
 
-	if (slug) {
+	if (category) {
 		const ancestor = findCategoryBySlugWithAncestors(
 			formattedCategories,
-			slug
+			category
 		)[0]
 		displayCategories = [ancestor]
 	} else {
 		displayCategories = formattedCategories
 	}
 
-	const handleClick = newSlug => {
-		if (newSlug !== '') {
-			if (newSlug === slug) return
-			params.set('category', newSlug)
+	const handleClick = newCategory => {
+		if (newCategory !== '') {
+			if (newCategory === category) return
+			params.set('category', newCategory)
 			params.set('page', 1)
 		} else {
 			params.delete('category')
@@ -46,23 +48,23 @@ const CategoriesCard = ({ categories, slug }) => {
 	}
 
 	const renderCategories = data => {
-		return data.map(category => (
+		return data.map(item => (
 			<NavLink
-				key={category.id}
-				label={category.name}
+				key={item.id}
+				label={item.name}
 				childrenOffset={10}
 				classNames={{
 					root: classes.linkRoot,
 					label: classes.linkLabel,
 				}}
-				active={category.slug === slug}
+				active={item.slug === category}
 				opened
-				onClick={() => handleClick(category.slug)}
+				onClick={() => handleClick(item.slug)}
 			>
-				{slug &&
-					category.children &&
-					category.children.length > 0 &&
-					renderCategories(category.children)}
+				{category &&
+					item.children &&
+					item.children.length > 0 &&
+					renderCategories(item.children)}
 			</NavLink>
 		))
 	}
@@ -82,7 +84,7 @@ const CategoriesCard = ({ categories, slug }) => {
 			</Card.Section>
 			<Card.Section withBorder>
 				{renderCategories(displayCategories)}
-				{slug && (
+				{category && (
 					<NavLink
 						label='All Categories'
 						leftSection={<IconArrowNarrowLeft size='1rem' stroke={1.5} />}

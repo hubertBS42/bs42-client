@@ -13,6 +13,7 @@ const CustomMantineProvider = ({ children }) => {
 			theme={{
 				fontFamily: arimo.style.fontFamily,
 				headings: { fontFamily: rajdhani.style.fontFamily },
+				cursorType: 'pointer',
 				colors: {
 					cRed: ['#b20000'],
 				},
