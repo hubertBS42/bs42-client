@@ -67,7 +67,7 @@ const ProductsPage = async () => {
 
 					<Box w={{ base: '100%', sm: '65.8', md: '75.1%', lg: '80%' }}>
 						<ProductsPageToolbar />
-						<ProductsShowcase />
+						{/* <ProductsShowcase /> */}
 					</Box>
 				</Flex>
 			</Container>
