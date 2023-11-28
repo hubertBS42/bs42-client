@@ -7,11 +7,9 @@ import CustomPagination from '../CustomPagination/CustomPagination'
 import { useSearchParams } from 'next/navigation'
 import { fetcher } from '@/utils/functions'
 import useSWR from 'swr'
-import { useEffect, useState } from 'react'
 
 const ProductsShowcase = () => {
 	const searchParams = useSearchParams()
-	const [products, setProducts] = useState([])
 
 	const params = new URLSearchParams(searchParams)
 
