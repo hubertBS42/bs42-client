@@ -43,7 +43,7 @@ const ProductsPageToolbar = () => {
 		}
 	}
 	return (
-		<Flex mb={30} justify='flex-end' gap={40}>
+		<Flex mb={30} justify='flex-end' gap={20} visibleFrom='md'>
 			<Select
 				label='Sort by:'
 				data={sortByData}

@@ -7,10 +7,10 @@ import CustomPagination from '../CustomPagination/CustomPagination'
 import { useSearchParams } from 'next/navigation'
 import { fetcher } from '@/utils/functions'
 import useSWR from 'swr'
+import LoadingProductCards from '../LoadingProductCards/LoadingProductCards'
 
 const ProductsShowcase = () => {
 	const searchParams = useSearchParams()
-
 	const params = new URLSearchParams(searchParams)
 
 	const category = params.get('category')
@@ -62,7 +62,7 @@ const ProductsShowcase = () => {
 					</Stack>
 				)
 			) : (
-				'loading'
+				<LoadingProductCards />
 			)}
 		</>
 	)

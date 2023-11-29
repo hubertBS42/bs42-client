@@ -1,5 +1,5 @@
 'use client'
-import { Box, Card, Group, Radio, Title } from '@mantine/core'
+import { Box, Card, Group, Radio, Stack, Title } from '@mantine/core'
 import classes from './PriceCard.module.scss'
 import {
 	usePathname,
@@ -77,7 +77,7 @@ const PriceCard = ({ prices }) => {
 					onChange={value => handleChange(value)}
 					value={currentRange}
 				>
-					<Group>{renderPrices}</Group>
+					<Stack>{renderPrices}</Stack>
 				</Radio.Group>
 				<Box
 					tt='uppercase'

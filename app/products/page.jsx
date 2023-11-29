@@ -50,11 +50,7 @@ const ProductsPage = async () => {
 			<CustomBreadcrumbs categories={categories.data} />
 			<Container size='xl' py='xl'>
 				<Flex gap='lg'>
-					<Stack
-						w={{ base: '34.2%', md: '25.9%', lg: '20%' }}
-						visibleFrom='sm'
-						gap='lg'
-					>
+					<Stack w={{ md: '24.9%', lg: '20%' }} visibleFrom='md' gap='lg'>
 						<FiltersCard
 							categories={categories.data}
 							brands={brands.data}
@@ -65,10 +61,13 @@ const ProductsPage = async () => {
 						<BrandsCard brands={brands.data} />
 					</Stack>
 
-					<Box w={{ base: '100%', sm: '65.8', md: '75.1%', lg: '80%' }}>
+					<Stack
+						gap={0}
+						w={{ base: '100%', sm: '100%', md: '76.1%', lg: '80%' }}
+					>
 						<ProductsPageToolbar />
 						<ProductsShowcase />
-					</Box>
+					</Stack>
 				</Flex>
 			</Container>
 		</>

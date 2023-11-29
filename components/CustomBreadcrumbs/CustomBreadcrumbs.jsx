@@ -1,6 +1,13 @@
 'use client'
 
-import { Box, Breadcrumbs, Container, Title } from '@mantine/core'
+import {
+	ActionIcon,
+	Box,
+	Breadcrumbs,
+	Container,
+	Flex,
+	Title,
+} from '@mantine/core'
 import classes from './CustomBreadcrumbs.module.scss'
 import {
 	findCategoryBySlugWithAncestors,
@@ -11,6 +18,8 @@ import {
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
+import { IconAdjustments } from '@tabler/icons-react'
+import FiltersDrawer from '../FiltersDrawer/FiltersDrawer'
 
 const CustomBreadcrumbs = ({ categories }) => {
 	const { replace } = useRouter()
@@ -70,9 +79,12 @@ const CustomBreadcrumbs = ({ categories }) => {
 	return (
 		<Box className={classes.container}>
 			<Container size='xl'>
-				<Title order={3} c='gray.7'>
-					{category ? categoryWithAncestors.pop().name : 'All Products'}
-				</Title>
+				<Flex justify='space-between'>
+					<Title order={3} c='gray.7'>
+						{category ? categoryWithAncestors.pop().name : 'All Products'}
+					</Title>
+					<FiltersDrawer />
+				</Flex>
 				{category && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
 			</Container>
 		</Box>

@@ -10,7 +10,6 @@ import {
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
-import Link from 'next/link'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 
 const CategoriesCard = ({ categories }) => {
