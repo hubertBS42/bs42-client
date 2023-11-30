@@ -23,7 +23,7 @@ export const getProducts = async searchParams => {
 export const getBrands = async () => {
 	const res = await fetch(
 		'https://portal.bs42.net/api/frontend/brands',
-		{ cache: 'no-store' }
+		{ next: { revalidate: 3600 } }
 	)
 
 	return res.json()
@@ -32,7 +32,7 @@ export const getBrands = async () => {
 export const getCategories = async () => {
 	const res = await fetch(
 		'https://portal.bs42.net/api/frontend/categories',
-		{ cache: 'no-store' }
+		{ next: { revalidate: 3600 } }
 	)
 
 	return res.json()
