@@ -1,33 +1,38 @@
 'use client'
-import { Box, Card, Group, Radio, Stack, Title } from '@mantine/core'
+import { Box, Card, Radio, Stack, Title } from '@mantine/core'
 import classes from './PriceCard.module.scss'
 import {
 	usePathname,
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
+import { useState } from 'react'
 
-const PriceCard = ({ prices }) => {
+const PriceCard = () => {
 	const searchParams = useSearchParams()
 	const { replace } = useRouter()
 	const pathname = usePathname()
-
 	const params = new URLSearchParams(searchParams)
-
 	const minPrice = params.get('min_price')
 	const maxPrice = params.get('max_price')
-
-	const parsedMin = minPrice ? parseInt(minPrice) : null
-	const parsedMax = maxPrice ? parseInt(maxPrice) : null
-
-	const currentRange = JSON.stringify({
-		min: parsedMin,
-		max: parsedMax,
+	// const parsedMin = minPrice ? Number(minPrice) : null
+	// const parsedMax = maxPrice ? Number(maxPrice) : null
+	const string = JSON.stringify({
+		min: minPrice ? Number(minPrice) : null,
+		max: maxPrice ? Number(maxPrice) : null,
 	})
+	const [currentRange, setCurrentRange] = useState(string)
+
+	const prices = [
+		{ id: 1, label: 'Under GHS 1000', min: null, max: 1000 },
+		{ id: 2, label: 'GHS 1000 - GHS 2000', min: 1000, max: 2000 },
+		{ id: 3, label: 'GHS 2000 - GHS 3000', min: 2000, max: 3000 },
+		{ id: 4, label: 'GHS 3000 - GHS 4000', min: 3000, max: 4000 },
+		{ id: 5, label: 'Over GHS 4000', min: 4000, max: null },
+	]
 
 	const handleChange = value => {
 		const { min, max } = JSON.parse(value)
-
 		if (min) {
 			params.set('min_price', min)
 		} else {
@@ -38,8 +43,10 @@ const PriceCard = ({ prices }) => {
 		} else {
 			params.delete('max_price')
 		}
+
 		params.set('page', 1)
 		replace(`${pathname}?${params}`)
+		setCurrentRange(JSON.stringify({ min, max }))
 	}
 
 	const handleClear = () => {
@@ -49,9 +56,9 @@ const PriceCard = ({ prices }) => {
 		replace(`${pathname}?${params}`)
 	}
 
-	const renderPrices = prices.map((price, i) => (
+	const renderPrices = prices.map(price => (
 		<Radio
-			key={i}
+			key={price.id}
 			value={JSON.stringify({ min: price.min, max: price.max })}
 			label={price.label}
 			size='xs'
@@ -73,7 +80,7 @@ const PriceCard = ({ prices }) => {
 			</Card.Section>
 			<Card.Section withBorder pt='lg' pb='md'>
 				<Radio.Group
-					name='pricesFilter'
+					// name='pricesFilter'
 					onChange={value => handleChange(value)}
 					value={currentRange}
 				>

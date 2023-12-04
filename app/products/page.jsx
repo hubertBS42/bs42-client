@@ -7,7 +7,8 @@ import PriceCard from '@/components/PriceCard/PriceCard'
 import BrandsCard from '@/components/BrandsCard/BrandsCard'
 import FiltersCard from '@/components/FiltersCard/FiltersCard'
 import ProductsShowcase from '@/components/ProductsShowcase/ProductsShowcase'
-import ProductsPageToolbar from '@/components/ProductsPageToolbar/ProductsPageToolbar'
+import LimitSelect from '@/components/LimitSelect/LimitSelect'
+import SortBySelect from '@/components/SortBySelect/SortBySelect'
 
 export async function generateMetadata({ searchParams }) {
 	let categoryName
@@ -65,7 +66,11 @@ const ProductsPage = async () => {
 						gap={0}
 						w={{ base: '100%', sm: '100%', md: '76.1%', lg: '80%' }}
 					>
-						<ProductsPageToolbar />
+						<Flex mb={30} justify='flex-end' gap={20} visibleFrom='md'>
+							<LimitSelect />
+							<SortBySelect />
+						</Flex>
+
 						<ProductsShowcase />
 					</Stack>
 				</Flex>

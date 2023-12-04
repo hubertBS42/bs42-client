@@ -1,7 +1,6 @@
 'use client'
 
 import {
-	ActionIcon,
 	Box,
 	Breadcrumbs,
 	Container,
@@ -12,29 +11,53 @@ import classes from './CustomBreadcrumbs.module.scss'
 import {
 	findCategoryBySlugWithAncestors,
 	formatCategoriesForHeader,
+	getBrands,
+	getCategories,
 } from '@/utils/functions'
 import {
 	usePathname,
 	useRouter,
 	useSearchParams,
 } from 'next/navigation'
-import { IconAdjustments } from '@tabler/icons-react'
 import FiltersDrawer from '../FiltersDrawer/FiltersDrawer'
+import { useEffect, useState } from 'react'
 
-const CustomBreadcrumbs = ({ categories }) => {
+const CustomBreadcrumbs = () => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
+	const [categories, setCategories] = useState([])
+	const [brands, setBrands] = useState([])
 
 	const params = new URLSearchParams(searchParams)
-
 	const category = params.get('category')
+
+	const fetchBrandsAndCategories = async () => {
+		const brandsData = getBrands()
+		const categoriesData = getCategories()
+
+		const [brands, categories] = await Promise.all([
+			brandsData,
+			categoriesData,
+		])
+
+		setCategories(categories.data)
+		setBrands(brands.data)
+	}
+
+	useEffect(() => {
+		fetchBrandsAndCategories()
+	}, [])
 
 	const formattedCategories = formatCategoriesForHeader(categories)
 	const categoryWithAncestors = findCategoryBySlugWithAncestors(
 		formattedCategories,
 		category
 	)
+
+	const title = category
+		? [...categoryWithAncestors].pop()?.name
+		: 'All Products'
 
 	const data = categoryWithAncestors.map(category => {
 		return {
@@ -79,13 +102,18 @@ const CustomBreadcrumbs = ({ categories }) => {
 	return (
 		<Box className={classes.container}>
 			<Container size='xl'>
-				<Flex justify='space-between'>
-					<Title order={3} c='gray.7'>
-						{category ? categoryWithAncestors.pop().name : 'All Products'}
-					</Title>
-					<FiltersDrawer />
+				<Flex justify='space-between' align='center'>
+					<Box>
+						<Title order={3} c='gray.7' visibleFrom='md'>
+							{title}
+						</Title>
+						<Title order={4} c='gray.7' hiddenFrom='md'>
+							{title}
+						</Title>
+						{category && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
+					</Box>
+					<FiltersDrawer brands={brands} categories={categories} />
 				</Flex>
-				{category && <Breadcrumbs mt={5}>{items}</Breadcrumbs>}
 			</Container>
 		</Box>
 	)

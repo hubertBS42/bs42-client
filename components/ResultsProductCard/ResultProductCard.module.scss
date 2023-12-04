@@ -1,0 +1,30 @@
+.container {
+	border-bottom: 1px solid var(--mantine-color-gray-2);
+
+	&:last-child {
+		border: none;
+	}
+
+	.imageWrapper {
+		height: 50px;
+		width: 50px;
+		position: relative;
+		border-radius: 50%;
+
+		img {
+			object-fit: contain;
+		}
+	}
+
+	.titleRoot {
+		font-family: var(--font-arimo);
+		font-weight: 700;
+		color: var(--mantine-color-blue-9);
+	}
+
+	.textRoot {
+		font-weight: 400;
+		font-size: 11px;
+		color: var(--mantine-color-gray-8);
+	}
+}

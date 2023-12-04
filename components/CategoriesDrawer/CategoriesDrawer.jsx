@@ -9,28 +9,34 @@ import {
 	Text,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import {
-	IconArrowNarrowLeft,
-	IconCategory,
-	IconChevronRight,
-} from '@tabler/icons-react'
+import { IconCategory, IconChevronRight } from '@tabler/icons-react'
 import CategoryMobileMenuCard from '../CategoryMobileMenuCard/CategoryMobileMenuCard'
 import { formatCategoriesForHeader } from '@/utils/functions'
 import { useSelector } from 'react-redux'
 import { selectAllCategories } from '@/redux/features/categories/categoriesSlice'
 import classes from './CategoriesDrawer.module.scss'
+import Link from 'next/link'
 
-const CategoriesDrawer = () => {
+const CategoriesDrawer = ({ toggleMobNav }) => {
 	const [opened, { toggle }] = useDisclosure(false)
 	const categories = formatCategoriesForHeader(
 		useSelector(selectAllCategories)
 	)
+
+	const handleNavClick = () => {
+		toggle()
+		toggleMobNav()
+	}
 	return (
-		<Stack>
+		<>
 			<NavLink
 				label='Categories'
 				leftSection={<IconCategory size='1.1em' stroke={1.5} />}
 				rightSection={<IconChevronRight size='1.1em' stroke={1.5} />}
+				classNames={{
+					label: classes.label,
+					root: classes.root,
+				}}
 				onClick={toggle}
 			/>
 			<Drawer.Root opened={opened} onClose={toggle}>
@@ -39,35 +45,26 @@ const CategoriesDrawer = () => {
 						<Drawer.Title ff={rajdhani.style.fontFamily}>
 							Categories
 						</Drawer.Title>
-						{/* <IconArrowNarrowLeft /> */}
 						<Drawer.CloseButton></Drawer.CloseButton>
 					</Drawer.Header>
 					<Drawer.Body>
-						<Accordion>
-							{categories.map(category => (
-								<Accordion.Item key={category.id} value={category.name}>
-									<Accordion.Control className={classes.accordionTitleWrapper}>
-										<Text className={classes.accordionTitle}>
-											{category.name}
-										</Text>
-									</Accordion.Control>
-									<Accordion.Panel className={classes.accordionBody}>
-										<Stack spacing='1.5em'>
-											{category.children.map(category => (
-												<CategoryMobileMenuCard
-													category={category}
-													key={category.id}
-												/>
-											))}
-										</Stack>
-									</Accordion.Panel>
-								</Accordion.Item>
-							))}
-						</Accordion>
+						{categories.map(category => (
+							<NavLink
+								key={category.id}
+								label={category.name}
+								classNames={{
+									label: classes.label,
+									root: classes.root,
+								}}
+								component={Link}
+								href={`/products?category=${category.slug}`}
+								onClick={handleNavClick}
+							/>
+						))}
 					</Drawer.Body>
 				</Drawer.Content>
 			</Drawer.Root>
-		</Stack>
+		</>
 	)
 }
 export default CategoriesDrawer

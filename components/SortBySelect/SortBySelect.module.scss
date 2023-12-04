@@ -1,0 +1,20 @@
+.selectRoot {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	column-gap: 0.5em;
+
+	@media (max-width: 62em) {
+		flex-direction: column;
+		gap: 0.2em;
+		align-items: unset;
+	}
+}
+
+.selectLabel {
+	font-family: var(--font-arimo);
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--mantine-color-gray-7);
+}

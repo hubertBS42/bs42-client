@@ -1,7 +1,13 @@
-.navLinkLabel {
+.label {
 	font-family: var(--font-rajdhani);
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 600;
 	color: var(--mantine-color-gray-8);
 	text-transform: uppercase;
+}
+
+.root {
+	&:hover {
+		background-color: transparent;
+	}
 }
