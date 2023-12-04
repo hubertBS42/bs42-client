@@ -1,7 +1,6 @@
 'use client'
 import { Accordion, Stack } from '@mantine/core'
 import ResultsProductCard from '../ResultsProductCard/ResultsProductCard'
-import ResultsCard from '../ResultsCard/ResultsCard'
 import classes from './SearchResultsSection.module.scss'
 import {
 	groupCategories,
