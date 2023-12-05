@@ -1,8 +1,8 @@
-'use client'
 import { Container, Title, Text, Button, Group } from '@mantine/core'
-import { Illustration } from './Illustration'
+
 import classes from './not-found.module.scss'
 import Link from 'next/link'
+import Illustration from './illustration'
 
 const NotFound = () => {
 	return (
