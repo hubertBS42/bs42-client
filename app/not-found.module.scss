@@ -1,0 +1,46 @@
+.root {
+	padding-top: em(80px);
+	padding-bottom: em(80px);
+}
+
+.inner {
+	position: relative;
+}
+
+.image {
+	position: absolute;
+	inset: 0;
+	opacity: 0.75;
+	color: light-dark(
+		var(--mantine-color-gray-0),
+		var(--mantine-color-dark-6)
+	);
+}
+
+.content {
+	padding-top: em(220px);
+	position: relative;
+	z-index: 1;
+
+	@media (max-width: 48em) {
+		padding-top: em(120px);
+	}
+}
+
+.title {
+	font-family: var(--font-arimo);
+	text-align: center;
+	font-weight: 900;
+	font-size: em(38px);
+
+	@media (max-width: 48em) {
+		font-size: em(32px);
+	}
+}
+
+.description {
+	max-width: em(540px);
+	margin: auto;
+	margin-top: var(--mantine-spacing-xl);
+	margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
+}

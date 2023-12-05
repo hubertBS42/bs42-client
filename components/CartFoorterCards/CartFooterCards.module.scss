@@ -1,0 +1,51 @@
+.cardSection {
+	padding: 0;
+	border-bottom: 1px solid var(--mantine-color-gray-3);
+}
+
+.btnRoot {
+	font-weight: 700;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	transition: ease-in 0.3s all;
+	color: var(--mantine-color-gray-7);
+	border: 1px solid var(--mantine-color-gray-4);
+
+	&:hover {
+		background-color: var(--mantine-color-gray-7);
+		color: white;
+		border: 1px solid var(--mantine-color-gray-7);
+	}
+}
+
+.checkoutBtnRoot {
+	font-weight: 700;
+	transition: ease-in 0.3s all;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+
+	&:hover {
+		background-color: white;
+		color: var(--mantine-color-cRed-0);
+		border: 1px solid var(--mantine-color-cRed-0);
+	}
+}
+
+.textInputLabel {
+	font-size: 14px;
+	color: var(--mantine-color-gray-6);
+	margin-bottom: 1.7em;
+	font-weight: 400 !important;
+}
+
+.textInputRoot {
+	width: 100%;
+}
+
+.textInputInput {
+	&::placeholder {
+		font-size: 15px;
+		font-family: var(--font-arimo);
+	}
+}

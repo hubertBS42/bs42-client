@@ -36,7 +36,7 @@ const CategoryCarousel = ({ category }) => {
 					{category?.children.map(category => (
 						<Link
 							key={category.id}
-							href={`/shop/category/${category.slug}`}
+							href={`/products?category=${category.slug}`}
 							className='animated-link'
 						>
 							{category.name}
@@ -46,7 +46,7 @@ const CategoryCarousel = ({ category }) => {
 
 				<Button
 					component={Link}
-					href='#'
+					href={`/products?category=${category?.slug}`}
 					className={classes.button}
 					color='cRed.0'
 				>

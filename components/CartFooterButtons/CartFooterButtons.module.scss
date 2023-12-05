@@ -1,0 +1,17 @@
+.btnRoot {
+	font-weight: 700;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	transition: ease-in 0.3s all;
+	color: var(--mantine-color-gray-7);
+	border: 1px solid var(--mantine-color-gray-4);
+	padding-left: 2em;
+	padding-right: 2em;
+
+	&:hover {
+		background-color: var(--mantine-color-gray-7);
+		color: white;
+		border: 1px solid var(--mantine-color-gray-7);
+	}
+}

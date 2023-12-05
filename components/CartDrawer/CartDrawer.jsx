@@ -90,7 +90,7 @@ const CartDrawer = () => {
 								root: classes.totalTitle,
 							}}
 						>
-							Total:
+							Subtotal:
 						</Title>
 						<Title order={3} className={classes.totalValue}>
 							GHS {roundedPriceTotal}
@@ -104,27 +104,27 @@ const CartDrawer = () => {
 							<Button
 								size='md'
 								variant='outline'
-								color='gray.7'
 								classNames={{
-									root: classes.emptyCartBtnRoot,
+									root: classes.viewCartBtnRoot,
 								}}
-								onClick={clearCart}
-								loading={loading}
+								disabled={loading}
+								component={Link}
+								href='/cart'
+								onClick={close}
 							>
-								Clear cart
+								View cart
 							</Button>
 							<Button
 								size='md'
 								variant='filled'
 								color='cRed.0'
-								component={Link}
-								href='/checkout'
+								onClick={clearCart}
 								classNames={{
-									root: classes.checkoutBtnRoot,
+									root: classes.emptyCartBtnRoot,
 								}}
-								disabled={loading}
+								loading={loading}
 							>
-								Check out now
+								Clear Cart
 							</Button>
 						</>
 					)}

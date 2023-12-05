@@ -1,0 +1,49 @@
+.thead {
+	background-color: var(--mantine-color-gray-0);
+	color: var(--mantine-color-gray-6);
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+.table {
+	border-bottom: 1px solid var(--mantine-color-gray-3);
+}
+
+.brand {
+	font-size: 12px !important;
+	font-weight: 400 !important;
+	color: var(--mantine-color-gray-6);
+	font-family: var(--font-arimo) !important;
+}
+
+.title {
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	color: var(--mantine-color-blue-9);
+	font-family: var(--font-arimo) !important;
+}
+
+.numberInputLabel {
+	color: var(--mantine-color-gray-8);
+	font-weight: 700;
+	font-size: 12px;
+	font-family: var(--font-arimo);
+	margin-bottom: 0.6em;
+}
+
+.numberInputInput {
+	font-weight: 400;
+	font-size: 12px !important;
+	font-family: var(--font-arimo);
+}
+
+.numberInputRoot {
+	width: 80px;
+}
+
+.price {
+	font-size: 16px !important;
+	font-weight: 700 !important;
+	color: var(--mantine-colors-gray-8);
+	font-family: var(--font-rajdhani);
+}

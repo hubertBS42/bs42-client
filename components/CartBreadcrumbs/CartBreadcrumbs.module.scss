@@ -1,0 +1,15 @@
+.link {
+	color: var(--mantine-color-gray-7);
+	transition: ease-in 0.3s all;
+	cursor: pointer;
+	font-size: 14px;
+
+	&:not([active='true']):hover {
+		color: var(--mantine-color-cRed-0);
+	}
+
+	&[active='true'] {
+		color: var(--mantine-color-cRed-0);
+		pointer-events: none;
+	}
+}
