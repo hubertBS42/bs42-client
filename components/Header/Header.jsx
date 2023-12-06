@@ -86,7 +86,7 @@ const Header = () => {
 				<Container size='xl'>
 					<Group justify='space-between'>
 						<Link
-							href='tel:0261989626'
+							href='tel:+233534930002'
 							style={{
 								display: 'flex',
 								alignItems: 'center',
@@ -109,7 +109,8 @@ const Header = () => {
 						</Link>
 
 						<Link
-							href='https://goo.gl/maps/2afHuwMpTypev9cFA'
+							href='https://maps.app.goo.gl/6JBVscgWE2sTTZX78'
+							target='_blank'
 							style={{
 								display: 'flex',
 								alignItems: 'center',

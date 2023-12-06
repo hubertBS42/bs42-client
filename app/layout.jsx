@@ -7,6 +7,8 @@ import './globals.scss'
 import { arimo, rajdhani } from '@/utils/font'
 
 export default function RootLayout({ children }) {
+	const today = new Date()
+	const year = today.getFullYear()
 	return (
 		<html
 			lang='en'
@@ -19,7 +21,7 @@ export default function RootLayout({ children }) {
 				<Providers>
 					<Header />
 					{children}
-					<Footer />
+					<Footer year={year} />
 				</Providers>
 			</body>
 		</html>

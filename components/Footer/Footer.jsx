@@ -12,7 +12,6 @@ import {
 } from '@mantine/core'
 import BenefitsCarousel from '../BenefitsCarousel/BenefitsCarousel'
 import Benefits from '../Benefits/Benefits'
-import { arimo, rajdhani } from '@/utils/font'
 import Link from 'next/link'
 import {
 	IconArrowRight,
@@ -25,8 +24,36 @@ import {
 	IconPhoneCall,
 } from '@tabler/icons-react'
 import classes from './Footer.module.scss'
+import {
+	getBrands,
+	getCategories,
+	groupCategories,
+} from '@/utils/functions'
+import { useEffect, useState } from 'react'
 
-const Footer = () => {
+const Footer = ({ year }) => {
+	const [categories, setCategories] = useState()
+	const [brands, setBrands] = useState()
+
+	const fetchBrandsAndCategories = async () => {
+		const brandsData = getBrands()
+		const categoriesData = getCategories()
+
+		const [brands, categories] = await Promise.all([
+			brandsData,
+			categoriesData,
+		])
+
+		const groupedCategories = groupCategories(categories.data)
+
+		setCategories(groupedCategories.slice(0, 4))
+		setBrands(brands.data.slice(0, 4))
+	}
+
+	useEffect(() => {
+		fetchBrandsAndCategories()
+	}, [])
+
 	return (
 		<Stack gap={0}>
 			<Box className={classes.top}>
@@ -120,34 +147,36 @@ const Footer = () => {
 						</Grid.Col>
 						<Grid.Col span={{ sm: 4, md: 2 }} className={classes.middle}>
 							<Title order={5} className={classes.footerHeading}>
-								Shop
+								Categories
 							</Title>
 							<Stack gap={10} className={classes.footerNavLinks}>
-								<Link href='#' className='animated-link'>
-									Computers
-								</Link>
-								<Link href='#' className='animated-link'>
-									Network Computers
-								</Link>
-								<Link href='#' className='animated-link'>
-									Network Cabinets
-								</Link>
+								{categories?.length > 0 &&
+									categories.map(category => (
+										<Link
+											href={`/products?category=${category.slug}`}
+											className='animated-link'
+											key={category.id}
+										>
+											{category.name}
+										</Link>
+									))}
 							</Stack>
 						</Grid.Col>
 						<Grid.Col span={{ sm: 4, md: 2 }}>
 							<Title order={5} className={classes.footerHeading}>
-								Information
+								Brands
 							</Title>
 							<Stack gap={10} className={classes.footerNavLinks}>
-								<Link href='#' className='animated-link'>
-									Computers
-								</Link>
-								<Link href='#' className='animated-link'>
-									Network Computers
-								</Link>
-								<Link href='#' className='animated-link'>
-									Network Cabinets
-								</Link>
+								{brands?.length > 0 &&
+									brands.map(brand => (
+										<Link
+											href={`/products?brand=${brand.slug}`}
+											className='animated-link'
+											key={brand._id}
+										>
+											{brand.name}
+										</Link>
+									))}
 							</Stack>
 						</Grid.Col>
 						<Grid.Col span={{ sm: 4, md: 4 }}>
@@ -155,33 +184,27 @@ const Footer = () => {
 								Contact
 							</Title>
 							<Stack gap={10}>
-								<Link href='#' className={classes.footerLink}>
+								<Link
+									href='https://maps.app.goo.gl/6JBVscgWE2sTTZX78'
+									target='_blank'
+									className={classes.footerLink}
+								>
 									<IconMapPin stroke={1.7} size={16} />
 									Tycan House, House NO. 43 <br />
 									Tetteh Okuley Ave <br /> Abofu - Achimota
 								</Link>
 
-								<Link href='#' className={classes.footerLink}>
+								<Link href='tel:+233534930002' className={classes.footerLink}>
 									<IconPhoneCall stroke={1.7} size={16} />
-									+233 26 1989 626
+									+233-53-493-0002
 								</Link>
 
-								{/* <Box
-									component={Link}
-									href='#'
+								<Link
+									href='mailto:info@bs42.net'
 									className={classes.footerLink}
-									td='underline'
-									tt='uppercase'
-									fz={15}
-									fw={700}
-									pl='xl'
 								>
-									Ask an expert
-								</Box> */}
-
-								<Link href='#' className={classes.footerLink}>
 									<IconMail stroke={1.7} size={16} />
-									support@bs42.net
+									info@bs42.net
 								</Link>
 							</Stack>
 						</Grid.Col>
@@ -190,7 +213,7 @@ const Footer = () => {
 			</Box>
 			<Box className={classes.copyright}>
 				<Text align='center' fz={12}>
-					© 2023 Online Shop. All Rights Reserved.
+					© {year} BS42.NET. All Rights Reserved.
 				</Text>
 			</Box>
 		</Stack>
