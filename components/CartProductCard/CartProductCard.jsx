@@ -25,7 +25,7 @@ import { useDebouncedCallback } from 'use-debounce'
 const CartProductCard = ({ item }) => {
 	const [loading, setLoading] = useState(false)
 	const settings = useSelector(getSettings)
-	const currentRate = settings[0].exchangeRate.currentRate
+	const currentRate = settings[0]?.exchangeRate.currentRate
 	const roundedSellPrice = roundMoney(
 		item.product.sellPrice * currentRate
 	)

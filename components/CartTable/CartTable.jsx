@@ -12,7 +12,6 @@ import {
 import classes from './CartTable.module.scss'
 import { useSelector } from 'react-redux'
 import {
-	getLoadingState,
 	selectAllCartItems,
 	totalCartItemSelector,
 	totalPriceSelector,
@@ -132,15 +131,8 @@ const CartTable = () => {
 		</Table.Tr>
 	))
 
-	// const empty = (
-	// 	<Table.Tr>
-	// 		<Table.Td colSpan={5} py='xl'>
-	// 			<Text ta='center'>There are no items in your cart.</Text>
-	// 		</Table.Td>
-	// 	</Table.Tr>
-	// )
 	return (
-		<>
+		<Box visibleFrom='sm'>
 			<Title tt='uppercase' order={3} mb='md'>
 				Your Cart ({`${cartItemsTotal} Items`})
 			</Title>
@@ -168,7 +160,7 @@ const CartTable = () => {
 					You have no items in your cart.
 				</Text>
 			)}
-		</>
+		</Box>
 	)
 }
 export default CartTable

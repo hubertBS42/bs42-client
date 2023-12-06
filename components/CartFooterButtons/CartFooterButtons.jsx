@@ -13,7 +13,7 @@ const CartFooterButtons = () => {
 	const loading = useSelector(getLoadingState)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	return (
-		<Flex py='lg' justify='flex-end' gap='md'>
+		<Flex py='lg' className={classes.container}>
 			{cartItemsTotal > 0 && (
 				<Button
 					size='md'

@@ -66,8 +66,8 @@ const Footer = ({ year }) => {
 				<Container size='xl'>
 					<Box className={classes.needHelp}>
 						<Text fz={20} fw={600}>
-							Need help? Call our award-winning support team at +233 24 8983
-							272
+							Need help? Call our award-winning support team at
+							+233-53-493-0002
 						</Text>
 					</Box>
 					<Grid

@@ -1,3 +1,14 @@
+.container {
+	flex-direction: column;
+	row-gap: var(--mantine-spacing-xs);
+
+	@media (min-width: 36em) {
+		flex-direction: row;
+		justify-content: flex-end;
+		column-gap: var(--mantine-spacing-sm);
+	}
+}
+
 .btnRoot {
 	font-weight: 700;
 	font-family: var(--font-rajdhani);
@@ -6,8 +17,11 @@
 	transition: ease-in 0.3s all;
 	color: var(--mantine-color-gray-7);
 	border: 1px solid var(--mantine-color-gray-4);
-	padding-left: 2em;
-	padding-right: 2em;
+
+	// @media (min-width: 48em) {
+	// 	padding-left: 2em;
+	// 	padding-right: 2em;
+	// }
 
 	&:hover {
 		background-color: var(--mantine-color-gray-7);
