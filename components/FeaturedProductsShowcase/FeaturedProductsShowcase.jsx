@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import { selectAllProducts } from '@/redux/features/products/productsSlice'
 import ProductCard from '../ProductCard/ProductCard'
 import classes from './FeaturedProductsShowcase.module.scss'
+import Link from 'next/link'
 
 const FeaturedProductsShowcase = () => {
 	const autoplay = useRef(Autoplay({ delay: 4000 }))
@@ -42,7 +43,13 @@ const FeaturedProductsShowcase = () => {
 			</Carousel>
 
 			<Flex justify='center' mt={40}>
-				<Button className='viewMoreBtn'>View more</Button>
+				<Button
+					className='viewMoreBtn'
+					component={Link}
+					href='products?sort_by=featured'
+				>
+					View more
+				</Button>
 			</Flex>
 		</Section>
 	)

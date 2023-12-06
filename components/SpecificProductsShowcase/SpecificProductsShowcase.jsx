@@ -14,6 +14,7 @@ import ProductCard from '../ProductCard/ProductCard'
 import { useRef } from 'react'
 import Autoplay from 'embla-carousel-autoplay'
 import classes from './SpecificProductsShowcase.module.scss'
+import Link from 'next/link'
 
 const SpecificProductsShowcase = ({ target }) => {
 	const autoplay = useRef(Autoplay({ delay: 4000 }))
@@ -75,7 +76,13 @@ const SpecificProductsShowcase = ({ target }) => {
 			</Flex>
 
 			<Flex justify='center' mt={40} hiddenFrom='sm'>
-				<Button className='viewMoreBtn'>View more</Button>
+				<Button
+					className='viewMoreBtn'
+					component={Link}
+					href={`/products?category=${category?.slug}`}
+				>
+					View more
+				</Button>
 			</Flex>
 		</Section>
 	)
