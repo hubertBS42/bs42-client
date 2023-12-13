@@ -1,0 +1,41 @@
+.wrapper {
+	// border-bottom: 1px solid var(--mantine-color-gray-2);
+
+	&:last-child {
+		border: 'none';
+	}
+}
+
+.imgWrapper {
+	height: 90px;
+	width: 90px;
+	position: relative;
+}
+
+.brand {
+	font-size: 12px !important;
+	font-weight: 400 !important;
+	color: var(--mantine-color-gray-6);
+	font-family: var(--font-arimo) !important;
+}
+
+.title {
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	color: var(--mantine-color-blue-9);
+	font-family: var(--font-arimo) !important;
+}
+
+.price {
+	font-size: 16px !important;
+	font-weight: 700 !important;
+	color: var(--mantine-colors-gray-8);
+	font-family: var(--font-rajdhani);
+}
+
+.quantity {
+	font-size: 16px !important;
+	font-weight: 700 !important;
+	color: var(--mantine-colors-gray-8);
+	font-family: var(--font-rajdhani);
+}

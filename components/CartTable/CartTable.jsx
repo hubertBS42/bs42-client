@@ -133,7 +133,7 @@ const CartTable = () => {
 
 	return (
 		<Box visibleFrom='sm'>
-			<Title tt='uppercase' order={3} mb='md'>
+			<Title tt='uppercase' order={2} mb='md'>
 				Your Cart ({`${cartItemsTotal} Items`})
 			</Title>
 			{cartItemsTotal > 0 ? (

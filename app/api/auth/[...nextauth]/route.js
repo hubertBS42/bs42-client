@@ -62,6 +62,9 @@ const handler = NextAuth({
 					role: user?.role?.title,
 					firstName: user?.firstName,
 					lastName: user?.lastName,
+					email: user?.email,
+					phone: user?.phone1,
+					deliveryAddresses: user?.deliveryAddresses,
 					profileImg: user?.profileImg?.url || null,
 				}
 			return token
@@ -73,6 +76,9 @@ const handler = NextAuth({
 			session.user.role = token.role
 			session.user.firstName = token.firstName
 			session.user.lastName = token.lastName
+			session.user.email = token.email
+			session.user.phone = token.phone
+			session.user.deliveryAddresses = token.deliveryAddresses
 			session.user.profileImg = token.profileImg
 
 			return session

@@ -1,0 +1,12 @@
+.cardSection {
+	// padding: 0.5em 1em;
+	background-color: var(--mantine-color-gray-1);
+	display: flex;
+	align-items: center;
+	column-gap: 0.6em;
+}
+
+.headerIcon {
+	pointer-events: none;
+	border: none;
+}

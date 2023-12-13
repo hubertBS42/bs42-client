@@ -6,7 +6,7 @@ import CartFooterCards from '@/components/CartFoorterCards/CartFooterCards'
 import CartMobileShowcase from '@/components/CartMobileShowcase/CartMobileShowcase'
 
 export const metadata = {
-	title: 'Your cart - BS42.NET',
+	title: 'Your Cart - BS42.NET',
 }
 
 const page = () => {

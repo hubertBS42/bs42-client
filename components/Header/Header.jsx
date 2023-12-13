@@ -36,15 +36,16 @@ import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
 import { useSession } from 'next-auth/react'
 import CustomAvatar from '../CustomAvatar/CustomAvatar'
 import { loadCart } from '@/redux/features/cart/cartActions'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const Header = () => {
 	const dispatch = useDispatch()
 	const pathname = usePathname()
+	const router = useRouter()
 	const { data: session, status } = useSession()
 
 	useEffect(() => {
-		loadCart()
+		loadCart(pathname, router)
 		const fetchAllData = async () => {
 			const {
 				status,

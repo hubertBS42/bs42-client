@@ -1,0 +1,32 @@
+.control {
+	pointer-events: none;
+	padding-left: 0;
+	padding-right: 0;
+	&:hover {
+		background: transparent;
+	}
+}
+
+.sectionLabelNumber {
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--mantine-color-gray-1);
+}
+
+.active {
+	border: 2px solid var(--mantine-color-blue-5);
+}
+
+.completed {
+	background-color: var(--mantine-color-blue-5);
+}
+
+.cartLink {
+	pointer-events: auto;
+	text-transform: uppercase;
+	font-size: 13px;
+	color: var(--mantine-color-blue-7);
+}
