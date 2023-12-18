@@ -1,11 +1,11 @@
-'use client'
 import { Container, Grid, GridCol, Title } from '@mantine/core'
 import classes from './page.module.scss'
 import CheckoutSteps from '@/components/CheckoutSteps/CheckoutSteps'
+import ConfirmOrderCard from '@/components/ConfirmOrderCard/ConfirmOrderCard'
 
-// export const metadata = {
-// 	title: 'Checkout - BS42.NET',
-// }
+export const metadata = {
+	title: 'Checkout - BS42.NET',
+}
 
 const page = () => {
 	return (
@@ -17,7 +17,9 @@ const page = () => {
 				<GridCol span={8}>
 					<CheckoutSteps />
 				</GridCol>
-				<GridCol span={4}></GridCol>
+				<GridCol span={4}>
+					<ConfirmOrderCard />
+				</GridCol>
 			</Grid>
 		</Container>
 	)

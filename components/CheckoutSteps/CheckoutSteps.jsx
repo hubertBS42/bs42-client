@@ -18,6 +18,7 @@ import {
 	IconNumber2,
 	IconNumber3,
 	IconNumber4,
+	IconNumber5,
 } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import classes from './CheckoutSteps.module.scss'
@@ -29,7 +30,11 @@ import {
 } from '@/redux/features/cart/cartSlice'
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard'
 import Link from 'next/link'
-import { fetcher } from '@/utils/functions'
+import {
+	extractTowns,
+	fetchRegions,
+	fetcher,
+} from '@/utils/functions'
 import { z } from 'zod'
 import isNumeric from 'validator/lib/isNumeric'
 import isAlpha from 'validator/lib/isAlpha'
@@ -37,7 +42,7 @@ import { useForm, zodResolver } from '@mantine/form'
 import { getSession, useSession } from 'next-auth/react'
 
 const schema = z.object({
-	firstName: z
+	cFName: z
 		.string()
 		.trim()
 		.min(2, { message: 'First name should have at least 2 letters.' })
@@ -47,7 +52,7 @@ const schema = z.object({
 		.refine(val => val !== '', {
 			message: 'You must provide your first name.',
 		}),
-	lastName: z
+	cLName: z
 		.string()
 		.trim()
 		.min(2, { message: 'Last name should have at least 2 letters.' })
@@ -57,35 +62,113 @@ const schema = z.object({
 		.refine(val => val !== '', {
 			message: 'You must provide your last name.',
 		}),
-	email: z
+	cEmail: z
 		.string()
 		.trim()
 		.email({ message: 'You need to provide a valid email address.' }),
-	phone1: z
+	cPhone: z
 		.string()
 		.min(10, { message: 'You need to provide a valid phone number.' })
 		.refine(val => isNumeric(val), {
 			message: 'You need to provide a valid phone number.',
 		}),
-	region: z
+	bFName: z
+		.string()
+		.trim()
+		.min(2, { message: 'First name should have at least 2 letters.' })
+		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
+			message: 'First name contains invalid characters.',
+		})
+		.refine(val => val !== '', {
+			message: 'You must provide your first name.',
+		}),
+	bLName: z
+		.string()
+		.trim()
+		.min(2, { message: 'Last name should have at least 2 letters.' })
+		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
+			message: 'Last name contains invalid characters.',
+		})
+		.refine(val => val !== '', {
+			message: 'You must provide your last name.',
+		}),
+	bEmail: z
+		.string()
+		.trim()
+		.email({ message: 'You need to provide a valid email address.' }),
+	bPhone: z
+		.string()
+		.min(10, { message: 'You need to provide a valid phone number.' })
+		.refine(val => isNumeric(val), {
+			message: 'You need to provide a valid phone number.',
+		}),
+	bRegion: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
 			message: 'You must provide your region.',
 		}),
-	town: z
+	bTown: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
 			message: 'You must provide your town.',
 		}),
-	address: z
+	bAddress: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
 			message: 'You must provide your address.',
 		}),
-	digitalAddress: z
+	sFName: z
+		.string()
+		.trim()
+		.min(2, { message: 'First name should have at least 2 letters.' })
+		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
+			message: 'First name contains invalid characters.',
+		})
+		.refine(val => val !== '', {
+			message: 'You must provide your first name.',
+		}),
+	sLName: z
+		.string()
+		.trim()
+		.min(2, { message: 'Last name should have at least 2 letters.' })
+		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
+			message: 'Last name contains invalid characters.',
+		})
+		.refine(val => val !== '', {
+			message: 'You must provide your last name.',
+		}),
+	sEmail: z
+		.string()
+		.trim()
+		.email({ message: 'You need to provide a valid email address.' }),
+	sPhone: z
+		.string()
+		.min(10, { message: 'You need to provide a valid phone number.' })
+		.refine(val => isNumeric(val), {
+			message: 'You need to provide a valid phone number.',
+		}),
+	sRegion: z
+		.string()
+		.trim()
+		.refine(val => val !== '', {
+			message: 'You must provide your region.',
+		}),
+	sTown: z
+		.string()
+		.trim()
+		.refine(val => val !== '', {
+			message: 'You must provide your town.',
+		}),
+	sAddress: z
+		.string()
+		.trim()
+		.refine(val => val !== '', {
+			message: 'You must provide your address.',
+		}),
+	sDigitalAddress: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
@@ -96,25 +179,32 @@ const schema = z.object({
 const CheckoutSteps = () => {
 	const [active, setActive] = useState(1)
 	const [loading, setLoading] = useState(false)
-	const [geoData, setGeoData] = useState(null)
+	// const [geoData, setGeoData] = useState(null)
 	const [regions, setRegions] = useState([])
-	const [towns, setTowns] = useState([])
+	const [bTowns, setBTowns] = useState([])
+	const [sTowns, setSTowns] = useState([])
 	const [user, setUser] = useState(null)
 	// const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartItems = useSelector(selectAllCartItems)
 	const cartLoading = useSelector(getLoadingState)
 
-	const handleRegion = value => {
-		form.setFieldValue('region', value)
-		setTowns(geoData[value])
-		form.setFieldValue('town', geoData[value][0])
+	const handleRegion = (value, section) => {
+		const extractedTowns = extractTowns(value)
+		if (section === 'billing') {
+			form.setFieldValue('bRegion', value)
+			setBTowns(extractedTowns)
+			form.setFieldValue('bTown', extractedTowns[0])
+		} else {
+			form.setFieldValue('sRegion', value)
+			setSTowns(extractedTowns)
+			form.setFieldValue('sTown', extractedTowns[0])
+		}
 	}
 
 	const getUser = async form => {
 		const session = await getSession()
 
 		if (session) {
-			console.log(session)
 			form.setFieldValue('firstName', session.user.firstName)
 			form.setFieldValue('lastName', session.user.lastName)
 			form.setFieldValue('email', session.user.email)
@@ -123,8 +213,11 @@ const CheckoutSteps = () => {
 				'region',
 				session.user.deliveryAddresses[0].region
 			)
-			// setTowns(geoData[session.user.deliveryAddresses[0].region])
-			// form.setFieldValue('town', session.user.deliveryAddresses[0].town)
+			const extractedTowns = extractTowns(
+				session.user.deliveryAddresses[0].region
+			)
+			setTowns(extractedTowns)
+			form.setFieldValue('town', session.user.deliveryAddresses[0].town)
 			form.setFieldValue(
 				'address',
 				session.user.deliveryAddresses[0].address
@@ -139,25 +232,37 @@ const CheckoutSteps = () => {
 	const form = useForm({
 		validate: zodResolver(schema),
 		initialValues: {
-			firstName: '',
-			lastName: '',
-			email: '',
-			phone1: '',
-			deliveryMethod: 'pickup',
-			region: '',
-			town: '',
+			cFName: '',
+			cLName: '',
+			cEmail: '',
+			cPhone: '',
+			bFName: '',
+			bLName: '',
+			bEmail: '',
+			bPhone: '',
+			bRegion: '',
+			bTown: '',
+			bAddress: '',
+			sFName: '',
+			sLName: '',
+			sEmail: '',
+			sPhone: '',
+			sRegion: '',
+			sTown: '',
+			sAddress: '',
+			sAddress: '',
+			sDigitalAddress: '',
+			shippingMethod: 'pickup',
 			paymentMethod: 'cash',
-			address: '',
-			digitalAddress: '',
 		},
 	})
 
 	const nextStep = async () => {
 		if (active === 1) {
-			const firstName = form.validateField('firstName')
-			const lastName = form.validateField('lastName')
-			const email = form.validateField('email')
-			const phone = form.validateField('phone1')
+			const firstName = form.validateField('cFName')
+			const lastName = form.validateField('cLName')
+			const email = form.validateField('cEmail')
+			const phone = form.validateField('cPhone')
 
 			if (
 				firstName.hasError ||
@@ -167,32 +272,46 @@ const CheckoutSteps = () => {
 			) {
 				return
 			}
-			// } else {
-			// 	setLoading(true)
-			// 	const { status, message } = await fetcher(
-			// 		`https://portal.bs42.net/api/users/checkExists?email=${form.values.email}`
-			// 	)
-
-			// 	setLoading(false)
-
-			// 	if (status === 'failed') {
-			// 		form.setFieldError(
-			// 			'email',
-			// 			'An account with this email address already exists.'
-			// 		)
-			// 		return
-			// 	}
-			// }
 		}
 
 		if (active === 2) {
-			if (form.values.deliveryMethod === 'delivery') {
-				const region = form.validateField('region')
-				const town = form.validateField('town')
-				const address = form.validateField('address')
-				const digitalAddress = form.validateField('digitalAddress')
+			const firstName = form.validateField('bFName')
+			const lastName = form.validateField('bLName')
+			const email = form.validateField('bEmail')
+			const phone = form.validateField('bPhone')
+			const region = form.validateField('bRegion')
+			const town = form.validateField('bTown')
+			const address = form.validateField('bAddress')
+
+			if (
+				firstName.hasError ||
+				lastName.hasError ||
+				email.hasError ||
+				phone.hasError ||
+				region.hasError ||
+				town.hasError ||
+				address.hasError
+			) {
+				return
+			}
+		}
+
+		if (active === 3) {
+			if (form.values.shippingMethod === 'delivery') {
+				const firstName = form.validateField('sFName')
+				const lastName = form.validateField('sLName')
+				const email = form.validateField('sEmail')
+				const phone = form.validateField('sPhone')
+				const region = form.validateField('sRegion')
+				const town = form.validateField('sTown')
+				const address = form.validateField('sAddress')
+				const digitalAddress = form.validateField('sDigitalAddress')
 
 				if (
+					firstName.hasError ||
+					lastName.hasError ||
+					email.hasError ||
+					phone.hasError ||
 					region.hasError ||
 					town.hasError ||
 					address.hasError ||
@@ -201,26 +320,25 @@ const CheckoutSteps = () => {
 					return
 				}
 			} else {
-				form.setFieldValue('region', '')
-				form.setFieldValue('town', '')
-				form.setFieldValue('address', '')
-				form.setFieldValue('digitalAddress', '')
+				form.setFieldValue('sFName', '')
+				form.setFieldValue('sLName', '')
+				form.setFieldValue('sEmail', '')
+				form.setFieldValue('sPhone', '')
+				form.setFieldValue('sRegion', '')
+				form.setFieldValue('sTown', '')
+				form.setFieldValue('sAddress', '')
+				form.setFieldValue('sDigitalAddress', '')
 			}
 		}
-		setActive(current => (current < 4 ? current + 1 : current))
+		setActive(current => (current < 5 ? current + 1 : current))
 	}
 
 	const prevStep = () =>
 		setActive(current => (current > 0 ? current - 1 : current))
 
-	const fetchRegions = async () => {
-		const data = await fetcher('/cities.json')
-		setGeoData(data)
-		setRegions(Object.keys(data))
-	}
-
 	useEffect(() => {
-		fetchRegions()
+		const regions = fetchRegions()
+		setRegions(regions)
 		getUser(form)
 	}, [])
 
@@ -235,21 +353,34 @@ const CheckoutSteps = () => {
 				mt='xl'
 			>
 				{active > 1 && (
-					<Button variant='default' onClick={prevStep} disabled={loading}>
+					<Button
+						variant='default'
+						onClick={prevStep}
+						disabled={loading}
+						classNames={{
+							root: classes.btnRoot,
+						}}
+					>
 						Back
 					</Button>
 				)}
 
-				{active < 4 && (
-					<Button onClick={nextStep} loading={loading}>
-						Next step
+				{active < 5 && (
+					<Button
+						onClick={nextStep}
+						loading={loading}
+						classNames={{
+							root: classes.btnRoot,
+						}}
+					>
+						Next
 					</Button>
 				)}
-				{active === 4 && (
+				{/* {active === 5 && (
 					<Button loading={loading} onClick={handleSubmit}>
 						Complete
 					</Button>
-				)}
+				)} */}
 			</Group>
 		)
 	}
@@ -279,10 +410,10 @@ const CheckoutSteps = () => {
 							</Flex>
 							<div>
 								<Title order={4} c='gray.7'>
-									Customer Details
+									Customer Information
 								</Title>
 								<Text size='sm' c='dimmed' fw={400}>
-									Provide us with the following details.
+									Provide us with the following information.
 								</Text>
 							</div>
 						</Group>
@@ -298,7 +429,7 @@ const CheckoutSteps = () => {
 								type='text'
 								disabled={loading}
 								required
-								{...form.getInputProps('firstName')}
+								{...form.getInputProps('cFName')}
 							/>
 							<TextInput
 								label='Last name'
@@ -307,7 +438,7 @@ const CheckoutSteps = () => {
 								type='text'
 								disabled={loading}
 								required
-								{...form.getInputProps('lastName')}
+								{...form.getInputProps('cLName')}
 							/>
 						</Group>
 						<Group grow>
@@ -317,7 +448,7 @@ const CheckoutSteps = () => {
 								size='md'
 								disabled={loading}
 								required
-								{...form.getInputProps('email')}
+								{...form.getInputProps('cEmail')}
 							/>
 							<TextInput
 								withAsterisk
@@ -326,7 +457,7 @@ const CheckoutSteps = () => {
 								type='text'
 								disabled={loading}
 								required
-								{...form.getInputProps('phone1')}
+								{...form.getInputProps('cPhone')}
 							/>
 						</Group>
 					</Stack>
@@ -351,10 +482,118 @@ const CheckoutSteps = () => {
 							</Flex>
 							<div>
 								<Title order={4} c='gray.7'>
-									Delivery Details
+									Billing Information
 								</Title>
 								<Text size='sm' c='dimmed' fw={400}>
-									Provide us with the following delivery details.
+									Provide us with the following information.
+								</Text>
+							</div>
+						</Group>
+					</Flex>
+				</Accordion.Control>
+				<Accordion.Panel>
+					<Stack spacing='md'>
+						<Group grow>
+							<TextInput
+								label='First name'
+								withAsterisk
+								size='md'
+								type='text'
+								disabled={loading}
+								required
+								{...form.getInputProps('bFName')}
+							/>
+							<TextInput
+								label='Last name'
+								withAsterisk
+								size='md'
+								type='text'
+								disabled={loading}
+								required
+								{...form.getInputProps('bLName')}
+							/>
+						</Group>
+						<Group grow>
+							<TextInput
+								withAsterisk
+								label='Email address'
+								size='md'
+								disabled={loading}
+								required
+								{...form.getInputProps('bEmail')}
+							/>
+							<TextInput
+								withAsterisk
+								label='Phone number'
+								size='md'
+								type='text'
+								disabled={loading}
+								required
+								{...form.getInputProps('bPhone')}
+							/>
+						</Group>
+						<Group grow>
+							<Select
+								withAsterisk
+								label='Region'
+								data={regions}
+								size='md'
+								searchable
+								allowDeselect={false}
+								withCheckIcon={false}
+								{...form.getInputProps('bRegion')}
+								value={form.values.bRegion}
+								onChange={value => handleRegion(value, 'billing')}
+							/>
+							<Select
+								withAsterisk
+								disabled={form.values.bRegion === ''}
+								label='Town'
+								data={bTowns}
+								size='md'
+								searchable
+								allowDeselect={false}
+								withCheckIcon={false}
+								{...form.getInputProps('bTown')}
+							/>
+						</Group>
+						<Group grow>
+							<TextInput
+								label='Address'
+								withAsterisk
+								size='md'
+								type='text'
+								disabled={loading}
+								required
+								{...form.getInputProps('bAddress')}
+							/>
+						</Group>
+					</Stack>
+					<NextPrevButtons />
+				</Accordion.Panel>
+			</Accordion.Item>
+
+			<Accordion.Item key='3' value='3'>
+				<Accordion.Control>
+					<Flex justify='space-between'>
+						<Group>
+							<Flex
+								className={`${classes.sectionLabelNumber} ${
+									active === 3 && classes.active
+								} ${active > 3 && classes.completed}`}
+							>
+								{active > 3 ? (
+									<IconCheck size={18} color='white' stroke={2.5} />
+								) : (
+									<IconNumber3 size={18} stroke={2.5} />
+								)}
+							</Flex>
+							<div>
+								<Title order={4} c='gray.7'>
+									Shipping Information
+								</Title>
+								<Text size='sm' c='dimmed' fw={400}>
+									Provide us with the following information.
 								</Text>
 							</div>
 						</Group>
@@ -366,7 +605,7 @@ const CheckoutSteps = () => {
 							label='Delivery Method'
 							withAsterisk
 							description='Indicate how you would want to receive your order.'
-							{...form.getInputProps('deliveryMethod')}
+							{...form.getInputProps('shippingMethod')}
 						>
 							<Group pt={9}>
 								<Radio
@@ -394,8 +633,47 @@ const CheckoutSteps = () => {
 							</Group>
 						</Radio.Group>
 
-						{form.values.deliveryMethod === 'delivery' && (
+						{form.values.shippingMethod === 'delivery' && (
 							<>
+								<Group grow>
+									<TextInput
+										label='First name'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('sFName')}
+									/>
+									<TextInput
+										label='Last name'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('sLName')}
+									/>
+								</Group>
+								<Group grow>
+									<TextInput
+										withAsterisk
+										label='Email address'
+										size='md'
+										disabled={loading}
+										required
+										{...form.getInputProps('sEmail')}
+									/>
+									<TextInput
+										withAsterisk
+										label='Phone number'
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('sPhone')}
+									/>
+								</Group>
 								<Group grow>
 									<Select
 										withAsterisk
@@ -405,20 +683,20 @@ const CheckoutSteps = () => {
 										searchable
 										allowDeselect={false}
 										withCheckIcon={false}
-										{...form.getInputProps('region')}
-										value={form.values.region}
-										onChange={value => handleRegion(value)}
+										{...form.getInputProps('sRegion')}
+										value={form.values.sRegion}
+										onChange={value => handleRegion(value, 'shipping')}
 									/>
 									<Select
 										withAsterisk
-										disabled={form.values.region === ''}
+										disabled={form.values.sRegion === ''}
 										label='Town'
-										data={towns}
+										data={sTowns}
 										size='md'
 										searchable
 										allowDeselect={false}
 										withCheckIcon={false}
-										{...form.getInputProps('town')}
+										{...form.getInputProps('sTown')}
 									/>
 								</Group>
 								<Group grow>
@@ -429,7 +707,7 @@ const CheckoutSteps = () => {
 										type='text'
 										disabled={loading}
 										required
-										{...form.getInputProps('address')}
+										{...form.getInputProps('sAddress')}
 									/>
 									<TextInput
 										label='Digital Address'
@@ -438,7 +716,7 @@ const CheckoutSteps = () => {
 										type='text'
 										disabled={loading}
 										required
-										{...form.getInputProps('digitalAddress')}
+										{...form.getInputProps('sDigitalAddress')}
 									/>
 								</Group>
 							</>
@@ -448,19 +726,19 @@ const CheckoutSteps = () => {
 				</Accordion.Panel>
 			</Accordion.Item>
 
-			<Accordion.Item key='3' value='3'>
+			<Accordion.Item key='4' value='4'>
 				<Accordion.Control>
 					<Flex justify='space-between'>
 						<Group>
 							<Flex
 								className={`${classes.sectionLabelNumber} ${
-									active === 3 && classes.active
-								} ${active > 3 && classes.completed}`}
+									active === 4 && classes.active
+								} ${active > 4 && classes.completed}`}
 							>
-								{active > 3 ? (
+								{active > 4 ? (
 									<IconCheck size={18} color='white' stroke={2.5} />
 								) : (
-									<IconNumber3 size={18} stroke={2.5} />
+									<IconNumber4 size={18} stroke={2.5} />
 								)}
 							</Flex>
 							<div>
@@ -523,19 +801,19 @@ const CheckoutSteps = () => {
 				</Accordion.Panel>
 			</Accordion.Item>
 
-			<Accordion.Item key='4' value='4'>
+			<Accordion.Item key='5' value='5'>
 				<Accordion.Control>
 					<Flex justify='space-between'>
 						<Group>
 							<Flex
 								className={`${classes.sectionLabelNumber} ${
-									active === 4 && classes.active
-								} ${active > 4 && classes.completed}`}
+									active === 5 && classes.active
+								} ${active > 5 && classes.completed}`}
 							>
-								{active > 4 ? (
+								{active > 5 ? (
 									<IconCheck size={18} color='white' stroke={2.5} />
 								) : (
-									<IconNumber4 size={18} stroke={2.5} />
+									<IconNumber5 size={18} stroke={2.5} />
 								)}
 							</Flex>
 							<div>
@@ -547,9 +825,6 @@ const CheckoutSteps = () => {
 								</Text>
 							</div>
 						</Group>
-						{/* <Link href='/cart' className={classes.cartLink}>
-							Edit
-						</Link> */}
 					</Flex>
 				</Accordion.Control>
 				<Accordion.Panel>

@@ -1,3 +1,5 @@
+import { geoData } from './data'
+
 export const fetcher = (...args) =>
 	fetch(...args).then(res => res.json())
 
@@ -295,4 +297,15 @@ export const groupProductsByTopLevelCategory = (
 	}
 
 	return groupedProducts
+}
+
+export const extractTowns = value => {
+	const towns = geoData.find(region => region.name === value).towns
+
+	return towns
+}
+
+export const fetchRegions = () => {
+	const regions = geoData.map(region => region.name)
+	return regions
 }

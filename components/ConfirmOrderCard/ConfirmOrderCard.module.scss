@@ -1,0 +1,18 @@
+.container {
+	width: 100%;
+
+	@media (min-width: 48em) {
+		max-width: 430px;
+	}
+}
+
+.cardSection {
+	padding: 0;
+	border-bottom: 1px solid var(--mantine-color-gray-3);
+}
+
+.checkoutBtnRoot {
+	font-weight: 700;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+}
