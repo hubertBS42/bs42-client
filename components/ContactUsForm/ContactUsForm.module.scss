@@ -1,0 +1,19 @@
+.sendBtn {
+	font-family: var(--font-rajdhani);
+	color: white;
+	font-weight: 700;
+	transition: ease-in-out 0.3s all;
+	text-transform: uppercase;
+	background-color: var(--mantine-color-blue-7);
+	width: 300px;
+
+	&:not([data-disabled]):hover {
+		background-color: var(--mantine-color-blue-8);
+		color: white;
+	}
+
+	&[data-loading] {
+		background-color: var(--mantine-color-blue-8);
+		color: white;
+	}
+}

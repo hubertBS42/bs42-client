@@ -26,28 +26,35 @@ import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
+const isAlphaWithSpacesAndHyphens = value => {
+	// Allow empty strings
+	if (value === '') {
+		return true
+	}
+
+	// Check if the string contains only alphabetical characters, spaces, and hyphens
+	return /^[a-zA-Z -]+$/.test(value)
+}
+
 const schema = z.object({
 	firstName: z
 		.string()
 		.trim()
 		.min(2, { message: 'First name should have at least 2 letters.' })
-		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
+		.refine(isAlphaWithSpacesAndHyphens, {
 			message: 'First name contains invalid characters.',
 		}),
 	lastName: z
 		.string()
 		.trim()
 		.min(2, { message: 'Last name should have at least 2 letters.' })
-		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
+		.refine(isAlphaWithSpacesAndHyphens, {
 			message: 'Last name contains invalid characters.',
 		}),
 	company: z.object({
-		name: z
-			.string()
-			.trim()
-			.refine(val => isAlphaNumeric(val, 'en-GB', { ignore: ' -' }), {
-				message: 'Company contains invalid characters.',
-			}),
+		name: z.string().trim().refine(isAlphaWithSpacesAndHyphens, {
+			message: 'Company contains invalid characters.',
+		}),
 	}),
 	email: z
 		.string()
@@ -59,6 +66,9 @@ const schema = z.object({
 		.refine(val => isNumeric(val), {
 			message: 'You need to provide a valid phone number.',
 		}),
+	terms: z.boolean().refine(val => val, {
+		message: 'This field needs to be checked.',
+	}),
 })
 
 const SignupForm = () => {
@@ -153,7 +163,6 @@ const SignupForm = () => {
 									size='md'
 									type='text'
 									disabled={loading}
-									required
 									{...form.getInputProps('firstName')}
 								/>
 								<TextInput
@@ -162,7 +171,6 @@ const SignupForm = () => {
 									size='md'
 									type='text'
 									disabled={loading}
-									required
 									{...form.getInputProps('lastName')}
 								/>
 							</Group>
@@ -178,7 +186,6 @@ const SignupForm = () => {
 								label='Email address'
 								size='md'
 								disabled={loading}
-								required
 								{...form.getInputProps('email')}
 							/>
 							<TextInput
@@ -187,7 +194,6 @@ const SignupForm = () => {
 								size='md'
 								type='text'
 								disabled={loading}
-								required
 								{...form.getInputProps('phone1')}
 							/>
 							<Checkbox
@@ -197,7 +203,6 @@ const SignupForm = () => {
 								{...form.getInputProps('canReceiveEmails')}
 							/>
 							<Checkbox
-								required
 								disabled={loading}
 								label={
 									<>

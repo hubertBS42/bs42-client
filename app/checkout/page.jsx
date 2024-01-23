@@ -1,7 +1,6 @@
-import { Container, Grid, GridCol, Title } from '@mantine/core'
+import { Container, Title } from '@mantine/core'
 import classes from './page.module.scss'
-import CheckoutSteps from '@/components/CheckoutSteps/CheckoutSteps'
-import ConfirmOrderCard from '@/components/ConfirmOrderCard/ConfirmOrderCard'
+import CheckoutForm from '@/components/CheckoutForm/CheckoutForm'
 
 export const metadata = {
 	title: 'Checkout - BS42.NET',
@@ -13,14 +12,7 @@ const page = () => {
 			<Title tt='uppercase' order={2} mb='xl'>
 				Checkout
 			</Title>
-			<Grid>
-				<GridCol span={8}>
-					<CheckoutSteps />
-				</GridCol>
-				<GridCol span={4}>
-					<ConfirmOrderCard />
-				</GridCol>
-			</Grid>
+			<CheckoutForm />
 		</Container>
 	)
 }

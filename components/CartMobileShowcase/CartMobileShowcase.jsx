@@ -15,12 +15,16 @@ const CartMobileShowcase = () => {
 	return (
 		<Box hiddenFrom='sm'>
 			<Title tt='uppercase' order={4} mb='md'>
-				Your Cart ({`${cartItemsTotal} Items`})
+				Your Cart (
+				{`${cartItemsTotal} Item${
+					cartItemsTotal === 0 || (cartItemsTotal > 1 && 's')
+				}`}
+				)
 			</Title>
 
 			{cartItemsTotal > 0 &&
-				cartItems.map(item => (
-					<CartProductCard item={item} key={item._id} />
+				cartItems.map((item, i) => (
+					<CartProductCard item={item} key={i} />
 				))}
 		</Box>
 	)

@@ -63,7 +63,18 @@ a {
 	font-family: var(--font-arimo);
 }
 
+.mantine-Textarea-label {
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	color: #383e47;
+	margin-bottom: 0.3em;
+	font-family: var(--font-arimo);
+}
+
 .mantine-TextInput-input {
+	font-size: 15px !important;
+}
+.mantine-Textarea-input {
 	font-size: 15px !important;
 }
 

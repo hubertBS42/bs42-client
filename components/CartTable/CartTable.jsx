@@ -54,8 +54,8 @@ const CartTable = () => {
 		setLoading(false)
 	}
 
-	const rows = cartItems.map(item => (
-		<Table.Tr key={item._id}>
+	const rows = cartItems.map((item, i) => (
+		<Table.Tr key={i}>
 			<Table.Td>
 				<Flex align='center' gap='md'>
 					<Box

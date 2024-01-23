@@ -18,10 +18,10 @@
 	color: var(--mantine-color-gray-7);
 	border: 1px solid var(--mantine-color-gray-4);
 
-	// @media (min-width: 48em) {
-	// 	padding-left: 2em;
-	// 	padding-right: 2em;
-	// }
+	@media (min-width: 48em) {
+		padding-left: 2.1em;
+		padding-right: 2.1em;
+	}
 
 	&:hover {
 		background-color: var(--mantine-color-gray-7);

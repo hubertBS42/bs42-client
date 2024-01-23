@@ -35,6 +35,11 @@ const nextConfig = {
 				source: '/api/products',
 				destination: 'https://portal.bs42.net/api/products',
 			},
+			{
+				source: '/api/sendMail',
+				destination: 'https://portal.bs42.net/api/sendMail',
+				// destination: 'http://localhost:3001/api/sendMail',
+			},
 		]
 	},
 }
