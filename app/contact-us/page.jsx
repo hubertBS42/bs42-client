@@ -32,8 +32,8 @@ const page = () => {
 			<Grid>
 				<GridCol span={{ base: 12, md: 8 }}>
 					<Text c='gray' fz={14} maw={360} mb='md'>
-						We're happy to answer questions your question. Please fill out
-						the form below if you need assistance.
+						We&apos;re happy to answer questions your question. Please fill
+						out the form below if you need assistance.
 					</Text>
 
 					<ContactUsForm />
