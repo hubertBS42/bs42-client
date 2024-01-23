@@ -17,6 +17,8 @@ import {
 	IconMapPin,
 	IconPhoneCall,
 } from '@tabler/icons-react'
+import classes from './page.module.scss'
+import Link from 'next/link'
 
 export const metadata = {
 	title: 'Contact Us - BS42.NET',
@@ -31,7 +33,7 @@ const page = () => {
 
 			<Grid>
 				<GridCol span={{ base: 12, md: 8 }}>
-					<Text c='gray' fz={14} maw={360} mb='md'>
+					<Text c='gray' fz={14} mb='md'>
 						We&apos;re happy to answer questions your question. Please fill
 						out the form below if you need assistance.
 					</Text>
@@ -41,60 +43,65 @@ const page = () => {
 				<GridCol span={{ base: 12, md: 4 }} pt={{ md: 100 }}>
 					<Stack gap='md'>
 						<Group grow align='flex-start'>
-							<Stack gap={5}>
-								<Flex align='flex-start' gap={5}>
-									<IconMapPin stroke={2} size={22} />
-									<Title tt='uppercase' order={4}>
+							<Flex align='flex-start' gap={6}>
+								<IconMapPin stroke={2} size={20} />
+								<Stack gap={5}>
+									<Title order={4} className={classes.subtitle}>
 										Store Location
 									</Title>
-								</Flex>
+									<Link
+										href='https://maps.app.goo.gl/6JBVscgWE2sTTZX78'
+										target='_blank'
+									>
+										<Text c='gray' fz={13} maw={360} mb='md'>
+											Tycan House, House NO. 43 <br />
+											Tetteh Okuley Ave <br /> Abofu - Achimota
+										</Text>
+									</Link>
+								</Stack>
+							</Flex>
 
-								<Text c='gray' fz={14} maw={360} mb='md'>
-									Tycan House, House NO. 43 <br />
-									Tetteh Okuley Ave <br /> Abofu - Achimota
-								</Text>
-							</Stack>
-
-							<Stack gap={5}>
-								<Flex align='flex-start' gap={5}>
-									<IconMail stroke={2} size={22} />
-									<Title tt='uppercase' order={4}>
+							<Flex align='flex-start' gap={6}>
+								<IconMail stroke={2} size={20} />
+								<Stack gap={5}>
+									<Title order={4} className={classes.subtitle}>
 										Email Address
 									</Title>
-								</Flex>
-
-								<Text c='gray' fz={14} maw={360} mb='md'>
-									info@bs42.net
-								</Text>
-							</Stack>
+									<Link href='mailto:info@bs42.net'>
+										<Text c='gray' fz={13} maw={360} mb='md'>
+											info@bs42.net
+										</Text>
+									</Link>
+								</Stack>
+							</Flex>
 						</Group>
 
 						<Group grow align='flex-start'>
-							<Stack gap={5}>
-								<Flex align='flex-start' gap={5}>
-									<IconPhoneCall stroke={2} size={22} />
-									<Title tt='uppercase' order={4}>
+							<Flex align='flex-start' gap={6}>
+								<IconPhoneCall stroke={2} size={20} />
+								<Stack gap={5}>
+									<Title order={4} className={classes.subtitle}>
 										Phone Number
 									</Title>
-								</Flex>
+									<Link href='tel:+233534930002'>
+										<Text c='gray' fz={13} maw={360} mb='md'>
+											+233-53-493-0002
+										</Text>
+									</Link>
+								</Stack>
+							</Flex>
 
-								<Text c='gray' fz={14} maw={360} mb='md'>
-									+233-53-493-0002
-								</Text>
-							</Stack>
-
-							<Stack gap={5}>
-								<Flex align='flex-start' gap={5}>
-									<IconClock stroke={2} size={22} />
-									<Title tt='uppercase' order={4}>
+							<Flex align='flex-start' gap={6}>
+								<IconClock stroke={2} size={20} />
+								<Stack gap={5}>
+									<Title order={4} className={classes.subtitle}>
 										Opening hours
 									</Title>
-								</Flex>
-
-								<Text c='gray' fz={14} maw={360} mb='md'>
-									Monday to Friday: 9am - 5:30pm
-								</Text>
-							</Stack>
+									<Text c='gray' fz={13} maw={360} mb='md'>
+										Monday to Friday: 9am - 5:30pm
+									</Text>
+								</Stack>
+							</Flex>
 						</Group>
 					</Stack>
 				</GridCol>
