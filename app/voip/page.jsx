@@ -20,7 +20,12 @@ import bannerPic from '@/public/images/voip-banner1.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
 import Section from '@/components/Section/Section'
-import { IconPigMoney } from '@tabler/icons-react'
+import {
+	IconListCheck,
+	IconPhone,
+	IconPhoneCheck,
+	IconPigMoney,
+} from '@tabler/icons-react'
 import image2 from '@/public/images/calling-2.jpg'
 import image3 from '@/public/images/phones1.png'
 import VoipSection from '@/components/VoipSection/VoipSection'
@@ -42,12 +47,12 @@ const page = () => {
 				<Container size='xl' className={classes.container} pt={130}>
 					<Stack className={classes.textWrapper}>
 						<Title className={classes.title} order={1}>
-							Lorem ipsum dolor sit amet consectetur.
+							Communicate without boundaries on VoIP
 						</Title>
 						<Text className={classes.text}>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-							placeat qui hic quisquam doloribus, blanditiis suscipit eaque
-							natus.
+							We specialize in providing VOIP and intercom systems for both
+							multibranched and unbranched businesses. Our solutions are
+							designed to help businesses communicate seamlessly.
 						</Text>
 
 						<Button
@@ -67,56 +72,60 @@ const page = () => {
 					cols={{ base: 1, sm: 2, md: 3 }}
 					verticalSpacing={{ base: 'lg', sm: 'xl' }}
 				>
-					<Flex align='center' gap='md'>
+					<Flex align='flex-start' gap='md'>
 						<Flex
 							bg='cRed.0'
 							c='white'
-							p={5}
+							p={10}
 							style={{ borderRadius: '50%' }}
 						>
-							<IconPigMoney size={40} />
+							<IconPigMoney size={30} />
 						</Flex>
 						<Stack gap={5}>
-							<Title order={2}>Lorem ipsum dolor</Title>
+							<Title order={2}>Cost Saving</Title>
 							<Text>
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-								Ipsam sed nam voluptates magnam ex perferendis dicta.
+								Our VoIP service allow businesses to make phone calls over the
+								internet, with US and UK landline numbers from anywhere in the
+								world at local rates.
 							</Text>
 						</Stack>
 					</Flex>
 
-					<Flex align='center' gap='md'>
+					<Flex align='flex-start' gap='md'>
 						<Flex
 							bg='cRed.0'
 							c='white'
-							p={5}
+							p={10}
 							style={{ borderRadius: '50%' }}
 						>
-							<IconPigMoney size={40} />
+							<IconPhone size={30} />
 						</Flex>
 						<Stack gap={5}>
-							<Title order={2}>Lorem ipsum dolor</Title>
+							<Title order={2}>Improved Communication</Title>
 							<Text>
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-								Ipsam sed nam voluptates magnam ex perferendis dicta.
+								With intercom systems, employees can communicate internally
+								and externally across different branches and regions at zero
+								extra cost.
 							</Text>
 						</Stack>
 					</Flex>
 
-					<Flex align='center' gap='md'>
+					<Flex align='flex-start' gap='md'>
 						<Flex
 							bg='cRed.0'
 							c='white'
-							p={5}
+							p={10}
 							style={{ borderRadius: '50%' }}
 						>
-							<IconPigMoney size={40} />
+							<IconListCheck size={30} />
 						</Flex>
 						<Stack gap={5}>
-							<Title order={2}>Lorem ipsum dolor</Title>
+							<Title order={2}>Amazing Features</Title>
 							<Text>
-								Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-								Ipsam sed nam voluptates magnam ex perferendis dicta.
+								Enjoy features such as call forwarding, call recording, IVR
+								menus, Call Centre, voicemail, conference calling as well as
+								integration with other communication tools such as video
+								conferencing and instant messaging.
 							</Text>
 						</Stack>
 					</Flex>
@@ -140,20 +149,20 @@ const page = () => {
 						/>
 					</Box>
 
-					<Stack gap={38} ml={{ sm: 80 }}>
+					<Stack gap={30} ml={{ sm: 80 }}>
 						<Stack gap={5}>
 							<Title c='gray.1'>Our call, anytime, anywhere!</Title>
-							<Text fz={21} c='gray.1'>
+							{/* <Text fz={21} c='gray.1'>
 								Lorem ipsum dolor sit amet
-							</Text>
+							</Text> */}
 							<Divider w={70} size='sm' mt={5} color='gray.2' />
 						</Stack>
 
 						<Text fz={18} c='gray.2' maw={550}>
-							Get more value out of your phone. Simplify your business
-							communications with a single product that does what you need,
-							when you need it. Build better relationships with every
-							customer.
+							In today&apos;s fast-paced business environment, communication
+							is key. Whether you need a simple intercom system for a small
+							office, or a complex VOIP system for a multinational
+							corporation. we offer expert advice and after sales support.
 						</Text>
 					</Stack>
 				</SimpleGrid>
@@ -165,20 +174,20 @@ const page = () => {
 					verticalSpacing={{ base: 'lg', sm: 'xl' }}
 					// spacing={{ sm: 100 }}
 				>
-					<Stack pt={{ sm: 80 }} gap={38}>
+					<Stack pt={{ sm: 80 }} gap={30}>
 						<Stack gap={5}>
 							<Title>Everything you need in one place!</Title>
-							<Text fz={21} c='gray.8'>
+							{/* <Text fz={21} c='gray.8'>
 								Lorem ipsum dolor sit amet
-							</Text>
+							</Text> */}
 							<Divider w={70} size='sm' mt={5} color='cRed.0' />
 						</Stack>
 
 						<Text fz={18} c='gray.7' maw={550}>
-							Get more value out of your phone. Simplify your business
-							communications with a single product that does what you need,
-							when you need it. Build better relationships with every
-							customer.
+							We have years of experience in installing, maintaining, and
+							troubleshooting these systems. We offer competitive prices and
+							flexible plans. Contact us today to get a free consultation
+							with our experts and quote.
 						</Text>
 					</Stack>
 
@@ -223,21 +232,49 @@ const page = () => {
 							}}
 						>
 							<AccordionItem key={1} value='item1'>
-								<AccordionControl>Question 1</AccordionControl>
-								<AccordionPanel>item1</AccordionPanel>
+								<AccordionControl>
+									<Title order={4}>What is VoIP?</Title>
+								</AccordionControl>
+								<AccordionPanel>
+									VoIP stands for Voice over Internet Protocol and it allows
+									you to place telephone calls over a data network like the
+									internet. It operates by converting your voice signal from
+									your telephone into a digital signal that can then be
+									transmitted over the Internet.
+								</AccordionPanel>
 							</AccordionItem>
 
 							<AccordionItem key={2} value='item2'>
-								<AccordionControl>Question 2</AccordionControl>
-								<AccordionPanel>item2</AccordionPanel>
+								<AccordionControl>
+									<Title order={4}>What are the advantages of VoIP?</Title>
+								</AccordionControl>
+								<AccordionPanel>
+									VoIP offers many benefits for businesses including lower
+									costs, better accessibility, portability, higher scalability,
+									and it can make working remotely much easier for workers and
+									employees.
+								</AccordionPanel>
 							</AccordionItem>
 							<AccordionItem key={3} value='item3'>
-								<AccordionControl>Question 3</AccordionControl>
-								<AccordionPanel>item3</AccordionPanel>
+								<AccordionControl>
+									<Title order={4}>Can I keep my phone number?</Title>
+								</AccordionControl>
+								<AccordionPanel>
+									Yes, most providers allow number portability so you can use
+									the same number you had with your traditional phone provider.
+									Certain providers charge for this, so be sure to check with
+									your provider. Also, you should be aware that number
+									portability is not instant, and can take a few days.
+								</AccordionPanel>
 							</AccordionItem>
 							<AccordionItem key={4} value='item4'>
-								<AccordionControl>Question 4</AccordionControl>
-								<AccordionPanel>item4</AccordionPanel>
+								<AccordionControl>
+									<Title order={4}>Does VoIP work without internet?</Title>
+								</AccordionControl>
+								<AccordionPanel>
+									No, VoIP requires an internet connection to work properly.
+									Without an internet connection, you cannot make VoIP calls.
+								</AccordionPanel>
 							</AccordionItem>
 						</Accordion>
 					</Stack>
