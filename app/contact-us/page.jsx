@@ -1,8 +1,6 @@
 import ContactUsForm from '@/components/ContactUsForm/ContactUsForm'
 import {
-	Box,
 	Container,
-	Divider,
 	Flex,
 	Grid,
 	GridCol,

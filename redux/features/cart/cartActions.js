@@ -189,7 +189,7 @@ export const loadCart = async (pathname, router) => {
 	const userID = session?.user.id || null
 
 	if (!userID && !cartToken) {
-		router.push('/products')
+		// router.push('/products')
 		return
 	}
 
