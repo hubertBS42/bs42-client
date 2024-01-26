@@ -1,0 +1,65 @@
+.bannerContainer {
+	.textWrapper {
+		max-width: 550px;
+		align-items: flex-start;
+
+		@media (max-width: 48em) {
+			margin-left: unset;
+		}
+
+		.title {
+			z-index: 200 !important;
+			color: var(--mantine-color-gray-0);
+		}
+
+		.text {
+			z-index: 200 !important;
+			font-size: 17px;
+			font-weight: 500;
+			color: var(--mantine-color-gray-1);
+		}
+	}
+}
+
+.card {
+	border: 1px solid var(--mantine-color-gray-2);
+	border-radius: 10px;
+	overflow: hidden;
+	@media (max-width: 48em) {
+		flex-direction: column;
+	}
+
+	.imageWrapper {
+		width: 400px;
+		height: 200px;
+		position: relative;
+		overflow: hidden;
+
+		@media (max-width: 48em) {
+			width: 100%;
+		}
+
+		.image {
+			object-fit: cover;
+		}
+	}
+
+	.textSection {
+		padding: 1.5em;
+	}
+}
+
+.button {
+	font-size: 16px;
+	font-weight: 700;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	transition: ease-in 0.3s all;
+	border: 1px solid var(--mantine-color-cRed-0);
+	z-index: 200 !important;
+
+	&:hover {
+		background-color: white;
+		color: var(--mantine-color-cRed-0);
+	}
+}

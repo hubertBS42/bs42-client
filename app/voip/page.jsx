@@ -60,6 +60,7 @@ const page = () => {
 							href='products?category=voip'
 							className={classes.button}
 							color='cRed.0'
+							size='md'
 						>
 							Shop now
 						</Button>

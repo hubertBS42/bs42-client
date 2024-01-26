@@ -1,0 +1,32 @@
+.bannerContainer {
+	.textWrapper {
+		text-align: center;
+
+		@media (max-width: 48em) {
+			margin-left: unset;
+		}
+
+		.title {
+			z-index: 200 !important;
+			color: var(--mantine-color-gray-0);
+		}
+
+		.text {
+			z-index: 200 !important;
+			font-size: 17px;
+			font-weight: 500;
+			color: var(--mantine-color-gray-1);
+		}
+	}
+}
+
+.tabsPanel {
+	padding: 1.5em 1em;
+}
+
+.tabLabel {
+	font-family: var(--font-rajdhani);
+	font-weight: 600;
+	font-size: 14px;
+	text-transform: uppercase;
+}
