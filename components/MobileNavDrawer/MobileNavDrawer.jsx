@@ -19,6 +19,10 @@ import React from 'react'
 const MobileNavDrawer = () => {
 	const [opened, { toggle: toggleMobNav }] = useDisclosure(false)
 	const label = opened ? 'Close navigation' : 'Open navigation'
+	const handleNavClick = () => {
+		toggle()
+		toggleMobNav()
+	}
 
 	const linksData = [
 		{
@@ -61,6 +65,7 @@ const MobileNavDrawer = () => {
 				leftSection={link.icon}
 				component={Link}
 				href={link.href}
+				onClick={() => toggleMobNav()}
 				classNames={{
 					label: classes.label,
 					root: classes.root,

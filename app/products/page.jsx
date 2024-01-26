@@ -9,6 +9,7 @@ import FiltersCard from '@/components/FiltersCard/FiltersCard'
 import ProductsShowcase from '@/components/ProductsShowcase/ProductsShowcase'
 import LimitSelect from '@/components/LimitSelect/LimitSelect'
 import SortBySelect from '@/components/SortBySelect/SortBySelect'
+import ConditionCard from '@/components/ConditionCard/ConditionCard'
 
 export async function generateMetadata({ searchParams }) {
 	let categoryName
@@ -59,6 +60,7 @@ const ProductsPage = async () => {
 						/>
 						<CategoriesCard categories={categories.data} />
 						<PriceCard prices={prices} />
+						<ConditionCard />
 						<BrandsCard brands={brands.data} />
 					</Stack>
 

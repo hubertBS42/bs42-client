@@ -16,8 +16,14 @@ const FiltersCard = ({ categories, brands, prices }) => {
 
 	const category = params.get('category')
 	const brand = params.get('brand')
+	const condition = params.get('condition')
 	const minPrice = params.get('min_price')
 	const maxPrice = params.get('max_price')
+
+	const conditions = [
+		{ title: 'New', value: 'new' },
+		{ title: 'Used', value: 'used' },
+	]
 
 	const filters = []
 
@@ -57,6 +63,15 @@ const FiltersCard = ({ categories, brands, prices }) => {
 				min_price: selectedPrice.min,
 				max_price: selectedPrice.max,
 			},
+		})
+	}
+
+	if (condition) {
+		const data = conditions.find(item => item.value === condition)
+		filters.push({
+			type: 'condition',
+			title: data.title,
+			value: data.value,
 		})
 	}
 

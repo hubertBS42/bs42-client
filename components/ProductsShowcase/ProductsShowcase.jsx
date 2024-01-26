@@ -15,6 +15,7 @@ const ProductsShowcase = () => {
 
 	const category = params.get('category')
 	const brand = params.get('brand')
+	const condition = params.get('condition')
 	const minPrice = params.get('min_price')
 	const maxPrice = params.get('max_price')
 	const sortBy = params.get('sort_by') || 'newest'
@@ -24,7 +25,7 @@ const ProductsShowcase = () => {
 	const { data, error, isLoading } = useSWR(
 		`https://portal.bs42.net/api/frontend/products?category=${category}&brand=${encodeURIComponent(
 			brand
-		)}&minPrice=${minPrice}&maxPrice=${maxPrice}&limit=${limit}&page=${page}&sortBy=${sortBy}`,
+		)}&minPrice=${minPrice}&maxPrice=${maxPrice}&limit=${limit}&page=${page}&sortBy=${sortBy}&condition=${condition}`,
 		fetcher
 	)
 
