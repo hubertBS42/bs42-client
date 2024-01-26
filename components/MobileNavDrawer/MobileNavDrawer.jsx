@@ -19,10 +19,6 @@ import React from 'react'
 const MobileNavDrawer = () => {
 	const [opened, { toggle: toggleMobNav }] = useDisclosure(false)
 	const label = opened ? 'Close navigation' : 'Open navigation'
-	const handleNavClick = () => {
-		toggle()
-		toggleMobNav()
-	}
 
 	const linksData = [
 		{

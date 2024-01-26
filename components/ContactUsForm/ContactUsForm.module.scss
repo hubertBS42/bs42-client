@@ -7,6 +7,10 @@
 	background-color: var(--mantine-color-blue-7);
 	width: 300px;
 
+	@media (max-width: 36em) {
+		width: 100%;
+	}
+
 	&:not([data-disabled]):hover {
 		background-color: var(--mantine-color-blue-8);
 		color: white;
