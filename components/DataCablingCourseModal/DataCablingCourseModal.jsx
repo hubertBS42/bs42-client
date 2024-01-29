@@ -127,24 +127,42 @@ const DataCablingCourseModal = () => {
 						<TabsPanel value='description'>
 							<Stack>
 								<Text>
-									Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-									Dignissimos quibusdam molestias inventore mollitia
-									perspiciatis architecto, ut, cupiditate recusandae dicta
-									officiis nobis quae obcaecati natus repudiandae consectetur
-									quod quam tenetur dolorem?
+									Data cabling technicians are responsible for installing,
+									maintaining, and troubleshooting data cables that carry
+									voice, data, and video signals. When you take the Data
+									Cabling course, you will learn how to work with different
+									types of cables, such as Category 5, 6, 7 and coaxial.
+								</Text>
+
+								<Text>
+									You will also learn how to follow industry standards and best
+									practices for data cabling installation and testing.
+								</Text>
+
+								<Text>
+									You will gain hands-on experience with real-world scenarios
+									and equipment, under the guidance of our experienced
+									instructors. Whether you are looking for a new career or want
+									to upgrade your existing skills, the Data Cabling course can
+									help you achieve your goals.
+								</Text>
+
+								<Text>
+									Enrol today and start your journey to becoming a data cabling
+									professional. Upon completing our course, you will gain a
+									certification that will open up many opportunities for you
+									and give you access to our reseller program which will enable
+									you purchase any item from us at a reseller price.
 								</Text>
 							</Stack>
 						</TabsPanel>
 
 						<TabsPanel value='requirements'>
 							<List icon={<IconCheck size={18} stroke={3} />}>
-								<ListItem>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								</ListItem>
-								<ListItem>
-									Excepturi, adipisci odio vitae non culpa, amet distinctio
-									quod
-								</ListItem>
+								<ListItem>Basic eduction</ListItem>
+								<ListItem>Ability to read and write in english</ListItem>
+								<ListItem>Basic electrical knowledge</ListItem>
+								<ListItem>18 years above</ListItem>
 							</List>
 						</TabsPanel>
 

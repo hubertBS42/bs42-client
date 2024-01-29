@@ -30,8 +30,8 @@
 	}
 
 	.imageWrapper {
-		width: 400px;
-		height: 200px;
+		width: 300px;
+		height: inherit;
 		position: relative;
 		overflow: hidden;
 
@@ -46,6 +46,10 @@
 
 	.textSection {
 		padding: 1.5em;
+
+		.text {
+			max-width: 980px;
+		}
 	}
 }
 

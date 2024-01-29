@@ -34,12 +34,12 @@ const page = () => {
 				>
 					<Stack className={classes.textWrapper}>
 						<Title className={classes.title} order={1}>
-							Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+							Welcome to BS42 Academy
 						</Title>
 						<Text className={classes.text}>
-							Lorem ipsum dolor sit amet consectetur adipisicing elit.
-							Similique quos, illum sunt inventore doloribus repudiandae
-							quisquam.
+							Are you looking for a rewarding career in the security and
+							networking industry? Learn how to install, maintain and
+							troubleshoot CCTV and network systems with BS42 Academy.
 						</Text>
 
 						<Button
@@ -77,11 +77,13 @@ const page = () => {
 						</Box>
 						<Stack className={classes.textSection} align='flex-start'>
 							<Title order={3}>CCTV Installation</Title>
-							<Text>
-								Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-								Tenetur ullam culpa perspiciatis dignissimos neque? Dolores
-								veniam, tempora incidunt ratione vero dolorum, officia rerum,
-								ab eveniet excepturi voluptatum minima soluta beatae!
+							<Text className={classes.text}>
+								Our CCTV course will teach you everything you need to know
+								about CCTV, from the basics of camera types and RJ45 crimping,
+								to the advanced skills of network configuration and remote
+								access. You will also learn how to comply with the relevant
+								standards and regulations, as well as how to deal with
+								customers and clients professionally.
 							</Text>
 
 							<CCTVCourseModal />
@@ -99,11 +101,16 @@ const page = () => {
 						</Box>
 						<Stack className={classes.textSection} align='flex-start'>
 							<Title order={3}>Data Cabling</Title>
-							<Text>
-								Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-								Tenetur ullam culpa perspiciatis dignissimos neque? Dolores
-								veniam, tempora incidunt ratione vero dolorum, officia rerum,
-								ab eveniet excepturi voluptatum minima soluta beatae!
+							<Text className={classes.text}>
+								Data cabling is the backbone of any network, whether its for
+								home, office, or industrial use. The Data Cabling Course
+								provides you with the skills and knowledge to become a
+								certified data cabling and networking technician. It is
+								designed for technicians who wish to install structured
+								cabling in commercial and non-commercial buildings for high
+								speed data network installations. This course is also suitable
+								for security technicians who install structured cable for
+								security camera, access control or alarm systems.
 							</Text>
 
 							<DataCablingCourseModal />

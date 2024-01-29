@@ -127,24 +127,43 @@ const CCTVCourseModal = () => {
 						<TabsPanel value='description'>
 							<Stack>
 								<Text>
-									Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-									Dignissimos quibusdam molestias inventore mollitia
-									perspiciatis architecto, ut, cupiditate recusandae dicta
-									officiis nobis quae obcaecati natus repudiandae consectetur
-									quod quam tenetur dolorem?
+									The basic course equips participants with fundamental skills
+									in CCTV system setup and maintenance, covering key aspects
+									such as site safety and proper tool usage, practical camera
+									placement, RJ45 crimping, setting up recording devices,
+									system maintenance, troubleshooting and a lot more.
+								</Text>
+
+								<Text>
+									Our Advanced course is your gateway to advanced surveillance
+									skills, ensuring you're well-equipped to tackle complex
+									challenges in the evolving field of surveillance technology.
+									Master essential skills like advanced network setups for
+									seamless remote access, cloud and alarm integration, disaster
+									recovery, VPN setup and many more.
+								</Text>
+
+								<Text>
+									Upon completion of the course, you will gain a certification
+									that will open many opportunities for you in the security
+									sector. You will also benefit from our reseller program which
+									will enable you purchase any item from us at a reseller
+									price.
+								</Text>
+
+								<Text>
+									Don't miss this chance to enrol in our CCTV installer course
+									today. Contact us now to find out more and secure your place.
 								</Text>
 							</Stack>
 						</TabsPanel>
 
 						<TabsPanel value='requirements'>
 							<List icon={<IconCheck size={18} stroke={3} />}>
-								<ListItem>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								</ListItem>
-								<ListItem>
-									Excepturi, adipisci odio vitae non culpa, amet distinctio
-									quod
-								</ListItem>
+								<ListItem>Basic education</ListItem>
+								<ListItem>Ability to read and write in English</ListItem>
+								<ListItem>Basic electrical knowledge</ListItem>
+								<ListItem>18 years and above</ListItem>
 							</List>
 						</TabsPanel>
 
