@@ -34,6 +34,21 @@ import {
 
 const DataCablingCourseModal = () => {
 	const [opened, { open, close }] = useDisclosure(false)
+
+	const tabs = [
+		{ label: 'Description', value: 'description', icon: <IconNotes /> },
+		{
+			label: 'Requirements',
+			value: 'requirements',
+			icon: <IconListCheck />,
+		},
+		{
+			label: 'Schedule and Pricing',
+			value: 'pricing',
+			icon: <IconCalendarEvent />,
+		},
+	]
+
 	return (
 		<>
 			<Modal
@@ -113,15 +128,15 @@ const DataCablingCourseModal = () => {
 						}}
 					>
 						<TabsList grow>
-							<TabsTab value='description' leftSection={<IconNotes />}>
-								Description
-							</TabsTab>
-							<TabsTab value='requirements' leftSection={<IconListCheck />}>
-								Requirements
-							</TabsTab>
-							<TabsTab value='pricing' leftSection={<IconCalendarEvent />}>
-								Schedule and Pricing
-							</TabsTab>
+							{tabs.map(tab => (
+								<TabsTab
+									key={tab.value}
+									value={tab.value}
+									leftSection={tab.icon}
+								>
+									{tab.label}
+								</TabsTab>
+							))}
 						</TabsList>
 
 						<TabsPanel value='description'>

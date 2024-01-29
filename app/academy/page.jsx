@@ -17,6 +17,10 @@ import Image from 'next/image'
 import CCTVCourseModal from '@/components/CCTVCourseModal/CCTVCourseModal'
 import DataCablingCourseModal from '@/components/DataCablingCourseModal/DataCablingCourseModal'
 
+export const metadata = {
+	title: 'VoIP - BS42.NET',
+}
+
 const page = () => {
 	return (
 		<>
@@ -108,9 +112,7 @@ const page = () => {
 								certified data cabling and networking technician. It is
 								designed for technicians who wish to install structured
 								cabling in commercial and non-commercial buildings for high
-								speed data network installations. This course is also suitable
-								for security technicians who install structured cable for
-								security camera, access control or alarm systems.
+								speed data network installations.
 							</Text>
 
 							<DataCablingCourseModal />
