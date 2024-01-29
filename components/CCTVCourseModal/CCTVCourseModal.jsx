@@ -136,7 +136,7 @@ const CCTVCourseModal = () => {
 
 								<Text>
 									Our Advanced course is your gateway to advanced surveillance
-									skills, ensuring you're well-equipped to tackle complex
+									skills, ensuring you&apos;re well-equipped to tackle complex
 									challenges in the evolving field of surveillance technology.
 									Master essential skills like advanced network setups for
 									seamless remote access, cloud and alarm integration, disaster
@@ -152,8 +152,9 @@ const CCTVCourseModal = () => {
 								</Text>
 
 								<Text>
-									Don't miss this chance to enrol in our CCTV installer course
-									today. Contact us now to find out more and secure your place.
+									Don&apos;t miss this chance to enrol in our CCTV installer
+									course today. Contact us now to find out more and secure your
+									place.
 								</Text>
 							</Stack>
 						</TabsPanel>
