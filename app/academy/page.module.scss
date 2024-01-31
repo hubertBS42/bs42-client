@@ -10,6 +10,9 @@
 		.title {
 			z-index: 200 !important;
 			color: var(--mantine-color-gray-0);
+			@media (max-width: 48em) {
+				font-size: 26px;
+			}
 		}
 
 		.text {
@@ -17,6 +20,23 @@
 			font-size: 17px;
 			font-weight: 500;
 			color: var(--mantine-color-gray-1);
+			@media (max-width: 48em) {
+				font-size: 16px;
+			}
+		}
+	}
+}
+
+.sectionTitle {
+	.title {
+		@media (max-width: 48em) {
+			font-size: 24px;
+		}
+	}
+
+	.text {
+		@media (max-width: 48em) {
+			font-size: 14px;
 		}
 	}
 }
@@ -25,6 +45,7 @@
 	border: 1px solid var(--mantine-color-gray-2);
 	border-radius: 10px;
 	overflow: hidden;
+
 	@media (max-width: 48em) {
 		flex-direction: column;
 	}
@@ -47,8 +68,16 @@
 	.textSection {
 		padding: 1.5em;
 
+		.title {
+			@media (max-width: 48em) {
+				font-size: 19px;
+			}
+		}
+
 		.text {
-			max-width: 980px;
+			@media (max-width: 48em) {
+				font-size: 14px;
+			}
 		}
 	}
 }

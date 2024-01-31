@@ -10,12 +10,21 @@
 
 		.title {
 			z-index: 200 !important;
+			color: var(--mantine-color-gray-0);
+
+			@media (max-width: 48em) {
+				font-size: 26px;
+			}
 		}
 
 		.text {
 			z-index: 200 !important;
 			font-size: 17px;
-			font-weight: 500;
+			font-weight: 300;
+			color: var(--mantine-color-gray-1);
+			@media (max-width: 48em) {
+				font-size: 16px;
+			}
 		}
 
 		.button {
@@ -26,6 +35,10 @@
 			transition: ease-in 0.3s all;
 			border: 1px solid var(--mantine-color-cRed-0);
 			z-index: 200 !important;
+
+			@media (max-width: 48em) {
+				font-size: 15px;
+			}
 
 			&:hover {
 				background-color: white;
@@ -43,6 +56,11 @@
 		border-bottom: none;
 	}
 
+	.accordionItemTitle {
+		font-size: 5px !important;
+		color: red;
+	}
+
 	.accordionControl {
 		background-color: rgba($color: #fff, $alpha: 0.8);
 
@@ -55,5 +73,63 @@
 
 	.accordionPanel {
 		background-color: rgba($color: #fff, $alpha: 0.7);
+		@media (max-width: 48em) {
+			font-size: 15px;
+		}
+	}
+}
+
+.benefitTitle {
+	@media (max-width: 48em) {
+		font-size: 20px;
+	}
+}
+.benefitText {
+	@media (max-width: 48em) {
+		font-size: 15px;
+	}
+}
+
+.benefitIconWrapper {
+	border-radius: 50%;
+}
+
+.benefitIcon {
+	width: 30px;
+	height: 30px;
+
+	@media (max-width: 48em) {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+.section3 {
+	.title {
+		@media (max-width: 48em) {
+			font-size: 26px;
+		}
+	}
+
+	.text {
+		@media (max-width: 48em) {
+			font-size: 16px !important;
+			font-weight: 300 !important;
+		}
+	}
+}
+
+.section4 {
+	.title {
+		@media (max-width: 48em) {
+			font-size: 26px;
+		}
+	}
+
+	.text {
+		@media (max-width: 48em) {
+			font-size: 16px !important;
+			font-weight: 300 !important;
+		}
 	}
 }

@@ -20,9 +20,9 @@ const TopNavLinks = () => {
 			<Link href='/contact-us' className={classes.link}>
 				Contact Us
 			</Link>
-			<Link href='/blog' className={classes.link}>
+			{/* <Link href='/blog' className={classes.link}>
 				Blog
-			</Link>
+			</Link> */}
 		</Group>
 	)
 }

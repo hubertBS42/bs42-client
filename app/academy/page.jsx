@@ -18,7 +18,7 @@ import CCTVCourseModal from '@/components/CCTVCourseModal/CCTVCourseModal'
 import DataCablingCourseModal from '@/components/DataCablingCourseModal/DataCablingCourseModal'
 
 export const metadata = {
-	title: 'VoIP - BS42.NET',
+	title: 'Academy - BS42.NET',
 }
 
 const page = () => {
@@ -26,7 +26,7 @@ const page = () => {
 		<>
 			<BackgroundImage
 				src='/images/academy-banner.jpg'
-				h={{ base: 400, sm: 560 }}
+				h={{ base: 380, sm: 560 }}
 				w='100%'
 				pos='relative'
 			>
@@ -34,7 +34,7 @@ const page = () => {
 				<Container
 					size='xl'
 					className={classes.bannerContainer}
-					pt={{ base: 80, sm: 130 }}
+					pt={{ base: 50, sm: 130 }}
 				>
 					<Stack className={classes.textWrapper}>
 						<Title className={classes.title} order={1}>
@@ -51,7 +51,7 @@ const page = () => {
 							href='contact-us'
 							className={classes.button}
 							color='cRed.0'
-							size='md'
+							size='sm'
 						>
 							Contact Us
 						</Button>
@@ -60,16 +60,21 @@ const page = () => {
 			</BackgroundImage>
 
 			<Section>
-				<Stack ta='center' gap={5} mb={{ base: 30, sm: 50 }}>
-					<Title order={2} fz={30}>
+				<Stack
+					ta='center'
+					gap={5}
+					mb={{ base: 30, sm: 50 }}
+					className={classes.sectionTitle}
+				>
+					<Title order={2} className={classes.title}>
 						We offer the following courses
 					</Title>
-					<Text c='gray'>
+					<Text c='gray' className={classes.text}>
 						Building a betterworld, one course at a time
 					</Text>
 				</Stack>
 
-				<Stack gap='xl'>
+				<Stack gap='lg'>
 					<Flex className={classes.card}>
 						<Box className={classes.imageWrapper}>
 							<Image
@@ -80,7 +85,9 @@ const page = () => {
 							/>
 						</Box>
 						<Stack className={classes.textSection} align='flex-start'>
-							<Title order={3}>CCTV Installation</Title>
+							<Title order={3} className={classes.title}>
+								CCTV Installation
+							</Title>
 							<Text className={classes.text}>
 								Our CCTV course will teach you everything you need to know
 								about CCTV, from the basics of camera types and RJ45 crimping,

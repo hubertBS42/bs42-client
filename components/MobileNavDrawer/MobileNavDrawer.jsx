@@ -46,11 +46,11 @@ const MobileNavDrawer = () => {
 			href: '/contact-us',
 			icon: <IconSend size='1.1em' stroke={1.5} />,
 		},
-		{
-			label: 'Blogs',
-			href: '/blogs',
-			icon: <IconArticle size='1.1em' stroke={1.5} />,
-		},
+		// {
+		// 	label: 'Blogs',
+		// 	href: '/blogs',
+		// 	icon: <IconArticle size='1.1em' stroke={1.5} />,
+		// },
 	]
 
 	const renderLinks = linksData.map((link, i) => (

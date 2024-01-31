@@ -21,7 +21,7 @@ export default function Home() {
 			<SpecificProductsShowcase target='Security' />
 			<SpecificProductsShowcase target='Smart Homes' />
 			<YouMightLike />
-			<BlogShowcase />
+			{/* <BlogShowcase /> */}
 		</main>
 	)
 }
