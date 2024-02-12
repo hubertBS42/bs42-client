@@ -1,4 +1,4 @@
-import BlogShowcase from '@/components/BlogShowcase/BlogShowcase'
+import BlogsSection from '@/components/BlogsSection/BlogsSection'
 import DesktopMainCarousel from '@/components/DesktopMainCarousel/DesktopMainCarousel'
 import FeaturedProductsShowcase from '@/components/FeaturedProductsShowcase/FeaturedProductsShowcase'
 import MobileMainCarousel from '@/components/MobileMainCarousel/MobileMainCarousel'
@@ -21,7 +21,7 @@ export default function Home() {
 			<SpecificProductsShowcase target='Security' />
 			<SpecificProductsShowcase target='Smart Homes' />
 			<YouMightLike />
-			{/* <BlogShowcase /> */}
+			<BlogsSection />
 		</main>
 	)
 }

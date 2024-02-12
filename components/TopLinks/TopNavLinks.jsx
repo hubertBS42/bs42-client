@@ -2,7 +2,7 @@ import { Group, MediaQuery } from '@mantine/core'
 import Link from 'next/link'
 import classes from './TopNavLinks.module.scss'
 
-const TopNavLinks = () => {
+const TopNavLinks = ({ count }) => {
 	return (
 		<Group justify='center' py={10} gap='1.7vw' visibleFrom='sm'>
 			<Link href='/' className={classes.link}>
@@ -20,9 +20,11 @@ const TopNavLinks = () => {
 			<Link href='/contact-us' className={classes.link}>
 				Contact Us
 			</Link>
-			{/* <Link href='/blog' className={classes.link}>
-				Blog
-			</Link> */}
+			{count > 0 && (
+				<Link href='/blogs' className={classes.link}>
+					Blog
+				</Link>
+			)}
 		</Group>
 	)
 }

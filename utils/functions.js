@@ -40,6 +40,33 @@ export const getCategories = async () => {
 	return res.json()
 }
 
+export const formatDate = date => {
+	const options = { day: 'numeric', month: 'short', year: 'numeric' }
+	const formattedDate = new Date(date).toLocaleDateString(
+		'en-GB',
+		options
+	)
+
+	// Append 'st', 'nd', 'rd', or 'th' to the day
+	const day = new Date(date).getDate()
+	let daySuffix
+	if (day === 1 || day === 21 || day === 31) {
+		daySuffix = 'st'
+	} else if (day === 2 || day === 22) {
+		daySuffix = 'nd'
+	} else if (day === 3 || day === 23) {
+		daySuffix = 'rd'
+	} else {
+		daySuffix = 'th'
+	}
+
+	// Replace the day with the formatted day including the suffix
+	const formattedDay = day + daySuffix
+
+	// Construct the final formatted date string
+	return formattedDate.replace(/\b\d+\b/, formattedDay)
+}
+
 export const extractCategoryIds = category => {
 	const categoryIds = []
 

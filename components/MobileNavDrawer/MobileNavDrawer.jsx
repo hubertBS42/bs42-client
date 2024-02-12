@@ -16,7 +16,7 @@ import { rajdhani } from '@/utils/font'
 import classes from './MobileNavDrawer.module.scss'
 import React from 'react'
 
-const MobileNavDrawer = () => {
+const MobileNavDrawer = ({ count }) => {
 	const [opened, { toggle: toggleMobNav }] = useDisclosure(false)
 	const label = opened ? 'Close navigation' : 'Open navigation'
 
@@ -46,12 +46,15 @@ const MobileNavDrawer = () => {
 			href: '/contact-us',
 			icon: <IconSend size='1.1em' stroke={1.5} />,
 		},
-		// {
-		// 	label: 'Blogs',
-		// 	href: '/blogs',
-		// 	icon: <IconArticle size='1.1em' stroke={1.5} />,
-		// },
 	]
+
+	if (count > 0) {
+		linksData.push({
+			label: 'Blogs',
+			href: '/blogs',
+			icon: <IconArticle size='1.1em' stroke={1.5} />,
+		})
+	}
 
 	const renderLinks = linksData.map((link, i) => (
 		<React.Fragment key={i}>

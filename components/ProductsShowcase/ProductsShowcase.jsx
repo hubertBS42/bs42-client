@@ -39,11 +39,7 @@ const ProductsShowcase = () => {
 							spacing={{ base: 'sm', sm: 'sm', md: 'md' }}
 						>
 							{data.products.map(product => (
-								<ProductCard
-									key={product._id}
-									product={product}
-									cardLoading={isLoading}
-								/>
+								<ProductCard key={product._id} product={product} />
 							))}
 						</SimpleGrid>
 						<CustomPagination count={data.count} />

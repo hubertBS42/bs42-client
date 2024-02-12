@@ -24,7 +24,7 @@ import TopNavLinks from '../TopLinks/TopNavLinks'
 import MobileNavDrawer from '../MobileNavDrawer/MobileNavDrawer'
 import SearchModal from '../SearchModal/SearchModal'
 import MobileSearchModal from '../MobileSearchModal/MobileSearchModal'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { fetcher, getInitials } from '@/utils/functions'
 import { useDispatch } from 'react-redux'
 import { setCategories } from '@/redux/features/categories/categoriesSlice'
@@ -41,6 +41,7 @@ import { usePathname, useRouter } from 'next/navigation'
 const Header = () => {
 	const dispatch = useDispatch()
 	const pathname = usePathname()
+	const [count, setCount] = useState(0)
 	const router = useRouter()
 	const { data: session, status } = useSession()
 
@@ -50,12 +51,14 @@ const Header = () => {
 			const {
 				status,
 				message,
-				data: { products, categories, brands, settings },
+				data: { products, categories, brands, settings, blogsCount },
 			} = await fetcher('https://portal.bs42.net/api/frontendInitData')
 
 			if (status === 'error') {
 				return console.log('Failed to load data.') //message site admin about error
 			}
+
+			setCount(blogsCount)
 
 			dispatch(setCategories(categories))
 			dispatch(setProducts(products))
@@ -133,7 +136,7 @@ const Header = () => {
 							style={{ alignItems: 'center', display: 'flex' }}
 						>
 							<Group gap={5}>
-								<MobileNavDrawer />
+								<MobileNavDrawer count={count} />
 								<MobileSearchModal />
 								<Box
 									component={Link}
@@ -149,7 +152,7 @@ const Header = () => {
 							<Box component={Link} href='/' hiddenFrom='sm'>
 								<Image src={MobileLogo} alt='logo' width={30} priority />
 							</Box>
-							<TopNavLinks />
+							<TopNavLinks count={count} />
 						</Grid.Col>
 						<Grid.Col
 							span={3}
