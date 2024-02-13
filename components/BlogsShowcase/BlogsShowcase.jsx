@@ -20,25 +20,27 @@ const BlogsShowcase = () => {
 	// const maxPrice = params.get('max_price')
 	const q = params.get('q')
 	const author = params.get('author')
+	const startDate = params.get('startDate')
+	const endDate = params.get('endDate')
 	const sortBy = params.get('sort_by') || 'newest'
 	const limit = params.get('limit') || '25'
 	const page = params.get('page') || '1'
 
 	const { data, error, isLoading } = useSWR(
-		`https://portal.bs42.net/api/frontend/blogs?q=${q}&limit=${limit}&page=${page}&sortBy=${sortBy}&author=${author}`,
+		`https://portal.bs42.net/api/frontend/blogs?q=${q}&limit=${limit}&page=${page}&sortBy=${sortBy}&author=${author}&startDate=${startDate}&endDate=${endDate}`,
 		fetcher
 	)
 
 	return (
 		<>
 			{!isLoading ? (
-				data.blogs.length > 0 ? (
+				data?.blogs?.length > 0 ? (
 					<>
 						<SimpleGrid
 							cols={{ base: 2, sm: 3, md: 4 }}
 							spacing={{ base: 'sm', sm: 'sm', md: 'md' }}
 						>
-							{data.blogs.map(blog => (
+							{data?.blogs.map(blog => (
 								<BlogCard key={blog._id} data={blog} />
 							))}
 						</SimpleGrid>

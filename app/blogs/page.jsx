@@ -1,7 +1,6 @@
 import { Container, Flex, Stack, Title } from '@mantine/core'
 import classes from './page.module.scss'
 import BlogsShowcase from '@/components/BlogsShowcase/BlogsShowcase'
-import BlogsSearch from '@/components/BlogsSearch/BlogsSearch'
 import FiltersPopOver from '@/components/FiltersPopOver/FiltersPopOver'
 
 export const metadata = {
@@ -18,7 +17,6 @@ const BlogsPage = async () => {
 					</Title>
 
 					<Flex align='center' gap='sm'>
-						<BlogsSearch />
 						<FiltersPopOver />
 					</Flex>
 				</Flex>
