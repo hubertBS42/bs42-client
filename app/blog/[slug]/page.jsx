@@ -12,6 +12,17 @@ import classes from './page.module.scss'
 import Section from '@/components/Section/Section'
 import { fetcher, formatDate } from '@/utils/functions'
 
+export async function generateMetadata({ params: { slug } }) {
+	const { data } = await fetcher(
+		`https://portal.bs42.net/api/frontend/blogs/${slug}`,
+		{ cache: 'no-store' }
+	)
+
+	return {
+		title: `${data.title} - BS42.NET`,
+	}
+}
+
 const page = async ({ params: { slug } }) => {
 	const { data } = await fetcher(
 		`https://portal.bs42.net/api/frontend/blogs/${slug}`,
