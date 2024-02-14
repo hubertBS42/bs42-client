@@ -8,6 +8,7 @@ import BlogCard from '../BlogCard/BlogCard'
 import classes from './BlogsSection.module.scss'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/functions'
+import Link from 'next/link'
 
 const BlogsSection = () => {
 	const autoplay = useRef(Autoplay({ delay: 4000 }))
@@ -52,7 +53,9 @@ const BlogsSection = () => {
 						{renderBlogs}
 					</Carousel>
 					<Flex justify='center' mt={40}>
-						<Button className='viewMoreBtn'>View more</Button>
+						<Button className='viewMoreBtn' component={Link} href='/blogs'>
+							View more
+						</Button>
 					</Flex>
 				</Box>
 			</Section>

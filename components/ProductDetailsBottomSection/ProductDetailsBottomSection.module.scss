@@ -17,6 +17,33 @@
 	padding-top: 1em;
 }
 
+.bodySection {
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-rajdhani);
+		text-transform: capitalize;
+	}
+
+	ul,
+	ol {
+		margin-left: 1em;
+		li {
+			font-size: 14px;
+		}
+	}
+
+	p {
+		margin-bottom: 1em;
+		font-size: 15px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
 .resources {
 	a {
 		color: var(--mantine-color-gray-8);

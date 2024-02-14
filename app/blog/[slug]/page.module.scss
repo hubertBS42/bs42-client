@@ -1,0 +1,54 @@
+.bannerContainer {
+	margin-top: 1.5em;
+	.textWrapper {
+		justify-content: flex-end;
+		height: 100%;
+		padding: 0 0 1em 1.5em;
+		row-gap: 0;
+
+		.title {
+			z-index: 200 !important;
+			color: var(--mantine-color-gray-0);
+			@media (max-width: 48em) {
+				font-size: 26px;
+			}
+		}
+
+		.text {
+			z-index: 200 !important;
+			font-size: 14px;
+			font-weight: 300;
+			color: var(--mantine-color-gray-1);
+			@media (max-width: 48em) {
+				font-size: 16px;
+			}
+		}
+	}
+}
+
+.bodySection {
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-rajdhani);
+		text-transform: capitalize;
+	}
+
+	ul,
+	ol {
+		margin-left: 1em;
+		li {
+			font-size: 14px;
+		}
+	}
+
+	p {
+		margin-bottom: 1em;
+		font-size: 15px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}

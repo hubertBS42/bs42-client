@@ -40,9 +40,12 @@ const ProductDetailsBottomSection = ({ data }) => {
 						</Tabs.List>
 
 						<Tabs.Panel value='description'>
-							<TypographyStylesProvider>
-								<div dangerouslySetInnerHTML={{ __html: data.description }} />
-							</TypographyStylesProvider>
+							{/* <TypographyStylesProvider> */}
+							<div
+								dangerouslySetInnerHTML={{ __html: data.description }}
+								className={classes.bodySection}
+							/>
+							{/* </TypographyStylesProvider> */}
 						</Tabs.Panel>
 
 						<Tabs.Panel value='resources'>
