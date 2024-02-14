@@ -46,12 +46,10 @@ const page = async ({ params: { slug } }) => {
 			</Container>
 
 			<Section>
-				{/* <TypographyStylesProvider> */}
 				<div
 					dangerouslySetInnerHTML={{ __html: data.body }}
 					className={classes.bodySection}
 				/>
-				{/* </TypographyStylesProvider> */}
 			</Section>
 		</>
 	)
