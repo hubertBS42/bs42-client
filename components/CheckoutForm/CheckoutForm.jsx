@@ -23,6 +23,7 @@ import {
 	IconNumber3,
 	IconNumber4,
 	IconNumber5,
+	IconX,
 } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import classes from './CheckoutForm.module.scss'
@@ -37,6 +38,7 @@ import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard'
 import {
 	extractTowns,
 	fetchRegions,
+	fetcher,
 	roundMoney,
 } from '@/utils/functions'
 import { z } from 'zod'
@@ -45,6 +47,7 @@ import isAlpha from 'validator/lib/isAlpha'
 import { useForm, zodResolver } from '@mantine/form'
 import { getSession } from 'next-auth/react'
 import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { notifications } from '@mantine/notifications'
 
 const schema = z.object({
 	cFName: z
@@ -183,7 +186,7 @@ const schema = z.object({
 
 const CheckoutForm = () => {
 	const [active, setActive] = useState(1)
-	// const [loading, setLoading] = useState(false)
+	const [submitting, setSubmitting] = useState(false)
 	const [regions, setRegions] = useState([])
 	const [sTowns, setSTowns] = useState([])
 	const [user, setUser] = useState(null)
@@ -365,10 +368,16 @@ const CheckoutForm = () => {
 
 	const handleSubmit = async () => {
 		const session = await getSession()
+		const userID = session?.user.id || null
+		let cartToken = localStorage.getItem('cartToken') || null
+
+		if (cartToken) {
+			cartToken = JSON.parse(cartToken)
+		}
 
 		const preparedData = {
 			customerInfo: {
-				user: session.user.id,
+				userRef: session?.user ? session.user.id : null,
 				firstName: form.values.cFName,
 				lastName: form.values.cLName,
 				email: form.values.cEmail,
@@ -377,26 +386,75 @@ const CheckoutForm = () => {
 			rate: currentRate,
 			products: cartItems.map(item => {
 				return {
-					product: item.product._id,
+					productRef: item.product._id || null,
+					title: item.product.title,
+					brand: {
+						name: item.product.brand.name,
+						website: item.product.brand.website,
+						logo: item.product.brand.logo.url,
+					},
+					category: [
+						item.product.category.name,
+						item.product.category.parent.name,
+						item.product.category.parent.parent.name,
+					],
+					images: item.product.images,
 					quantity: item.quantity,
 					price: item.product.sellPrice,
 				}
 			}),
 			totalPrice: cartPriceTotal,
-			shippingInfo: {
-				firstName: form.values.sFName,
-				lastName: form.values.sLName,
-				email: form.values.sEmail,
-				phone: form.values.sFPhone,
-				region: form.values.sRegion,
-				town: form.values.sTown,
-				address: form.values.sAddress,
-				digitalAddress: form.values.sDigitalAddress,
+			shipping: {
+				address: {
+					firstName: form.values.sFName,
+					lastName: form.values.sLName,
+					email: form.values.sEmail,
+					phone: form.values.sPhone,
+					region: form.values.sRegion,
+					town: form.values.sTown,
+					address: form.values.sAddress,
+					digitalAddress: form.values.sDigitalAddress,
+				},
+				method: form.values.shippingMethod,
 			},
-			paymentMethod: form.values.paymentMethod,
-			shippingMethod: form.values.shippingMethod,
+			payment: {
+				method: form.values.paymentMethod,
+			},
 		}
-		console.log(preparedData)
+
+		setSubmitting(true)
+
+		const { status, message } = await fetcher(
+			`/api/orders/add?cartToken=${cartToken}&userID=${userID}`,
+			{
+				method: 'POST',
+				body: JSON.stringify(preparedData),
+				headers: {
+					'Content-type': 'application/json; charset=UTF-8',
+				},
+			}
+		)
+
+		if (status === 'success') {
+			notifications.show({
+				title: 'Order Placed!',
+				message:
+					'You have successfully placed your order! You will be contacted soon by a statff member.',
+				color: 'green',
+				autoClose: false,
+				icon: <IconCheck />,
+			})
+		} else {
+			notifications.show({
+				title: 'Order Failed!',
+				message:
+					'Your order could not be placed. Try refreshing the page and try again. If the problem persists, you can contact us via the Contact us page.',
+				color: 'red',
+				icon: <IconX />,
+			})
+		}
+
+		setSubmitting(false)
 	}
 
 	const NextPrevButtons = () => {
@@ -776,38 +834,93 @@ const CheckoutForm = () => {
 						</Accordion.Control>
 						<Accordion.Panel>
 							<Grid>
-								<Grid.Col span={6}>
-									<Stack>
-										<Title order={5}>Customer Information</Title>
+								<Grid.Col span={4}>
+									<Stack gap={0}>
+										<Title className={classes.subTitle} order={5}>
+											Customer Information
+										</Title>
 										<Box>
-											<Text>
-												{form.values.cFName} {form.values.cLName}
+											<Text className={classes.infoText}>
+												Full name: {form.values.cFName} {form.values.cLName}
 											</Text>
-											<Text>{form.values.cEmail}</Text>
-											<Text>{form.values.cPhone}</Text>
+											<Text className={classes.infoText}>
+												Email: {form.values.cEmail}
+											</Text>
+											<Text className={classes.infoText}>
+												Phone: {form.values.cPhone}
+											</Text>
 										</Box>
 									</Stack>
 								</Grid.Col>
-								<Grid.Col span={6}>
-									<Stack>
-										<Title order={5}>Shipping Information</Title>
+								<Grid.Col span={4}>
+									<Stack gap={0}>
+										<Title className={classes.subTitle} order={5}>
+											Shipping Information
+										</Title>
 										<Box>
-											<Text>
-												{form.values.sFName} {form.values.sLName}
+											<Text className={classes.infoText}>
+												Shipping Method:{' '}
+												{form.values.shippingMethod === 'pickup'
+													? 'Pick up'
+													: 'Delivery'}
 											</Text>
-											<Text>{form.values.sEmail}</Text>
-											<Text>{form.values.sPhone}</Text>
-											<Text>{form.values.sAddress}</Text>
-											<Text>{form.values.sRegion}</Text>
-											<Text>{form.values.sTown}</Text>
-											<Text>{form.values.sDigitalAddress}</Text>
 										</Box>
+
+										{form.values.shippingMethod === 'delivery' && (
+											<Box>
+												<Text className={classes.infoText}>
+													Full name: {form.values.sFName} {form.values.sLName}
+												</Text>
+												<Text className={classes.infoText}>
+													Email: {form.values.sEmail}
+												</Text>
+												<Text className={classes.infoText}>
+													Phone: {form.values.sPhone}
+												</Text>
+												<Text className={classes.infoText}>
+													Address: {form.values.sAddress}
+												</Text>
+												<Text className={classes.infoText}>
+													Region: {form.values.sRegion}
+												</Text>
+												<Text className={classes.infoText}>
+													Town: {form.values.sTown}
+												</Text>
+												<Text className={classes.infoText}>
+													Digital address: {form.values.sDigitalAddress}
+												</Text>
+											</Box>
+										)}
+									</Stack>
+								</Grid.Col>
+
+								<Grid.Col span={4}>
+									<Stack gap={0}>
+										<Title className={classes.subTitle} order={5}>
+											Payment Information
+										</Title>
+										<Box>
+											<Text className={classes.infoText}>
+												Payment Method:{' '}
+												{form.values.paymentMethod === 'cash' && 'Cash'}
+											</Text>
+										</Box>
+									</Stack>
+								</Grid.Col>
+
+								<Grid.Col span={12}>
+									<Stack gap={0}>
+										<Title className={classes.subTitle} order={5}>
+											Products in Cart
+										</Title>
+
+										{cartItems.map((item, i) => (
+											<CheckoutProductCard key={i} item={item} />
+										))}
 									</Stack>
 								</Grid.Col>
 							</Grid>
-							{cartItems.map((item, i) => (
-								<CheckoutProductCard key={i} item={item} />
-							))}
+
 							<NextPrevButtons />
 						</Accordion.Panel>
 					</Accordion.Item>
@@ -819,7 +932,7 @@ const CheckoutForm = () => {
 						Order Summary:
 					</Title>
 
-					<TextInput
+					{/* <TextInput
 						size='md'
 						mb='md'
 						placeholder='Coupon Code'
@@ -833,7 +946,7 @@ const CheckoutForm = () => {
 								/>
 							</ActionIcon>
 						}
-					/>
+					/> */}
 
 					<Flex justify='space-between'>
 						<Title order={6} c='gray.7'>
@@ -870,7 +983,7 @@ const CheckoutForm = () => {
 						classNames={{
 							root: classes.checkoutBtnRoot,
 						}}
-						loading={loading}
+						loading={loading || submitting}
 						disabled={active !== 4}
 						onClick={handleSubmit}
 					>
