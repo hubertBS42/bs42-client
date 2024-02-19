@@ -16,58 +16,68 @@ import { useRef, useState } from 'react'
 import classes from './MobileMainCarousel.module.scss'
 import { getSettings } from '@/redux/features/settings/settingsSlice'
 import { useSelector } from 'react-redux'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/functions'
 
 const MobileMainCarousel = () => {
 	const autoplay = useRef(Autoplay({ delay: 5000 }))
 	const [carouselIndex, setCarouselIndex] = useState(0)
-	const settings = useSelector(getSettings)
 
-	const slides = settings[0]?.carouselSlides.map((slide, i) => (
-		<Carousel.Slide key={i}>
-			<Image
-				src={slide.image.url}
-				fill
-				sizes='100vw'
-				style={{ objectFit: 'cover' }}
-				alt={slide.title}
-				priority
-			/>
-			<Overlay color='#000' opacity={0.5} />
-			<Container size='xl' pos='relative'>
-				<Stack className={classes.innerTextWrapper}>
-					<Title
-						order={1}
-						className={`${classes.title} ${
-							carouselIndex === i && classes.titleActive
-						}`}
-					>
-						{slide.title}
-					</Title>
+	const { data, error, isLoading } = useSWR(
+		'https://portal.bs42.net/api/frontend/slides',
+		fetcher
+	)
 
-					<Text
-						className={`${classes.text} ${
-							carouselIndex === i && classes.textActive
-						}`}
-					>
-						{slide.description}
-					</Text>
-					<Button
-						component={Link}
-						href={slide.cta.url}
-						className={`${classes.button} ${
-							carouselIndex === i && classes.buttonActive
-						}`}
-						color='cRed.0'
-					>
-						{slide.cta.label}
-					</Button>
-				</Stack>
-			</Container>
-		</Carousel.Slide>
-	))
+	const renderSlides =
+		!isLoading &&
+		data.slides.length > 0 &&
+		data.slides.map((slide, i) => (
+			<Carousel.Slide key={slide.position}>
+				<Image
+					src={slide.image.url}
+					fill
+					sizes='100vw'
+					style={{ objectFit: 'cover' }}
+					alt={slide.title}
+					priority
+				/>
+				<Overlay color='#000' opacity={0.5} />
+				<Container size='xl' pos='relative'>
+					<Stack className={classes.innerTextWrapper}>
+						<Title
+							order={1}
+							className={`${classes.title} ${
+								carouselIndex === i && classes.titleActive
+							}`}
+						>
+							{slide.title}
+						</Title>
+
+						<Text
+							className={`${classes.text} ${
+								carouselIndex === i && classes.textActive
+							}`}
+						>
+							{slide.description}
+						</Text>
+						<Button
+							component={Link}
+							href={slide.cta.url}
+							className={`${classes.button} ${
+								carouselIndex === i && classes.buttonActive
+							}`}
+							color='cRed.0'
+						>
+							{slide.cta.label}
+						</Button>
+					</Stack>
+				</Container>
+			</Carousel.Slide>
+		))
+
 	return (
 		<>
-			{settings[0]?.carouselSlides.length > 0 && (
+			{!isLoading && data.slides.length > 0 && (
 				<Carousel
 					height={300}
 					plugins={[autoplay.current]}
@@ -81,7 +91,7 @@ const MobileMainCarousel = () => {
 					}}
 					hiddenFrom='xs'
 				>
-					{slides}
+					{renderSlides}
 				</Carousel>
 			)}
 		</>

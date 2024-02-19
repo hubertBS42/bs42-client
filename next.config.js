@@ -18,7 +18,8 @@ const nextConfig = {
 		return [
 			{
 				source: '/api/applications/add',
-				destination: 'https://portal.bs42.net/api/applications/add',
+				destination: 'http://localhost:3001/api/applications/add',
+				// destination: 'https://portal.bs42.net/api/applications/add',
 			},
 			{
 				source: '/api/orders/add',
