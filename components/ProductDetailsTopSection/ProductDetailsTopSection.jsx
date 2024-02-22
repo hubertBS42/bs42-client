@@ -20,7 +20,7 @@ import classes from './ProductDetailsTopSection.module.scss'
 import { useEffect, useState } from 'react'
 import { IconFlame } from '@tabler/icons-react'
 import { useSelector } from 'react-redux'
-import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { roundMoney } from '@/utils/functions'
 import { productQtyInCartSelector } from '@/redux/features/cart/cartSlice'
 import { modifyCart } from '@/redux/features/cart/cartActions'
@@ -30,7 +30,7 @@ const ProductDetailsTopSection = ({ data }) => {
 	const [embla, setEmbla] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [quantity, setQuantity] = useState(1)
-	const settings = useSelector(getSettings)
+	const currency = useSelector(getCurrency)
 	const curQuantity = useSelector(productQtyInCartSelector(data._id))
 
 	useEffect(() => {
@@ -49,7 +49,9 @@ const ProductDetailsTopSection = ({ data }) => {
 		setLoading(false)
 	}
 
-	const currentRate = settings[0]?.exchangeRate.currentRate
+	const currentRate = currency.isCustomRate
+		? currency.customRate
+		: currency.history[0].rate
 	const roundedSellPrice = roundMoney(data.sellPrice * currentRate)
 
 	const MainSlides = data.images.map(image => (

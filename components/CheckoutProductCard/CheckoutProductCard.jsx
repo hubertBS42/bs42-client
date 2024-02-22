@@ -13,11 +13,13 @@ import Link from 'next/link'
 import classes from './CheckoutProductCard.module.scss'
 import { roundMoney } from '@/utils/functions'
 import { useSelector } from 'react-redux'
-import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { getCurrency } from '@/redux/features/currency/currencySlice'
 
 const CheckoutProductCard = ({ item }) => {
-	const settings = useSelector(getSettings)
-	const currentRate = settings[0]?.exchangeRate.currentRate
+	const currency = useSelector(getCurrency)
+	const currentRate = currency.isCustomRate
+		? currency.customRate
+		: currency.history[0].rate
 	const roundedSellPrice = roundMoney(
 		item.product.sellPrice * currentRate
 	)

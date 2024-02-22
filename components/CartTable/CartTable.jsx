@@ -16,7 +16,7 @@ import {
 	totalCartItemSelector,
 	totalPriceSelector,
 } from '@/redux/features/cart/cartSlice'
-import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { roundMoney } from '@/utils/functions'
 import {
 	modifyCart,
@@ -32,11 +32,18 @@ const CartTable = () => {
 	const [loading, setLoading] = useState(false)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartPriceTotal = useSelector(totalPriceSelector)
-	const settings = useSelector(getSettings)
+	const currency = useSelector(getCurrency)
 	const cartItems = useSelector(selectAllCartItems)
 	// const loading = useSelector(getLoadingState)
 
-	const currentRate = settings[0]?.exchangeRate.currentRate
+	let currentRate = 0
+
+	if (currency) {
+		currentRate = currency.isCustomRate
+			? currency.customRate
+			: currency.history[0].rate
+	}
+
 	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
 
 	const handleChange = useDebouncedCallback(

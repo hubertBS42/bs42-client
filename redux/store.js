@@ -3,7 +3,7 @@ import categoriesReducer from './features/categories/categoriesSlice'
 import productsReducer from './features/products/productsSlice'
 import brandsReducer from './features/brands/brandsSlice'
 import cartReducer from './features/cart/cartSlice'
-import settingsReducer from './features/settings/settingsSlice'
+import currencyReducer from './features/currency/currencySlice'
 
 export const store = configureStore({
 	reducer: {
@@ -11,6 +11,6 @@ export const store = configureStore({
 		products: productsReducer,
 		brands: brandsReducer,
 		cart: cartReducer,
-		settings: settingsReducer,
+		currency: currencyReducer,
 	},
 })

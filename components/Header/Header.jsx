@@ -31,7 +31,7 @@ import { setCategories } from '@/redux/features/categories/categoriesSlice'
 import { setProducts } from '@/redux/features/products/productsSlice'
 import { setBrands } from '@/redux/features/brands/brandsSlice'
 import CategoryMenu from '../CategoryMenu/CategoryMenu'
-import { setSettings } from '@/redux/features/settings/settingsSlice'
+import { setCurrency } from '@/redux/features/currency/currencySlice'
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
 import { useSession } from 'next-auth/react'
 import CustomAvatar from '../CustomAvatar/CustomAvatar'
@@ -51,7 +51,7 @@ const Header = () => {
 			const {
 				status,
 				message,
-				data: { products, categories, brands, settings, blogsCount },
+				data: { products, categories, brands, currency, blogsCount },
 			} = await fetcher('https://portal.bs42.net/api/frontendInitData')
 
 			if (status === 'error') {
@@ -63,7 +63,7 @@ const Header = () => {
 			dispatch(setCategories(categories))
 			dispatch(setProducts(products))
 			dispatch(setBrands(brands))
-			dispatch(setSettings(settings))
+			dispatch(setCurrency(currency))
 		}
 		fetchAllData()
 	}, [])

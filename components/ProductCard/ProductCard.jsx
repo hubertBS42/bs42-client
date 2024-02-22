@@ -18,13 +18,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import classes from './ProductCard.module.scss'
 import { useSelector } from 'react-redux'
-import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { useState } from 'react'
 
 const ProductCard = ({ product, border }) => {
 	const [loading, setLoading] = useState(false)
-	const settings = useSelector(getSettings)
-	const currentRate = settings[0]?.exchangeRate.currentRate
+	const currency = useSelector(getCurrency)
+	const currentRate = currency.isCustomRate
+		? currency.customRate
+		: currency.history[0].rate
 	const roundedSellPrice = roundMoney(product?.sellPrice * currentRate)
 	const roundedDiscountPrice = roundMoney(
 		(20 / 100) * product?.sellPrice * currentRate

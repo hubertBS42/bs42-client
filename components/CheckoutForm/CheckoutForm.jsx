@@ -46,7 +46,7 @@ import isNumeric from 'validator/lib/isNumeric'
 import isAlpha from 'validator/lib/isAlpha'
 import { useForm, zodResolver } from '@mantine/form'
 import { getSession } from 'next-auth/react'
-import { getSettings } from '@/redux/features/settings/settingsSlice'
+import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { notifications } from '@mantine/notifications'
 
 const schema = z.object({
@@ -194,10 +194,16 @@ const CheckoutForm = () => {
 	const cartLoading = useSelector(getLoadingState)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartPriceTotal = useSelector(totalPriceSelector)
-	const settings = useSelector(getSettings)
+	const currency = useSelector(getCurrency)
 	const loading = useSelector(getLoadingState)
 
-	const currentRate = settings[0]?.exchangeRate.currentRate
+	let currentRate = 0
+
+	if (currency) {
+		currentRate = currency.isCustomRate
+			? currency.customRate
+			: currency.history[0].rate
+	}
 	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
 
 	const handleRegion = value => {
