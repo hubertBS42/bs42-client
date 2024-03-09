@@ -1,8 +1,25 @@
-import { Group, MediaQuery } from '@mantine/core'
+import { Group } from '@mantine/core'
 import Link from 'next/link'
 import classes from './TopNavLinks.module.scss'
+import { fetchBlogsCount } from '@/server/actions'
+import { useEffect, useState } from 'react'
 
-const TopNavLinks = ({ count }) => {
+const TopNavLinks = () => {
+	const [count, setCount] = useState(0)
+
+	useEffect(() => {
+		const getBlogsCount = async () => {
+			try {
+				const data = await fetchBlogsCount()
+				setCount(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+
+		getBlogsCount()
+	}, [])
+
 	return (
 		<Group justify='center' py={10} gap='1.7vw' visibleFrom='sm'>
 			<Link href='/' className={classes.link}>

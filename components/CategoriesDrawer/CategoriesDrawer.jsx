@@ -1,27 +1,30 @@
 'use client'
 
 import { rajdhani } from '@/utils/font'
-import {
-	Accordion,
-	Drawer,
-	NavLink,
-	Stack,
-	Text,
-} from '@mantine/core'
+import { Drawer, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCategory, IconChevronRight } from '@tabler/icons-react'
-import CategoryMobileMenuCard from '../CategoryMobileMenuCard/CategoryMobileMenuCard'
 import { formatCategoriesForHeader } from '@/utils/functions'
-import { useSelector } from 'react-redux'
-import { selectAllCategories } from '@/redux/features/categories/categoriesSlice'
 import classes from './CategoriesDrawer.module.scss'
 import Link from 'next/link'
+import { getAllCategories } from '@/server/actions'
+import { useEffect, useState } from 'react'
 
 const CategoriesDrawer = ({ toggleMobNav }) => {
 	const [opened, { toggle }] = useDisclosure(false)
-	const categories = formatCategoriesForHeader(
-		useSelector(selectAllCategories)
-	)
+	const [categories, setCategories] = useState([])
+
+	useEffect(() => {
+		const getCategories = async () => {
+			try {
+				const data = await getAllCategories('group')
+				setCategories(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		getCategories()
+	}, [])
 
 	const handleNavClick = () => {
 		toggle()

@@ -55,7 +55,11 @@ const schema = z.object({
 		.refine(val => isNumeric(val), {
 			message: 'You need to provide a valid phone number.',
 		}),
-	question: z
+	subject: z
+		.string()
+		.trim()
+		.min(2, { message: 'This field is required.' }),
+	body: z
 		.string()
 		.trim()
 		.min(2, { message: 'This field is required.' }),
@@ -73,14 +77,15 @@ const ContactUsForm = () => {
 			companyName: '',
 			email: '',
 			phone: '',
-			question: '',
+			subject: '',
+			body: '',
 		},
 	})
 
 	const handleSubmit = async values => {
 		setLoading(true)
 
-		const { status, message } = await fetcher('/api/sendMail', {
+		const { status, message } = await fetcher('/api/messages/add', {
 			method: 'POST',
 			body: JSON.stringify(values),
 			headers: {
@@ -91,8 +96,7 @@ const ContactUsForm = () => {
 		if (status === 'success') {
 			notifications.show({
 				title: 'Message Received!',
-				message:
-					'Thank you, we have successfully received your message. You will be contacted soon by a staff member.',
+				message,
 				color: 'green',
 				autoClose: false,
 				icon: <IconCheck />,
@@ -101,8 +105,7 @@ const ContactUsForm = () => {
 		} else {
 			notifications.show({
 				title: 'Message Not Received!',
-				message:
-					'Sorry, your message was not received due to some kind of error. Try refreshing the page and try again. If the problem persists, you can contact us via email.',
+				message,
 				color: 'red',
 				icon: <IconX />,
 			})
@@ -155,6 +158,14 @@ const ContactUsForm = () => {
 					{...form.getInputProps('companyName')}
 				/>
 
+				<TextInput
+					label='Subject'
+					size='md'
+					type='text'
+					disabled={loading}
+					{...form.getInputProps('subject')}
+				/>
+
 				<Textarea
 					label='Comments or Question'
 					size='md'
@@ -162,7 +173,7 @@ const ContactUsForm = () => {
 					minRows={4}
 					withAsterisk
 					disabled={loading}
-					{...form.getInputProps('question')}
+					{...form.getInputProps('body')}
 				/>
 			</Stack>
 			{sent ? (

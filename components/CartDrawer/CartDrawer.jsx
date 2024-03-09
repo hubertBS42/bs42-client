@@ -3,7 +3,6 @@ import {
 	ActionIcon,
 	Button,
 	Drawer,
-	Flex,
 	Indicator,
 	Stack,
 	Text,
@@ -13,7 +12,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconShoppingCart } from '@tabler/icons-react'
 import CartProductCard from '../CartProductCard/CartProductCard'
 import Link from 'next/link'
-import { arimo, rajdhani } from '@/utils/font'
+import { arimo } from '@/utils/font'
 import { useSelector } from 'react-redux'
 import {
 	getLoadingState,
@@ -23,24 +22,36 @@ import {
 } from '@/redux/features/cart/cartSlice'
 import classes from './CartDrawer.module.scss'
 import { clearCart } from '@/redux/features/cart/cartActions'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { roundMoney } from '@/utils/functions'
+import { useEffect, useState } from 'react'
+import { fetchActiveCurrency } from '@/server/actions'
 
 const CartDrawer = () => {
 	const [opened, { open, close }] = useDisclosure(false)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartPriceTotal = useSelector(totalPriceSelector)
-	const currency = useSelector(getCurrency)
 	const cartItems = useSelector(selectAllCartItems)
 	const loading = useSelector(getLoadingState)
+	const [currentRate, setCurrentRate] = useState(0)
 
-	let currentRate = 0
+	useEffect(() => {
+		const getActiveCurrency = async () => {
+			try {
+				const currency = await fetchActiveCurrency()
+				if (currency) {
+					const rate = currency.isCustomRate
+						? currency.customRate
+						: currency.history[0].rate
 
-	if (currency) {
-		currentRate = currency.isCustomRate
-			? currency.customRate
-			: currency.history[0].rate
-	}
+					setCurrentRate(rate)
+				}
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+
+		getActiveCurrency()
+	}, [])
 
 	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
 	return (
@@ -75,7 +86,11 @@ const CartDrawer = () => {
 			>
 				{cartItems.length > 0 ? (
 					cartItems.map(item => (
-						<CartProductCard key={item.product._id} item={item} />
+						<CartProductCard
+							key={item.product._id}
+							item={item}
+							rate={currentRate}
+						/>
 					))
 				) : (
 					<Text

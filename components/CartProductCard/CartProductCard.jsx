@@ -22,15 +22,13 @@ import {
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 
-const CartProductCard = ({ item }) => {
+const CartProductCard = ({ item, rate }) => {
 	const [loading, setLoading] = useState(false)
-	const currency = useSelector(getCurrency)
-	const currentRate = currency.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
-	const roundedSellPrice = roundMoney(
-		item.product.sellPrice * currentRate
-	)
+	// const currency = useSelector(getCurrency)
+	// const currentRate = currency.isCustomRate
+	// 	? currency.customRate
+	// 	: currency.history[0].rate
+	const roundedSellPrice = roundMoney(item.product.sellPrice * rate)
 
 	const handleChange = useDebouncedCallback(async quantity => {
 		setLoading(true)

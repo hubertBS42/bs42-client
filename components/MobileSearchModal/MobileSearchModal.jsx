@@ -1,12 +1,5 @@
 'use client'
-import {
-	ActionIcon,
-	Flex,
-	Group,
-	Loader,
-	MediaQuery,
-	Modal,
-} from '@mantine/core'
+import { ActionIcon, Flex, Group, Loader, Modal } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconSearch } from '@tabler/icons-react'
 import SearchField from '../SearchField/SearchField'
@@ -14,7 +7,7 @@ import SearchResultsSection from '../SearchResultsSection/SearchResultsSection'
 import { rajdhani } from '@/utils/font'
 import { useDebouncedCallback } from 'use-debounce'
 import { useEffect, useState } from 'react'
-import { fetcher, getCategories } from '@/utils/functions'
+import { getAllCategories, searchProducts } from '@/server/actions'
 
 const MobileSearchModal = () => {
 	const [opened, { open, close }] = useDisclosure(false)
@@ -27,22 +20,23 @@ const MobileSearchModal = () => {
 		setResults([])
 	}
 
-	const fetchCategories = async () => {
-		const result = await getCategories()
-		setCategories(result.data)
-	}
-
 	useEffect(() => {
-		fetchCategories()
+		const getCategories = async () => {
+			try {
+				const data = await getAllCategories('group')
+				setCategories(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		getCategories()
 	}, [])
 
 	const handleSearch = useDebouncedCallback(async e => {
 		if (e.target.value.length > 2) {
 			setIsLoading(true)
-			const { data, status } = await fetcher(
-				`https://portal.bs42.net/api/frontend/products/search?q=${e.target.value}`,
-				{ cache: 'no-store' }
-			)
+
+			const { data, status } = await searchProducts(e.target.value)
 
 			if (status === 'success') {
 				setResults(data)

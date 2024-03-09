@@ -41,7 +41,6 @@ import { usePathname, useRouter } from 'next/navigation'
 const Header = () => {
 	const dispatch = useDispatch()
 	const pathname = usePathname()
-	const [count, setCount] = useState(0)
 	const router = useRouter()
 	const { data: session, status } = useSession()
 
@@ -51,14 +50,12 @@ const Header = () => {
 			const {
 				status,
 				message,
-				data: { products, categories, brands, currency, blogsCount },
+				data: { products, categories, brands, currency },
 			} = await fetcher('https://portal.bs42.net/api/frontendInitData')
 
 			if (status === 'error') {
 				return console.log('Failed to load data.') //message site admin about error
 			}
-
-			setCount(blogsCount)
 
 			dispatch(setCategories(categories))
 			dispatch(setProducts(products))
@@ -136,7 +133,7 @@ const Header = () => {
 							style={{ alignItems: 'center', display: 'flex' }}
 						>
 							<Group gap={5}>
-								<MobileNavDrawer count={count} />
+								<MobileNavDrawer />
 								<MobileSearchModal />
 								<Box
 									component={Link}
@@ -152,7 +149,7 @@ const Header = () => {
 							<Box component={Link} href='/' hiddenFrom='sm'>
 								<Image src={MobileLogo} alt='logo' width={30} priority />
 							</Box>
-							<TopNavLinks count={count} />
+							<TopNavLinks />
 						</Grid.Col>
 						<Grid.Col
 							span={3}

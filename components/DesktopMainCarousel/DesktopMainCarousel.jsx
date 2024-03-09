@@ -12,24 +12,31 @@ import {
 import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import classes from './DesktopMainCarousel.module.scss'
-import useSWR from 'swr'
-import { fetcher } from '@/utils/functions'
+import { fetchSlides } from '@/server/actions'
 
 const DesktopMainCarousel = () => {
 	const autoplay = useRef(Autoplay({ delay: 5000 }))
 	const [carouselIndex, setCarouselIndex] = useState(0)
 
-	const { data, error, isLoading } = useSWR(
-		'https://portal.bs42.net/api/frontend/slides',
-		fetcher
-	)
+	const [slides, setSlides] = useState([])
+
+	useEffect(() => {
+		const getCategories = async () => {
+			try {
+				const data = await fetchSlides()
+				setSlides(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		getCategories()
+	}, [])
 
 	const renderSlides =
-		!isLoading &&
-		data.slides.length > 0 &&
-		data.slides.map((slide, i) => (
+		slides.length > 0 &&
+		slides.map((slide, i) => (
 			<Carousel.Slide key={slide.position}>
 				<Image
 					src={slide.image.url}
@@ -75,7 +82,7 @@ const DesktopMainCarousel = () => {
 
 	return (
 		<>
-			{!isLoading && data.slides.length > 0 && (
+			{slides.length > 0 && (
 				<Carousel
 					height={550}
 					plugins={[autoplay.current]}

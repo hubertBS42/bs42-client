@@ -18,8 +18,8 @@ const nextConfig = {
 		return [
 			{
 				source: '/api/applications/add',
-				destination: 'http://localhost:3001/api/applications/add',
-				// destination: 'https://portal.bs42.net/api/applications/add',
+				// destination: 'http://localhost:3001/api/applications/add',
+				destination: 'https://portal.bs42.net/api/applications/add',
 			},
 			{
 				source: '/api/orders/add',
@@ -45,9 +45,9 @@ const nextConfig = {
 				destination: 'https://portal.bs42.net/api/products',
 			},
 			{
-				source: '/api/sendMail',
-				destination: 'https://portal.bs42.net/api/sendMail',
-				// destination: 'http://localhost:3001/api/sendMail',
+				source: '/api/messages/add',
+				destination: 'https://portal.bs42.net/api/messages/add',
+				// destination: 'http://localhost:3001/api/messages/add',
 			},
 		]
 	},

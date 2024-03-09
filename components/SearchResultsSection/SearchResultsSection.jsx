@@ -2,20 +2,16 @@
 import { Accordion, Stack } from '@mantine/core'
 import ResultsProductCard from '../ResultsProductCard/ResultsProductCard'
 import classes from './SearchResultsSection.module.scss'
-import {
-	groupCategories,
-	groupProductsByTopLevelCategory,
-} from '@/utils/functions'
+import { groupProductsByTopLevelCategory } from '@/utils/functions'
 
 const SearchResultsSection = ({
 	results: products,
 	categories,
 	closeModal,
 }) => {
-	const groupedCategories = groupCategories(categories)
 	const groupedProducts = groupProductsByTopLevelCategory(
 		products,
-		groupedCategories
+		categories
 	)
 
 	return (

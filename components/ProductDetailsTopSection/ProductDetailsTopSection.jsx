@@ -49,7 +49,7 @@ const ProductDetailsTopSection = ({ data }) => {
 		setLoading(false)
 	}
 
-	const currentRate = currency.isCustomRate
+	const currentRate = currency?.isCustomRate
 		? currency.customRate
 		: currency.history[0].rate
 	const roundedSellPrice = roundMoney(data.sellPrice * currentRate)

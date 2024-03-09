@@ -14,11 +14,27 @@ import Link from 'next/link'
 import CategoriesDrawer from '../CategoriesDrawer/CategoriesDrawer'
 import { rajdhani } from '@/utils/font'
 import classes from './MobileNavDrawer.module.scss'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { fetchBlogsCount } from '@/server/actions'
 
-const MobileNavDrawer = ({ count }) => {
+const MobileNavDrawer = () => {
 	const [opened, { toggle: toggleMobNav }] = useDisclosure(false)
 	const label = opened ? 'Close navigation' : 'Open navigation'
+
+	const [count, setCount] = useState(0)
+
+	useEffect(() => {
+		const getBlogsCount = async () => {
+			try {
+				const data = await fetchBlogsCount()
+				setCount(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+
+		getBlogsCount()
+	}, [])
 
 	const linksData = [
 		{

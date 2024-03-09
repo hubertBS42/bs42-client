@@ -1,13 +1,22 @@
 import { Box, Container, Group } from '@mantine/core'
 import CategoryMegaMenu from '../CategoryMegaMenu/CategoryMegaMenu'
-import { formatCategoriesForHeader } from '@/utils/functions'
-import { useSelector } from 'react-redux'
-import { selectAllCategories } from '@/redux/features/categories/categoriesSlice'
+import { getAllCategories } from '@/server/actions'
+import { useEffect, useState } from 'react'
 
 const CategoryMenu = () => {
-	const categories = formatCategoriesForHeader(
-		useSelector(selectAllCategories)
-	)
+	const [categories, setCategories] = useState([])
+
+	useEffect(() => {
+		const getCategories = async () => {
+			try {
+				const data = await getAllCategories('group')
+				setCategories(data)
+			} catch (error) {
+				console.log(error.message)
+			}
+		}
+		getCategories()
+	}, [])
 
 	return (
 		<Box
