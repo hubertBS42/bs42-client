@@ -3,26 +3,32 @@ import ProductDetailsTopSection from '@/components/ProductDetailsTopSection/Prod
 import { fetcher } from '@/utils/functions'
 
 export async function generateMetadata({ params: { slug } }) {
-	const { data } = await fetcher(
+	const { product } = await fetcher(
 		`https://portal.bs42.net/api/products/${slug}`,
 		{ cache: 'no-store' }
 	)
 
 	return {
-		title: `${data.title} - BS42.NET`,
+		title: `${product.title} - BS42.NET`,
 	}
 }
 
 const ProductDetails = async ({ params: { slug } }) => {
-	const { data } = await fetcher(
-		`https://portal.bs42.net/api/products/${slug}`,
-		{ cache: 'no-store' }
-	)
+	const [{ product }, { currency }] = await Promise.all([
+		fetcher(`https://portal.bs42.net/api/products/${slug}`, {
+			cache: 'no-store',
+		}),
+		fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+	])
+
+	const rate = currency.isCustomRate
+		? currency.customRate
+		: currency.history[0].rate
 
 	return (
 		<>
-			<ProductDetailsTopSection data={data} />
-			<ProductDetailsBottomSection data={data} />
+			<ProductDetailsTopSection product={product} rate={rate} />
+			<ProductDetailsBottomSection product={product} />
 		</>
 	)
 }

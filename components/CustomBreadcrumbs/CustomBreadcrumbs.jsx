@@ -13,6 +13,7 @@ import {
 	formatCategoriesForHeader,
 	getBrands,
 	getCategories,
+	groupCategories,
 } from '@/utils/functions'
 import {
 	usePathname,
@@ -22,34 +23,34 @@ import {
 import FiltersDrawer from '../FiltersDrawer/FiltersDrawer'
 import { useEffect, useState } from 'react'
 
-const CustomBreadcrumbs = () => {
+const CustomBreadcrumbs = ({ categories, brands }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
-	const [categories, setCategories] = useState([])
-	const [brands, setBrands] = useState([])
+	// const [categories, setCategories] = useState([])
+	// const [brands, setBrands] = useState([])
 
 	const params = new URLSearchParams(searchParams)
 	const category = params.get('category')
 
-	const fetchBrandsAndCategories = async () => {
-		const brandsData = getBrands()
-		const categoriesData = getCategories()
+	// const fetchBrandsAndCategories = async () => {
+	// 	const brandsData = getBrands()
+	// 	const categoriesData = getCategories()
 
-		const [brands, categories] = await Promise.all([
-			brandsData,
-			categoriesData,
-		])
+	// 	const [brands, categories] = await Promise.all([
+	// 		brandsData,
+	// 		categoriesData,
+	// 	])
 
-		setCategories(categories.data)
-		setBrands(brands.data)
-	}
+	// 	setCategories(categories.data)
+	// 	setBrands(brands.data)
+	// }
 
-	useEffect(() => {
-		fetchBrandsAndCategories()
-	}, [])
+	// useEffect(() => {
+	// 	fetchBrandsAndCategories()
+	// }, [])
 
-	const formattedCategories = formatCategoriesForHeader(categories)
+	const formattedCategories = groupCategories(categories)
 	const categoryWithAncestors = findCategoryBySlugWithAncestors(
 		formattedCategories,
 		category

@@ -1,4 +1,3 @@
-import { arimo, rajdhani } from '@/utils/font'
 import {
 	ActionIcon,
 	Box,
@@ -11,8 +10,6 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import classes from './CartProductCard.module.scss'
-import { useSelector } from 'react-redux'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { roundMoney } from '@/utils/functions'
 import { IconTrash } from '@tabler/icons-react'
 import {
@@ -24,10 +21,6 @@ import { useDebouncedCallback } from 'use-debounce'
 
 const CartProductCard = ({ item, rate }) => {
 	const [loading, setLoading] = useState(false)
-	// const currency = useSelector(getCurrency)
-	// const currentRate = currency.isCustomRate
-	// 	? currency.customRate
-	// 	: currency.history[0].rate
 	const roundedSellPrice = roundMoney(item.product.sellPrice * rate)
 
 	const handleChange = useDebouncedCallback(async quantity => {

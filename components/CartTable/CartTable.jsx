@@ -14,9 +14,7 @@ import { useSelector } from 'react-redux'
 import {
 	selectAllCartItems,
 	totalCartItemSelector,
-	totalPriceSelector,
 } from '@/redux/features/cart/cartSlice'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { roundMoney } from '@/utils/functions'
 import {
 	modifyCart,
@@ -28,23 +26,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { IconTrash } from '@tabler/icons-react'
 
-const CartTable = () => {
+const CartTable = ({ rate }) => {
 	const [loading, setLoading] = useState(false)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
-	const cartPriceTotal = useSelector(totalPriceSelector)
-	const currency = useSelector(getCurrency)
 	const cartItems = useSelector(selectAllCartItems)
-	// const loading = useSelector(getLoadingState)
-
-	let currentRate = 0
-
-	if (currency) {
-		currentRate = currency.isCustomRate
-			? currency.customRate
-			: currency.history[0].rate
-	}
-
-	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
 
 	const handleChange = useDebouncedCallback(
 		async (product, quantity) => {
@@ -92,7 +77,7 @@ const CartTable = () => {
 			</Table.Td>
 			<Table.Td>
 				<Text className={classes.price}>
-					{`GHS ${roundMoney(item.product.sellPrice * currentRate)}`}
+					{`GHS ${roundMoney(item.product.sellPrice * rate)}`}
 				</Text>
 			</Table.Td>
 			<Table.Td>
@@ -116,7 +101,7 @@ const CartTable = () => {
 			<Table.Td>
 				<Text className={classes.price}>
 					{`GHS ${roundMoney(
-						item.product.sellPrice * item.quantity * currentRate
+						item.product.sellPrice * item.quantity * rate
 					)}`}
 				</Text>
 			</Table.Td>
@@ -141,7 +126,11 @@ const CartTable = () => {
 	return (
 		<Box visibleFrom='sm'>
 			<Title tt='uppercase' order={2} mb='md'>
-				Your Cart ({`${cartItemsTotal} Items`})
+				Your Cart (
+				{`${cartItemsTotal} Item${
+					cartItemsTotal === 0 || cartItemsTotal > 1 ? 's' : ''
+				}`}
+				)
 			</Title>
 			{cartItemsTotal > 0 ? (
 				<Table

@@ -14,27 +14,22 @@ import Link from 'next/link'
 import CategoriesDrawer from '../CategoriesDrawer/CategoriesDrawer'
 import { rajdhani } from '@/utils/font'
 import classes from './MobileNavDrawer.module.scss'
-import React, { useEffect, useState } from 'react'
-import { fetchBlogsCount } from '@/server/actions'
+import React from 'react'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/functions'
 
 const MobileNavDrawer = () => {
 	const [opened, { toggle: toggleMobNav }] = useDisclosure(false)
 	const label = opened ? 'Close navigation' : 'Open navigation'
 
-	const [count, setCount] = useState(0)
-
-	useEffect(() => {
-		const getBlogsCount = async () => {
-			try {
-				const data = await fetchBlogsCount()
-				setCount(data)
-			} catch (error) {
-				console.log(error.message)
-			}
-		}
-
-		getBlogsCount()
-	}, [])
+	const {
+		data: count,
+		error,
+		isLoading,
+	} = useSWR(
+		'https://portal.bs42.net/api/frontend/blogs/count',
+		fetcher
+	)
 
 	const linksData = [
 		{
@@ -64,7 +59,7 @@ const MobileNavDrawer = () => {
 		},
 	]
 
-	if (count > 0) {
+	if (!error && !isLoading && count > 0) {
 		linksData.push({
 			label: 'Blogs',
 			href: '/blogs',

@@ -2,16 +2,35 @@
 import { Box, Button, Divider, Flex, SimpleGrid } from '@mantine/core'
 import Section from '../Section/Section'
 import ProductCard from '../ProductCard/ProductCard'
-import { useSelector } from 'react-redux'
-import { selectAllProducts } from '@/redux/features/products/productsSlice'
 import classes from './YouMightLike.module.scss'
+import { useEffect, useState } from 'react'
+import { fetcher } from '@/utils/functions'
+import Link from 'next/link'
 
 const YouMightLike = () => {
-	const products = useSelector(selectAllProducts)
-	const copy = [...products].sort(
-		(a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-	)
-	const oldest10Products = copy.slice(0, 10)
+	const [products, setProducts] = useState([])
+	const [rate, setRate] = useState(0)
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const [{ products }, { currency }] = await Promise.all([
+				fetcher(
+					'https://portal.bs42.net/api/frontend/products?sortBy=oldest&limit=10'
+				),
+				fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+			])
+
+			setProducts(products)
+
+			if (currency.isCustomRate) {
+				setRate(currency.customRate)
+			} else {
+				setRate(currency.history[0].rate)
+			}
+		}
+
+		fetchData()
+	}, [])
 
 	return (
 		<Section grayBg>
@@ -29,12 +48,23 @@ const YouMightLike = () => {
 					cols={{ base: 2, sm: 3, md: 4, lg: 5 }}
 					spacing={{ base: 'sm', sm: 'sm', md: 'md' }}
 				>
-					{oldest10Products.map(product => (
-						<ProductCard key={product._id} border product={product} />
+					{products.map(product => (
+						<ProductCard
+							key={product._id}
+							border
+							product={product}
+							rate={rate}
+						/>
 					))}
 				</SimpleGrid>
 				<Flex justify='center' mt={40}>
-					<Button className='viewMoreBtn'>View more</Button>
+					<Button
+						className='viewMoreBtn'
+						component={Link}
+						href='products?sort_by=oldest'
+					>
+						View more
+					</Button>
 				</Flex>
 			</Box>
 		</Section>

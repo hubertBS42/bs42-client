@@ -18,6 +18,7 @@ const SortBySelect = () => {
 
 	const sortByData = [
 		{ value: 'newest', label: 'Newest' },
+		{ value: 'oldest', label: 'Oldest' },
 		{ value: 'featured', label: 'Featured' },
 		{ value: 'a-z', label: 'A - Z' },
 		{ value: 'z-a', label: 'Z - A' },

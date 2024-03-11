@@ -2,26 +2,45 @@
 import { Box, Button, Divider, Flex } from '@mantine/core'
 import CategoryCarousel from '../CategoryCarousel/CategoryCarousel'
 import Section from '../Section/Section'
-import { useSelector } from 'react-redux'
-import { selectAllCategories } from '@/redux/features/categories/categoriesSlice'
 import {
 	extractCategoryIds,
-	formatCategoriesForHeader,
+	fetcher,
+	groupCategories,
 } from '@/utils/functions'
-import { selectAllProducts } from '@/redux/features/products/productsSlice'
 import { Carousel } from '@mantine/carousel'
 import ProductCard from '../ProductCard/ProductCard'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Autoplay from 'embla-carousel-autoplay'
 import classes from './SpecificProductsShowcase.module.scss'
 import Link from 'next/link'
 
 const SpecificProductsShowcase = ({ target }) => {
 	const autoplay = useRef(Autoplay({ delay: 4000 }))
-	const categories = formatCategoriesForHeader(
-		useSelector(selectAllCategories)
-	)
-	const products = useSelector(selectAllProducts)
+	const [products, setProducts] = useState([])
+	const [categories, setCategories] = useState([])
+	const [rate, setRate] = useState(0)
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const [{ products }, { currency }, data] = await Promise.all([
+				fetcher('https://portal.bs42.net/api/frontend/products'),
+				fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+				fetcher('https://portal.bs42.net/api/frontend/categories'),
+			])
+			const groupedCategories = groupCategories(data.categories)
+			setProducts(products)
+
+			setCategories(groupedCategories)
+
+			if (currency.isCustomRate) {
+				setRate(currency.customRate)
+			} else {
+				setRate(currency.history[0].rate)
+			}
+		}
+
+		fetchData()
+	}, [])
 
 	const category = categories.find(
 		category => category.name === target
@@ -35,7 +54,7 @@ const SpecificProductsShowcase = ({ target }) => {
 
 	const slides = filteredProducts.map(product => (
 		<Carousel.Slide key={product._id}>
-			<ProductCard product={product} />
+			<ProductCard product={product} rate={rate} />
 		</Carousel.Slide>
 	))
 

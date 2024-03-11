@@ -24,35 +24,22 @@ import {
 	IconPhoneCall,
 } from '@tabler/icons-react'
 import classes from './Footer.module.scss'
-import {
-	getBrands,
-	getCategories,
-	groupCategories,
-} from '@/utils/functions'
-import { useEffect, useState } from 'react'
+import { fetcher, groupCategories } from '@/utils/functions'
+import useSWR from 'swr'
 
 const Footer = ({ year }) => {
-	const [categories, setCategories] = useState()
-	const [brands, setBrands] = useState()
+	const { data, error, isLoading } = useSWR(
+		'https://portal.bs42.net/api/frontend/brandsAndCategories',
+		fetcher
+	)
 
-	const fetchBrandsAndCategories = async () => {
-		const brandsData = getBrands()
-		const categoriesData = getCategories()
+	let categories
+	let brands
 
-		const [brands, categories] = await Promise.all([
-			brandsData,
-			categoriesData,
-		])
-
-		const groupedCategories = groupCategories(categories.data)
-
-		setCategories(groupedCategories.slice(0, 4))
-		setBrands(brands.data.slice(0, 4))
+	if (!error & !isLoading) {
+		categories = groupCategories(data.categories).slice(0, 4)
+		brands = data.brands.slice(0, 4)
 	}
-
-	useEffect(() => {
-		fetchBrandsAndCategories()
-	}, [])
 
 	return (
 		<Stack gap={0}>

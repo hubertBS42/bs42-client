@@ -8,7 +8,6 @@ import {
 	Card,
 	Group,
 	Rating,
-	Skeleton,
 	Stack,
 	Text,
 	Title,
@@ -17,19 +16,13 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import classes from './ProductCard.module.scss'
-import { useSelector } from 'react-redux'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { useState } from 'react'
 
-const ProductCard = ({ product, border }) => {
+const ProductCard = ({ product, border, rate }) => {
 	const [loading, setLoading] = useState(false)
-	const currency = useSelector(getCurrency)
-	const currentRate = currency.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
-	const roundedSellPrice = roundMoney(product?.sellPrice * currentRate)
+	const roundedSellPrice = roundMoney(product?.sellPrice * rate)
 	const roundedDiscountPrice = roundMoney(
-		(20 / 100) * product?.sellPrice * currentRate
+		(20 / 100) * product?.sellPrice * rate
 	)
 
 	const handleAdd = async () => {

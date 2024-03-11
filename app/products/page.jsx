@@ -13,10 +13,10 @@ import ConditionCard from '@/components/ConditionCard/ConditionCard'
 
 export async function generateMetadata({ searchParams }) {
 	let categoryName
-	const categoriesData = await getCategories()
+	const { categories } = await getCategories()
 
 	if (searchParams.category) {
-		const category = categoriesData.data.find(
+		const category = categories.find(
 			category => category.slug === searchParams.category
 		)
 
@@ -34,7 +34,7 @@ const ProductsPage = async () => {
 	const brandsData = getBrands()
 	const categoriesData = getCategories()
 
-	const [brands, categories] = await Promise.all([
+	const [{ brands }, { categories }] = await Promise.all([
 		brandsData,
 		categoriesData,
 	])
@@ -49,19 +49,19 @@ const ProductsPage = async () => {
 
 	return (
 		<>
-			<CustomBreadcrumbs categories={categories.data} />
+			<CustomBreadcrumbs categories={categories} brands={brands} />
 			<Container size='xl' py='xl'>
 				<Flex gap='lg'>
 					<Stack w={{ md: '24.9%', lg: '20%' }} visibleFrom='md' gap='lg'>
 						<FiltersCard
-							categories={categories.data}
-							brands={brands.data}
+							categories={categories}
+							brands={brands}
 							prices={prices}
 						/>
-						<CategoriesCard categories={categories.data} />
+						<CategoriesCard categories={categories} />
 						<PriceCard prices={prices} />
 						<ConditionCard />
-						<BrandsCard brands={brands.data} />
+						<BrandsCard brands={brands} />
 					</Stack>
 
 					<Stack

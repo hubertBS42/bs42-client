@@ -1,14 +1,5 @@
 'use client'
-import {
-	Button,
-	Card,
-	Flex,
-	Grid,
-	Stack,
-	Text,
-	TextInput,
-	Title,
-} from '@mantine/core'
+import { Button, Card, Flex, Title } from '@mantine/core'
 import classes from './CartFooterCards.module.scss'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
@@ -17,23 +8,15 @@ import {
 	totalCartItemSelector,
 	totalPriceSelector,
 } from '@/redux/features/cart/cartSlice'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { roundMoney } from '@/utils/functions'
 
-const CartFooterCards = () => {
+const CartFooterCards = ({ rate }) => {
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartPriceTotal = useSelector(totalPriceSelector)
-	const currency = useSelector(getCurrency)
+
 	const loading = useSelector(getLoadingState)
 
-	let currentRate = 0
-
-	if (currency) {
-		currentRate = currency.isCustomRate
-			? currency.customRate
-			: currency.history[0].rate
-	}
-	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
+	const roundedPriceTotal = roundMoney(cartPriceTotal * rate)
 
 	if (cartItemsTotal > 0) {
 		return (

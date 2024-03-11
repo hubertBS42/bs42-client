@@ -4,27 +4,24 @@ import { rajdhani } from '@/utils/font'
 import { Drawer, NavLink } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconCategory, IconChevronRight } from '@tabler/icons-react'
-import { formatCategoriesForHeader } from '@/utils/functions'
 import classes from './CategoriesDrawer.module.scss'
 import Link from 'next/link'
-import { getAllCategories } from '@/server/actions'
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { fetcher, groupCategories } from '@/utils/functions'
 
 const CategoriesDrawer = ({ toggleMobNav }) => {
 	const [opened, { toggle }] = useDisclosure(false)
-	const [categories, setCategories] = useState([])
 
-	useEffect(() => {
-		const getCategories = async () => {
-			try {
-				const data = await getAllCategories('group')
-				setCategories(data)
-			} catch (error) {
-				console.log(error.message)
-			}
-		}
-		getCategories()
-	}, [])
+	const { data, error, isLoading } = useSWR(
+		'https://portal.bs42.net/api/frontend/categories',
+		fetcher
+	)
+
+	let categories = []
+
+	if (!error && !isLoading) {
+		categories = groupCategories(data.categories)
+	}
 
 	const handleNavClick = () => {
 		toggle()

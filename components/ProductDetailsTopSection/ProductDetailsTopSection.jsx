@@ -21,17 +21,20 @@ import { useEffect, useState } from 'react'
 import { IconFlame } from '@tabler/icons-react'
 import { useSelector } from 'react-redux'
 import { getCurrency } from '@/redux/features/currency/currencySlice'
-import { roundMoney } from '@/utils/functions'
+import { fetcher, roundMoney } from '@/utils/functions'
 import { productQtyInCartSelector } from '@/redux/features/cart/cartSlice'
 import { modifyCart } from '@/redux/features/cart/cartActions'
+import useSWR from 'swr'
 
-const ProductDetailsTopSection = ({ data }) => {
+const ProductDetailsTopSection = ({ product, rate }) => {
 	const [currentImage, setCurrentImage] = useState(0)
 	const [embla, setEmbla] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [quantity, setQuantity] = useState(1)
-	const currency = useSelector(getCurrency)
-	const curQuantity = useSelector(productQtyInCartSelector(data._id))
+	// const currency = useSelector(getCurrency)
+	const curQuantity = useSelector(
+		productQtyInCartSelector(product._id)
+	)
 
 	useEffect(() => {
 		if (curQuantity) {
@@ -45,21 +48,31 @@ const ProductDetailsTopSection = ({ data }) => {
 
 	const handleAdd = async () => {
 		setLoading(true)
-		await modifyCart(data, quantity)
+		await modifyCart(product, quantity)
 		setLoading(false)
 	}
 
-	const currentRate = currency?.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
-	const roundedSellPrice = roundMoney(data.sellPrice * currentRate)
+	// let rate = null
 
-	const MainSlides = data.images.map(image => (
+	// const { data, error, isLoading } = useSWR(
+	// 	'https://portal.bs42.net/api/frontend/currency/active',
+	// 	fetcher
+	// )
+
+	// if (!isLoading && !error) {
+	// 	rate = data.currency.isCustomRate
+	// 		? data.currency.customRate
+	// 		: data.currency.history[0].rate
+	// }
+
+	const roundedSellPrice = roundMoney(product.sellPrice * rate)
+
+	const MainSlides = product.images.map(image => (
 		<Carousel.Slide key={image._id}>
 			<Box className={classes.carouselImageWrapper}>
 				<Image
 					src={image.url}
-					alt={data.title}
+					alt={product.title}
 					fill
 					className={classes.carouselImage}
 				/>
@@ -67,7 +80,7 @@ const ProductDetailsTopSection = ({ data }) => {
 		</Carousel.Slide>
 	))
 
-	const ThumbnailSlides = data.images.map((image, i) => (
+	const ThumbnailSlides = product.images.map((image, i) => (
 		<Carousel.Slide key={image._id}>
 			<Box
 				className={`${classes.carouselImageWrapper} ${
@@ -77,7 +90,7 @@ const ProductDetailsTopSection = ({ data }) => {
 			>
 				<Image
 					src={image.url}
-					alt={data.title}
+					alt={product.title}
 					fill
 					className={classes.carouselImage}
 				/>
@@ -126,8 +139,10 @@ const ProductDetailsTopSection = ({ data }) => {
 				</Grid.Col>
 				<Grid.Col span={{ base: 12, sm: 6 }}>
 					<Stack mb='lg'>
-						<Title className={classes.brand}>{data.brand.name} &reg;</Title>
-						<Title className={classes.title}>{data.title}</Title>
+						<Title className={classes.brand}>
+							{product.brand.name} &reg;
+						</Title>
+						<Title className={classes.title}>{product.title}</Title>
 						<Group className={classes.rating} gap='xl'>
 							<Rating />
 							<Text className={classes.text}>No Reviews Yet</Text>
@@ -166,7 +181,7 @@ const ProductDetailsTopSection = ({ data }) => {
 					<Stack>
 						<Group className={classes.metadata}>
 							<Text className={classes.metadataTitle}>Current Stock:</Text>
-							<Text className={classes.value}>{data.countInStock}</Text>
+							<Text className={classes.value}>{product.countInStock}</Text>
 						</Group>
 
 						<Flex align='flex-end' gap={20}>
@@ -183,12 +198,12 @@ const ProductDetailsTopSection = ({ data }) => {
 								size='md'
 								value={quantity}
 								onChange={handleChange}
-								disabled={loading || data.countInStock === 0}
+								disabled={loading || product.countInStock === 0}
 								min={1}
-								max={data.countInStock}
+								max={product.countInStock}
 							/>
 
-							{data.countInStock > 0 ? (
+							{product.countInStock > 0 ? (
 								<Button
 									size='md'
 									variant='filled'

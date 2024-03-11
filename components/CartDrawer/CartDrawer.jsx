@@ -22,9 +22,8 @@ import {
 } from '@/redux/features/cart/cartSlice'
 import classes from './CartDrawer.module.scss'
 import { clearCart } from '@/redux/features/cart/cartActions'
-import { roundMoney } from '@/utils/functions'
-import { useEffect, useState } from 'react'
-import { fetchActiveCurrency } from '@/server/actions'
+import { fetcher, roundMoney } from '@/utils/functions'
+import useSWR from 'swr'
 
 const CartDrawer = () => {
 	const [opened, { open, close }] = useDisclosure(false)
@@ -32,26 +31,18 @@ const CartDrawer = () => {
 	const cartPriceTotal = useSelector(totalPriceSelector)
 	const cartItems = useSelector(selectAllCartItems)
 	const loading = useSelector(getLoadingState)
-	const [currentRate, setCurrentRate] = useState(0)
+	let currentRate = 0
 
-	useEffect(() => {
-		const getActiveCurrency = async () => {
-			try {
-				const currency = await fetchActiveCurrency()
-				if (currency) {
-					const rate = currency.isCustomRate
-						? currency.customRate
-						: currency.history[0].rate
+	const { data, error, isLoading } = useSWR(
+		'https://portal.bs42.net/api/frontend/currency/active',
+		fetcher
+	)
 
-					setCurrentRate(rate)
-				}
-			} catch (error) {
-				console.log(error.message)
-			}
-		}
-
-		getActiveCurrency()
-	}, [])
+	if (!isLoading && !error) {
+		currentRate = data.currency.isCustomRate
+			? data.currency.customRate
+			: data.currency.history[0].rate
+	}
 
 	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
 	return (

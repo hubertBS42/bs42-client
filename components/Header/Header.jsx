@@ -1,14 +1,6 @@
 'use client'
 
-import {
-	Avatar,
-	Box,
-	Container,
-	Grid,
-	Group,
-	Stack,
-	Text,
-} from '@mantine/core'
+import { Box, Container, Grid, Group, Stack } from '@mantine/core'
 import Link from 'next/link'
 import {
 	IconMail,
@@ -24,14 +16,8 @@ import TopNavLinks from '../TopLinks/TopNavLinks'
 import MobileNavDrawer from '../MobileNavDrawer/MobileNavDrawer'
 import SearchModal from '../SearchModal/SearchModal'
 import MobileSearchModal from '../MobileSearchModal/MobileSearchModal'
-import { useEffect, useState } from 'react'
-import { fetcher, getInitials } from '@/utils/functions'
-import { useDispatch } from 'react-redux'
-import { setCategories } from '@/redux/features/categories/categoriesSlice'
-import { setProducts } from '@/redux/features/products/productsSlice'
-import { setBrands } from '@/redux/features/brands/brandsSlice'
+import { useEffect } from 'react'
 import CategoryMenu from '../CategoryMenu/CategoryMenu'
-import { setCurrency } from '@/redux/features/currency/currencySlice'
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'
 import { useSession } from 'next-auth/react'
 import CustomAvatar from '../CustomAvatar/CustomAvatar'
@@ -39,33 +25,14 @@ import { loadCart } from '@/redux/features/cart/cartActions'
 import { usePathname, useRouter } from 'next/navigation'
 
 const Header = () => {
-	const dispatch = useDispatch()
 	const pathname = usePathname()
 	const router = useRouter()
 	const { data: session, status } = useSession()
 
 	useEffect(() => {
 		loadCart(pathname, router)
-		const fetchAllData = async () => {
-			const {
-				status,
-				message,
-				data: { products, categories, brands, currency },
-			} = await fetcher('https://portal.bs42.net/api/frontendInitData')
-
-			if (status === 'error') {
-				return console.log('Failed to load data.') //message site admin about error
-			}
-
-			dispatch(setCategories(categories))
-			dispatch(setProducts(products))
-			dispatch(setBrands(brands))
-			dispatch(setCurrency(currency))
-		}
-		fetchAllData()
 	}, [])
 
-	console.log('rendered')
 	return (
 		<Stack gap={0}>
 			<ProgressBar

@@ -1,22 +1,20 @@
+'use client'
 import { Box, Container, Group } from '@mantine/core'
 import CategoryMegaMenu from '../CategoryMegaMenu/CategoryMegaMenu'
-import { getAllCategories } from '@/server/actions'
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { fetcher, groupCategories } from '@/utils/functions'
 
 const CategoryMenu = () => {
-	const [categories, setCategories] = useState([])
+	const { data, error, isLoading } = useSWR(
+		'https://portal.bs42.net/api/frontend/categories',
+		fetcher
+	)
 
-	useEffect(() => {
-		const getCategories = async () => {
-			try {
-				const data = await getAllCategories('group')
-				setCategories(data)
-			} catch (error) {
-				console.log(error.message)
-			}
-		}
-		getCategories()
-	}, [])
+	let categories = []
+
+	if (!isLoading && !error) {
+		categories = groupCategories(data.categories)
+	}
 
 	return (
 		<Box

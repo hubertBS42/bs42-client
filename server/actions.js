@@ -22,7 +22,7 @@ export const searchProducts = async value => {
 
 export const getAllCategories = async group => {
 	const { status, message, data } = await fetcher(
-		'http://localhost:3001/api/frontend/categories',
+		'https:portal.bs42.net/api/frontend/categories',
 		{ next: { revalidate: 3600 } }
 	)
 

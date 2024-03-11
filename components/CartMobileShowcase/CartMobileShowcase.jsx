@@ -8,7 +8,7 @@ import {
 } from '@/redux/features/cart/cartSlice'
 import CartProductCard from '../CartProductCard/CartProductCard'
 
-const CartMobileShowcase = () => {
+const CartMobileShowcase = ({ rate }) => {
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartItems = useSelector(selectAllCartItems)
 
@@ -17,14 +17,14 @@ const CartMobileShowcase = () => {
 			<Title tt='uppercase' order={4} mb='md'>
 				Your Cart (
 				{`${cartItemsTotal} Item${
-					cartItemsTotal === 0 || (cartItemsTotal > 1 && 's')
+					cartItemsTotal === 0 || cartItemsTotal > 1 ? 's' : ''
 				}`}
 				)
 			</Title>
 
 			{cartItemsTotal > 0 &&
 				cartItems.map((item, i) => (
-					<CartProductCard item={item} key={i} />
+					<CartProductCard item={item} key={i} rate={rate} />
 				))}
 		</Box>
 	)

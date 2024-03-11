@@ -7,7 +7,11 @@ import SearchResultsSection from '../SearchResultsSection/SearchResultsSection'
 import { rajdhani } from '@/utils/font'
 import { useDebouncedCallback } from 'use-debounce'
 import { useEffect, useState } from 'react'
-import { getAllCategories, searchProducts } from '@/server/actions'
+import {
+	fetcher,
+	getCategories,
+	groupCategories,
+} from '@/utils/functions'
 
 const MobileSearchModal = () => {
 	const [opened, { open, close }] = useDisclosure(false)
@@ -21,22 +25,20 @@ const MobileSearchModal = () => {
 	}
 
 	useEffect(() => {
-		const getCategories = async () => {
-			try {
-				const data = await getAllCategories('group')
-				setCategories(data)
-			} catch (error) {
-				console.log(error.message)
-			}
+		const fetchCategories = async () => {
+			const result = await getCategories()
+			setCategories(groupCategories(result.categories))
 		}
-		getCategories()
+		fetchCategories()
 	}, [])
 
 	const handleSearch = useDebouncedCallback(async e => {
 		if (e.target.value.length > 2) {
 			setIsLoading(true)
-
-			const { data, status } = await searchProducts(e.target.value)
+			const { data, status } = await fetcher(
+				`https://portal.bs42.net/api/frontend/products/search?q=${e.target.value}`,
+				{ cache: 'no-store' }
+			)
 
 			if (status === 'success') {
 				setResults(data)

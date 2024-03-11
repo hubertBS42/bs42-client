@@ -1,25 +1,45 @@
 'use client'
 import Section from '../Section/Section'
 import { Carousel } from '@mantine/carousel'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Autoplay from 'embla-carousel-autoplay'
 import { Button, Divider, Flex } from '@mantine/core'
-import { useSelector } from 'react-redux'
-import { selectAllProducts } from '@/redux/features/products/productsSlice'
 import ProductCard from '../ProductCard/ProductCard'
 import classes from './FeaturedProductsShowcase.module.scss'
 import Link from 'next/link'
+import { fetcher } from '@/utils/functions'
 
 const FeaturedProductsShowcase = () => {
 	const autoplay = useRef(Autoplay({ delay: 4000 }))
-	const data = useSelector(selectAllProducts)
-	const products = data
-		.filter(product => product.featured)
-		.slice(0, 15)
+	const [products, setProducts] = useState([])
+	const [rate, setRate] = useState(0)
 
-	const slides = products.map(product => (
+	useEffect(() => {
+		const fetchProductsAndRate = async () => {
+			const [{ products }, { currency }] = await Promise.all([
+				fetcher(
+					'https://portal.bs42.net/api/frontend/products?sortBy=featured&limit=10'
+				),
+				fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+			])
+
+			setProducts(products)
+
+			if (currency.isCustomRate) {
+				setRate(currency.customRate)
+			} else {
+				setRate(currency.history[0].rate)
+			}
+		}
+
+		fetchProductsAndRate()
+	}, [])
+
+	let slides = []
+
+	slides = products.map(product => (
 		<Carousel.Slide key={product._id}>
-			<ProductCard product={product} />
+			<ProductCard product={product} rate={rate} />
 		</Carousel.Slide>
 	))
 

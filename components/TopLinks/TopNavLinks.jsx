@@ -1,24 +1,15 @@
+'use client'
 import { Group } from '@mantine/core'
 import Link from 'next/link'
 import classes from './TopNavLinks.module.scss'
-import { fetchBlogsCount } from '@/server/actions'
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/functions'
 
 const TopNavLinks = () => {
-	const [count, setCount] = useState(0)
-
-	useEffect(() => {
-		const getBlogsCount = async () => {
-			try {
-				const data = await fetchBlogsCount()
-				setCount(data)
-			} catch (error) {
-				console.log(error.message)
-			}
-		}
-
-		getBlogsCount()
-	}, [])
+	const { data, error, isLoading } = useSWR(
+		'https://portal.bs42.net/api/frontend/blogs/count',
+		fetcher
+	)
 
 	return (
 		<Group justify='center' py={10} gap='1.7vw' visibleFrom='sm'>
@@ -37,7 +28,7 @@ const TopNavLinks = () => {
 			<Link href='/contact-us' className={classes.link}>
 				Contact Us
 			</Link>
-			{count > 0 && (
+			{!isLoading && !error && data.count > 0 && (
 				<Link href='/blogs' className={classes.link}>
 					Blog
 				</Link>

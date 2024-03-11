@@ -184,7 +184,7 @@ const schema = z.object({
 		}),
 })
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ rate }) => {
 	const [active, setActive] = useState(1)
 	const [submitting, setSubmitting] = useState(false)
 	const [regions, setRegions] = useState([])
@@ -194,17 +194,9 @@ const CheckoutForm = () => {
 	const cartLoading = useSelector(getLoadingState)
 	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartPriceTotal = useSelector(totalPriceSelector)
-	const currency = useSelector(getCurrency)
 	const loading = useSelector(getLoadingState)
 
-	let currentRate = 0
-
-	if (currency) {
-		currentRate = currency.isCustomRate
-			? currency.customRate
-			: currency.history[0].rate
-	}
-	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)
+	const roundedPriceTotal = roundMoney(cartPriceTotal * rate)
 
 	const handleRegion = value => {
 		const extractedTowns = extractTowns(value)
