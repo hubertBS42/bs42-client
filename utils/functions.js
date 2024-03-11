@@ -40,6 +40,15 @@ export const getCategories = async () => {
 	return res.json()
 }
 
+export const getActiveCurrency = async () => {
+	const res = await fetch(
+		'https://portal.bs42.net/api/frontend/currency/active',
+		{ next: { revalidate: 3600 } }
+	)
+
+	return res.json()
+}
+
 export const formatDate = date => {
 	const options = { day: 'numeric', month: 'short', year: 'numeric' }
 	const formattedDate = new Date(date).toLocaleDateString(

@@ -9,7 +9,7 @@ import { fetcher } from '@/utils/functions'
 import useSWR from 'swr'
 import LoadingProductCards from '../LoadingProductCards/LoadingProductCards'
 
-const ProductsShowcase = () => {
+const ProductsShowcase = ({ rate }) => {
 	const searchParams = useSearchParams()
 	const params = new URLSearchParams(searchParams)
 
@@ -39,7 +39,11 @@ const ProductsShowcase = () => {
 							spacing={{ base: 'sm', sm: 'sm', md: 'md' }}
 						>
 							{data.products.map(product => (
-								<ProductCard key={product._id} product={product} />
+								<ProductCard
+									key={product._id}
+									product={product}
+									rate={rate}
+								/>
 							))}
 						</SimpleGrid>
 						<CustomPagination count={data.count} />
