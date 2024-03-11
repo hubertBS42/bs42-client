@@ -913,7 +913,7 @@ const CheckoutForm = ({ rate }) => {
 										</Title>
 
 										{cartItems.map((item, i) => (
-											<CheckoutProductCard key={i} item={item} />
+											<CheckoutProductCard key={i} item={item} rate={rate} />
 										))}
 									</Stack>
 								</Grid.Col>

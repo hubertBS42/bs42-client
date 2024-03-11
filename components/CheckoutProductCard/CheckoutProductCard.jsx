@@ -1,28 +1,12 @@
 'use client'
-import {
-	Box,
-	Flex,
-	Grid,
-	Group,
-	Stack,
-	Text,
-	Title,
-} from '@mantine/core'
+import { Box, Grid, Group, Stack, Text, Title } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
 import classes from './CheckoutProductCard.module.scss'
 import { roundMoney } from '@/utils/functions'
-import { useSelector } from 'react-redux'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 
-const CheckoutProductCard = ({ item }) => {
-	const currency = useSelector(getCurrency)
-	const currentRate = currency.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
-	const roundedSellPrice = roundMoney(
-		item.product.sellPrice * currentRate
-	)
+const CheckoutProductCard = ({ item, rate }) => {
+	const roundedSellPrice = roundMoney(item.product.sellPrice * rate)
 	return (
 		<Grid align='center'>
 			<Grid.Col span={6}>
