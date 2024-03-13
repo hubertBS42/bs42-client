@@ -381,7 +381,7 @@ const CheckoutForm = ({ rate }) => {
 				email: form.values.cEmail,
 				phone: form.values.cPhone,
 			},
-			rate: currentRate,
+			rate: rate,
 			products: cartItems.map(item => {
 				return {
 					productRef: item.product._id || null,
