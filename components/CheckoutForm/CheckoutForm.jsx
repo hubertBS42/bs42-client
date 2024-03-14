@@ -435,7 +435,7 @@ const CheckoutForm = ({ rate }) => {
 			notifications.show({
 				title: 'Order Failed!',
 				message:
-					'Your order could not be placed. Try refreshing the page and try again. If the problem persists, you can contact us via the Contact us page.',
+					'Your order could not be placed. Try refreshing the page and try again. If the problem persists, you can contact us via the Contact us page.1',
 				color: 'red',
 				icon: <IconX />,
 			})
