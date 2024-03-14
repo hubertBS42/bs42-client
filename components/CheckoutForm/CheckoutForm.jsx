@@ -80,53 +80,29 @@ const schema = z.object({
 		.refine(val => isNumeric(val), {
 			message: 'You need to provide a valid phone number.',
 		}),
-	bFName: z
-		.string()
-		.trim()
-		.min(2, { message: 'First name should have at least 2 letters.' })
-		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
-			message: 'First name contains invalid characters.',
-		})
-		.refine(val => val !== '', {
-			message: 'You must provide your first name.',
-		}),
-	bLName: z
-		.string()
-		.trim()
-		.min(2, { message: 'Last name should have at least 2 letters.' })
-		.refine(val => isAlpha(val, 'en-GB', { ignore: ' -' }), {
-			message: 'Last name contains invalid characters.',
-		})
-		.refine(val => val !== '', {
-			message: 'You must provide your last name.',
-		}),
-	bEmail: z
-		.string()
-		.trim()
-		.email({ message: 'You need to provide a valid email address.' }),
-	bPhone: z
-		.string()
-		.min(10, { message: 'You need to provide a valid phone number.' })
-		.refine(val => isNumeric(val), {
-			message: 'You need to provide a valid phone number.',
-		}),
-	bRegion: z
+	cRegion: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
 			message: 'You must provide your region.',
 		}),
-	bTown: z
+	cTown: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
 			message: 'You must provide your town.',
 		}),
-	bAddress: z
+	cAddress: z
 		.string()
 		.trim()
 		.refine(val => val !== '', {
 			message: 'You must provide your address.',
+		}),
+	cDigitalAddress: z
+		.string()
+		.trim()
+		.refine(val => val !== '', {
+			message: 'You must provide your digital address.',
 		}),
 	sFName: z
 		.string()
@@ -189,6 +165,7 @@ const CheckoutForm = ({ rate }) => {
 	const [submitting, setSubmitting] = useState(false)
 	const [regions, setRegions] = useState([])
 	const [sTowns, setSTowns] = useState([])
+	const [cTowns, setCTowns] = useState([])
 	const [user, setUser] = useState(null)
 	const cartItems = useSelector(selectAllCartItems)
 	const cartLoading = useSelector(getLoadingState)
@@ -198,11 +175,17 @@ const CheckoutForm = ({ rate }) => {
 
 	const roundedPriceTotal = roundMoney(cartPriceTotal * rate)
 
-	const handleRegion = value => {
-		const extractedTowns = extractTowns(value)
-		form.setFieldValue('sRegion', value)
-		setSTowns(extractedTowns)
-		form.setFieldValue('sTown', extractedTowns[0])
+	const handleRegion = (region, category) => {
+		const extractedTowns = extractTowns(region)
+		if (category === 'customerInfo') {
+			form.setFieldValue('cRegion', region)
+			setCTowns(extractedTowns)
+			form.setFieldValue('cTown', extractedTowns[0])
+		} else {
+			form.setFieldValue('sRegion', region)
+			setSTowns(extractedTowns)
+			form.setFieldValue('sTown', extractedTowns[0])
+		}
 	}
 
 	const getUser = async form => {
@@ -213,6 +196,19 @@ const CheckoutForm = ({ rate }) => {
 			form.setFieldValue('cLName', session.user.lastName)
 			form.setFieldValue('cEmail', session.user.email)
 			form.setFieldValue('cPhone', session.user.phone)
+			form.setFieldValue(
+				'cRegion',
+				session.user.residentialAddress.region
+			)
+			form.setFieldValue('cTown', session.user.residentialAddress.town)
+			form.setFieldValue(
+				'cAddress',
+				session.user.residentialAddress.adress
+			)
+			form.setFieldValue(
+				'cDigitalAddress',
+				session.user.residentialAddress.digitalAddress
+			)
 		}
 	}
 
@@ -230,8 +226,11 @@ const CheckoutForm = ({ rate }) => {
 			sRegion: '',
 			sTown: '',
 			sAddress: '',
-			sAddress: '',
 			sDigitalAddress: '',
+			cRegion: '',
+			cTown: '',
+			cAddress: '',
+			cDigitalAddress: '',
 			shippingMethod: 'pickup',
 			paymentMethod: 'cash',
 		},
@@ -243,38 +242,24 @@ const CheckoutForm = ({ rate }) => {
 			const lastName = form.validateField('cLName')
 			const email = form.validateField('cEmail')
 			const phone = form.validateField('cPhone')
+			const region = form.validateField('cRegion')
+			const town = form.validateField('cTown')
+			const address = form.validateField('cAddress')
+			const digitalAddress = form.validateField('cDigitalAddress')
 
 			if (
 				firstName.hasError ||
 				lastName.hasError ||
 				email.hasError ||
-				phone.hasError
+				phone.hasError ||
+				region.hasError ||
+				town.hasError ||
+				address.hasError ||
+				digitalAddress.hasError
 			) {
 				return
 			}
 		}
-
-		// if (active === 2) {
-		// 	const firstName = form.validateField('bFName')
-		// 	const lastName = form.validateField('bLName')
-		// 	const email = form.validateField('bEmail')
-		// 	const phone = form.validateField('bPhone')
-		// 	const region = form.validateField('bRegion')
-		// 	const town = form.validateField('bTown')
-		// 	const address = form.validateField('bAddress')
-
-		// 	if (
-		// 		firstName.hasError ||
-		// 		lastName.hasError ||
-		// 		email.hasError ||
-		// 		phone.hasError ||
-		// 		region.hasError ||
-		// 		town.hasError ||
-		// 		address.hasError
-		// 	) {
-		// 		return
-		// 	}
-		// }
 
 		if (active === 2) {
 			if (form.values.shippingMethod === 'delivery') {
@@ -380,6 +365,10 @@ const CheckoutForm = ({ rate }) => {
 				lastName: form.values.cLName,
 				email: form.values.cEmail,
 				phone: form.values.cPhone,
+				region: form.values.cRegion,
+				town: form.values.cTown,
+				address: form.values.cAddress,
+				digitalAddress: form.values.cDigitalAddress,
 			},
 			rate: rate,
 			products: cartItems.map(item => {
@@ -570,6 +559,52 @@ const CheckoutForm = ({ rate }) => {
 										{...form.getInputProps('cPhone')}
 									/>
 								</Group>
+								<Group grow>
+									<Select
+										withAsterisk
+										label='Region'
+										data={regions}
+										size='md'
+										searchable
+										disabled={loading}
+										allowDeselect={false}
+										withCheckIcon={false}
+										{...form.getInputProps('cRegion')}
+										value={form.values.cRegion}
+										onChange={value => handleRegion(value, 'customerInfo')}
+									/>
+									<Select
+										withAsterisk
+										disabled={form.values.cRegion === ''}
+										label='Town'
+										data={cTowns}
+										size='md'
+										searchable
+										allowDeselect={false}
+										withCheckIcon={false}
+										{...form.getInputProps('cTown')}
+									/>
+								</Group>
+								<Group grow>
+									<TextInput
+										label='Address'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cAddress')}
+									/>
+									<TextInput
+										label='Digital Address'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cDigitalAddress')}
+									/>
+								</Group>
 							</Stack>
 							<NextPrevButtons />
 						</Accordion.Panel>
@@ -684,11 +719,12 @@ const CheckoutForm = ({ rate }) => {
 												data={regions}
 												size='md'
 												searchable
+												disabled={loading}
 												allowDeselect={false}
 												withCheckIcon={false}
 												{...form.getInputProps('sRegion')}
 												value={form.values.sRegion}
-												onChange={value => handleRegion(value)}
+												onChange={value => handleRegion(value, 'shippingInfo')}
 											/>
 											<Select
 												withAsterisk
