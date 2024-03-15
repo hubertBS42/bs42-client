@@ -173,8 +173,6 @@ const CheckoutForm = ({ rate }) => {
 	const cartPriceTotal = useSelector(totalPriceSelector)
 	const loading = useSelector(getLoadingState)
 
-	const roundedPriceTotal = roundMoney(cartPriceTotal * rate)
-
 	const handleRegion = (region, category) => {
 		const extractedTowns = extractTowns(region)
 		if (category === 'customerInfo') {
@@ -235,6 +233,8 @@ const CheckoutForm = ({ rate }) => {
 			paymentMethod: 'cash',
 		},
 	})
+
+	const roundedPriceTotal = roundMoney(cartPriceTotal * rate)
 
 	const nextStep = async () => {
 		if (active === 1) {
@@ -371,7 +371,7 @@ const CheckoutForm = ({ rate }) => {
 				digitalAddress: form.values.cDigitalAddress,
 			},
 			rate: rate,
-			products: cartItems.map(item => {
+			products: cartItems?.map(item => {
 				return {
 					productRef: item.product._id || null,
 					title: item.product.title,
@@ -991,14 +991,16 @@ const CheckoutForm = ({ rate }) => {
 						</Title>
 					</Flex>
 
-					<Flex justify='space-between' mb='xs'>
-						<Title order={6} c='gray.7'>
-							Delivery:
-						</Title>
-						<Title order={5} c='gray.7' fw={500}>
-							GHS 0.00
-						</Title>
-					</Flex>
+					{form.values.shippingMethod === 'delivery' && (
+						<Flex justify='space-between' mb='xs'>
+							<Title order={6} c='gray.7'>
+								Delivery:
+							</Title>
+							<Title order={5} c='gray.7' fw={500}>
+								TBD
+							</Title>
+						</Flex>
+					)}
 
 					<Flex justify='space-between'>
 						<Title order={4} c='gray.8'>
