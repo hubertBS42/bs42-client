@@ -18,20 +18,23 @@ import {
 } from '@/redux/features/cart/cartActions'
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
+import { usePathname, useRouter } from 'next/navigation'
 
 const CartProductCard = ({ item, rate }) => {
 	const [loading, setLoading] = useState(false)
 	const roundedSellPrice = roundMoney(item.product.sellPrice * rate)
+	const pathname = usePathname()
+	const router = useRouter()
 
 	const handleChange = useDebouncedCallback(async quantity => {
 		setLoading(true)
-		await modifyCart(item.product, quantity)
+		await modifyCart(item.product, quantity, pathname, router)
 		setLoading(false)
 	}, 800)
 
 	const handleRemove = async () => {
 		setLoading(true)
-		await removeFromCart(item.product)
+		await removeFromCart(item.product, pathname, router)
 		setLoading(false)
 	}
 

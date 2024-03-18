@@ -1,7 +1,6 @@
 'use client'
 import {
 	Accordion,
-	ActionIcon,
 	Box,
 	Button,
 	Card,
@@ -10,25 +9,25 @@ import {
 	Group,
 	Radio,
 	Select,
+	SimpleGrid,
 	Stack,
 	Text,
 	TextInput,
 	Title,
 } from '@mantine/core'
 import {
-	IconArrowRight,
 	IconCheck,
 	IconNumber1,
 	IconNumber2,
 	IconNumber3,
 	IconNumber4,
-	IconNumber5,
 	IconX,
 } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import classes from './CheckoutForm.module.scss'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
+	emptyCart,
 	getLoadingState,
 	selectAllCartItems,
 	totalCartItemSelector,
@@ -46,7 +45,6 @@ import isNumeric from 'validator/lib/isNumeric'
 import isAlpha from 'validator/lib/isAlpha'
 import { useForm, zodResolver } from '@mantine/form'
 import { getSession } from 'next-auth/react'
-import { getCurrency } from '@/redux/features/currency/currencySlice'
 import { notifications } from '@mantine/notifications'
 
 const schema = z.object({
@@ -163,15 +161,14 @@ const schema = z.object({
 const CheckoutForm = ({ rate }) => {
 	const [active, setActive] = useState(1)
 	const [submitting, setSubmitting] = useState(false)
+	const [submitted, setSubmitted] = useState(false)
 	const [regions, setRegions] = useState([])
 	const [sTowns, setSTowns] = useState([])
 	const [cTowns, setCTowns] = useState([])
-	const [user, setUser] = useState(null)
 	const cartItems = useSelector(selectAllCartItems)
-	const cartLoading = useSelector(getLoadingState)
-	const cartItemsTotal = useSelector(totalCartItemSelector)
 	const cartPriceTotal = useSelector(totalPriceSelector)
 	const loading = useSelector(getLoadingState)
+	const dispatch = useDispatch()
 
 	const handleRegion = (region, category) => {
 		const extractedTowns = extractTowns(region)
@@ -370,20 +367,18 @@ const CheckoutForm = ({ rate }) => {
 				address: form.values.cAddress,
 				digitalAddress: form.values.cDigitalAddress,
 			},
-			rate: rate,
+			rate,
 			products: cartItems?.map(item => {
 				return {
 					productRef: item.product._id || null,
 					title: item.product.title,
 					brand: {
 						name: item.product.brand.name,
-						website: item.product.brand.website,
-						logo: item.product.brand.logo.url,
 					},
 					category: [
-						item.product.category.name,
-						item.product.category.parent.name,
-						item.product.category.parent.parent.name,
+						item?.product?.category?.name,
+						item?.product?.category?.parent?.name,
+						item?.product?.category?.parent?.parent?.name,
 					],
 					images: item.product.images,
 					quantity: item.quantity,
@@ -392,16 +387,19 @@ const CheckoutForm = ({ rate }) => {
 			}),
 			totalPrice: cartPriceTotal,
 			shipping: {
-				address: {
-					firstName: form.values.sFName,
-					lastName: form.values.sLName,
-					email: form.values.sEmail,
-					phone: form.values.sPhone,
-					region: form.values.sRegion,
-					town: form.values.sTown,
-					address: form.values.sAddress,
-					digitalAddress: form.values.sDigitalAddress,
-				},
+				address:
+					form.values.shippingMethod === 'delivery'
+						? {
+								firstName: form.values.sFName,
+								lastName: form.values.sLName,
+								email: form.values.sEmail,
+								phone: form.values.sPhone,
+								region: form.values.sRegion,
+								town: form.values.sTown,
+								address: form.values.sAddress,
+								digitalAddress: form.values.sDigitalAddress,
+						  }
+						: null,
 				method: form.values.shippingMethod,
 			},
 			payment: {
@@ -431,6 +429,9 @@ const CheckoutForm = ({ rate }) => {
 				autoClose: false,
 				icon: <IconCheck />,
 			})
+			localStorage.removeItem('cartToken')
+			dispatch(emptyCart())
+			setSubmitted(true)
 		} else {
 			notifications.show({
 				title: 'Order Failed!',
@@ -454,7 +455,7 @@ const CheckoutForm = ({ rate }) => {
 					<Button
 						variant='default'
 						onClick={prevStep}
-						disabled={loading}
+						disabled={loading || submitted}
 						classNames={{
 							root: classes.btnRoot,
 						}}
@@ -466,7 +467,7 @@ const CheckoutForm = ({ rate }) => {
 				{active < 4 && (
 					<Button
 						onClick={nextStep}
-						loading={loading}
+						loading={loading || submitted}
 						classNames={{
 							root: classes.btnRoot,
 						}}
@@ -474,17 +475,12 @@ const CheckoutForm = ({ rate }) => {
 						Next
 					</Button>
 				)}
-				{/* {active === 5 && (
-					<Button loading={loading} onClick={handleSubmit}>
-						Complete
-					</Button>
-				)} */}
 			</Group>
 		)
 	}
 	return (
 		<Grid>
-			<Grid.Col span={8}>
+			<Grid.Col span={{ base: 12, md: 8 }}>
 				<Accordion
 					value={active.toString()}
 					chevron={false}
@@ -519,93 +515,86 @@ const CheckoutForm = ({ rate }) => {
 							</Flex>
 						</Accordion.Control>
 						<Accordion.Panel>
-							<Stack spacing='md'>
-								<Group grow>
-									<TextInput
-										label='First name'
-										withAsterisk
-										size='md'
-										type='text'
-										disabled={loading}
-										required
-										{...form.getInputProps('cFName')}
-									/>
-									<TextInput
-										label='Last name'
-										withAsterisk
-										size='md'
-										type='text'
-										disabled={loading}
-										required
-										{...form.getInputProps('cLName')}
-									/>
-								</Group>
-								<Group grow>
-									<TextInput
-										withAsterisk
-										label='Email address'
-										size='md'
-										disabled={loading}
-										required
-										{...form.getInputProps('cEmail')}
-									/>
-									<TextInput
-										withAsterisk
-										label='Phone number'
-										size='md'
-										type='text'
-										disabled={loading}
-										required
-										{...form.getInputProps('cPhone')}
-									/>
-								</Group>
-								<Group grow>
-									<Select
-										withAsterisk
-										label='Region'
-										data={regions}
-										size='md'
-										searchable
-										disabled={loading}
-										allowDeselect={false}
-										withCheckIcon={false}
-										{...form.getInputProps('cRegion')}
-										value={form.values.cRegion}
-										onChange={value => handleRegion(value, 'customerInfo')}
-									/>
-									<Select
-										withAsterisk
-										disabled={form.values.cRegion === ''}
-										label='Town'
-										data={cTowns}
-										size='md'
-										searchable
-										allowDeselect={false}
-										withCheckIcon={false}
-										{...form.getInputProps('cTown')}
-									/>
-								</Group>
-								<Group grow>
-									<TextInput
-										label='Address'
-										withAsterisk
-										size='md'
-										type='text'
-										disabled={loading}
-										required
-										{...form.getInputProps('cAddress')}
-									/>
-									<TextInput
-										label='Digital Address'
-										withAsterisk
-										size='md'
-										type='text'
-										disabled={loading}
-										required
-										{...form.getInputProps('cDigitalAddress')}
-									/>
-								</Group>
-							</Stack>
+							<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
+								<TextInput
+									label='First name'
+									withAsterisk
+									size='md'
+									type='text'
+									disabled={loading}
+									required
+									{...form.getInputProps('cFName')}
+								/>
+								<TextInput
+									label='Last name'
+									withAsterisk
+									size='md'
+									type='text'
+									disabled={loading}
+									required
+									{...form.getInputProps('cLName')}
+								/>
+								<TextInput
+									withAsterisk
+									label='Email address'
+									size='md'
+									disabled={loading}
+									required
+									{...form.getInputProps('cEmail')}
+								/>
+								<TextInput
+									withAsterisk
+									label='Phone number'
+									size='md'
+									type='text'
+									disabled={loading}
+									required
+									{...form.getInputProps('cPhone')}
+								/>
+								<Select
+									withAsterisk
+									label='Region'
+									data={regions}
+									size='md'
+									searchable
+									disabled={loading}
+									allowDeselect={false}
+									withCheckIcon={false}
+									{...form.getInputProps('cRegion')}
+									value={form.values.cRegion}
+									onChange={value => handleRegion(value, 'customerInfo')}
+								/>
+								<Select
+									withAsterisk
+									disabled={form.values.cRegion === ''}
+									label='Town'
+									data={cTowns}
+									size='md'
+									searchable
+									allowDeselect={false}
+									withCheckIcon={false}
+									{...form.getInputProps('cTown')}
+								/>
+								<TextInput
+									label='Address'
+									withAsterisk
+									size='md'
+									type='text'
+									disabled={loading}
+									required
+									{...form.getInputProps('cAddress')}
+								/>
+								<TextInput
+									label='Digital Address'
+									withAsterisk
+									size='md'
+									type='text'
+									disabled={loading}
+									required
+									{...form.getInputProps('cDigitalAddress')}
+								/>
+							</SimpleGrid>
+
 							<NextPrevButtons />
 						</Accordion.Panel>
 					</Accordion.Item>
@@ -672,93 +661,85 @@ const CheckoutForm = ({ rate }) => {
 								</Radio.Group>
 
 								{form.values.shippingMethod === 'delivery' && (
-									<>
-										<Group grow>
-											<TextInput
-												label='First name'
-												withAsterisk
-												size='md'
-												type='text'
-												disabled={loading}
-												required
-												{...form.getInputProps('sFName')}
-											/>
-											<TextInput
-												label='Last name'
-												withAsterisk
-												size='md'
-												type='text'
-												disabled={loading}
-												required
-												{...form.getInputProps('sLName')}
-											/>
-										</Group>
-										<Group grow>
-											<TextInput
-												withAsterisk
-												label='Email address'
-												size='md'
-												disabled={loading}
-												required
-												{...form.getInputProps('sEmail')}
-											/>
-											<TextInput
-												withAsterisk
-												label='Phone number'
-												size='md'
-												type='text'
-												disabled={loading}
-												required
-												{...form.getInputProps('sPhone')}
-											/>
-										</Group>
-										<Group grow>
-											<Select
-												withAsterisk
-												label='Region'
-												data={regions}
-												size='md'
-												searchable
-												disabled={loading}
-												allowDeselect={false}
-												withCheckIcon={false}
-												{...form.getInputProps('sRegion')}
-												value={form.values.sRegion}
-												onChange={value => handleRegion(value, 'shippingInfo')}
-											/>
-											<Select
-												withAsterisk
-												disabled={form.values.sRegion === ''}
-												label='Town'
-												data={sTowns}
-												size='md'
-												searchable
-												allowDeselect={false}
-												withCheckIcon={false}
-												{...form.getInputProps('sTown')}
-											/>
-										</Group>
-										<Group grow>
-											<TextInput
-												label='Address'
-												withAsterisk
-												size='md'
-												type='text'
-												disabled={loading}
-												required
-												{...form.getInputProps('sAddress')}
-											/>
-											<TextInput
-												label='Digital Address'
-												withAsterisk
-												size='md'
-												type='text'
-												disabled={loading}
-												required
-												{...form.getInputProps('sDigitalAddress')}
-											/>
-										</Group>
-									</>
+									<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
+										<TextInput
+											label='First name'
+											withAsterisk
+											size='md'
+											type='text'
+											disabled={loading}
+											required
+											{...form.getInputProps('sFName')}
+										/>
+										<TextInput
+											label='Last name'
+											withAsterisk
+											size='md'
+											type='text'
+											disabled={loading}
+											required
+											{...form.getInputProps('sLName')}
+										/>
+										<TextInput
+											withAsterisk
+											label='Email address'
+											size='md'
+											disabled={loading}
+											required
+											{...form.getInputProps('sEmail')}
+										/>
+										<TextInput
+											withAsterisk
+											label='Phone number'
+											size='md'
+											type='text'
+											disabled={loading}
+											required
+											{...form.getInputProps('sPhone')}
+										/>
+										<Select
+											withAsterisk
+											label='Region'
+											data={regions}
+											size='md'
+											searchable
+											disabled={loading}
+											allowDeselect={false}
+											withCheckIcon={false}
+											{...form.getInputProps('sRegion')}
+											value={form.values.sRegion}
+											onChange={value => handleRegion(value, 'shippingInfo')}
+										/>
+										<Select
+											withAsterisk
+											disabled={form.values.sRegion === ''}
+											label='Town'
+											data={sTowns}
+											size='md'
+											searchable
+											allowDeselect={false}
+											withCheckIcon={false}
+											{...form.getInputProps('sTown')}
+										/>
+										<TextInput
+											label='Address'
+											withAsterisk
+											size='md'
+											type='text'
+											disabled={loading}
+											required
+											{...form.getInputProps('sAddress')}
+										/>
+										<TextInput
+											label='Digital Address'
+											withAsterisk
+											size='md'
+											type='text'
+											disabled={loading}
+											required
+											{...form.getInputProps('sDigitalAddress')}
+										/>
+									</SimpleGrid>
 								)}
 							</Stack>
 							<NextPrevButtons />
@@ -960,7 +941,7 @@ const CheckoutForm = ({ rate }) => {
 					</Accordion.Item>
 				</Accordion>
 			</Grid.Col>
-			<Grid.Col span={4}>
+			<Grid.Col span={{ base: 12, md: 4 }}>
 				<Card radius='sm' className={classes.container} withBorder p='xl'>
 					<Title order={4} c='gray.7' tt='uppercase' mb='md'>
 						Order Summary:
@@ -1020,10 +1001,10 @@ const CheckoutForm = ({ rate }) => {
 							root: classes.checkoutBtnRoot,
 						}}
 						loading={loading || submitting}
-						disabled={active !== 4}
+						disabled={active !== 4 || submitted}
 						onClick={handleSubmit}
 					>
-						Confirm Order
+						{submitted ? 'Order Placed' : 'Confirm Order'}
 					</Button>
 				</Card>
 			</Grid.Col>

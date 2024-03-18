@@ -21,7 +21,7 @@ const CartFooterButtons = () => {
 					classNames={{
 						root: classes.btnRoot,
 					}}
-					onClick={clearCart}
+					onClick={() => clearCart()}
 					loading={loading}
 				>
 					Clear Shopping Cart

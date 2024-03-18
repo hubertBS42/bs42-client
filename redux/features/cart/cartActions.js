@@ -15,7 +15,12 @@ import { getSession } from 'next-auth/react'
 
 const { dispatch, getState } = store
 
-export const modifyCart = async (product, quantity) => {
+export const modifyCart = async (
+	product,
+	quantity,
+	pathname,
+	router
+) => {
 	const session = await getSession()
 	let cartToken = localStorage.getItem('cartToken') || null
 	const userID = session?.user.id || null
@@ -50,6 +55,9 @@ export const modifyCart = async (product, quantity) => {
 			localStorage.setItem('cartToken', JSON.stringify(data.token))
 		}
 
+		if (data.items.length === 0 && pathname === '/checkout')
+			router.push('/products')
+
 		notifications.show({
 			title: 'Cart updated',
 			message: 'Product has been added to cart successfully.',
@@ -59,6 +67,7 @@ export const modifyCart = async (product, quantity) => {
 	} else if (status === 'error' && message === 'jwt expired') {
 		localStorage.removeItem('cartToken')
 		dispatch(emptyCart())
+		if (pathname === '/checkout') router.push('/products')
 	} else {
 		notifications.show({
 			title: 'Error',
@@ -124,7 +133,7 @@ export const addToCart = async product => {
 	}
 }
 
-export const removeFromCart = async product => {
+export const removeFromCart = async (product, pathname, router) => {
 	const session = await getSession()
 	let cartToken = localStorage.getItem('cartToken') || null
 	const userID = session?.user.id || null
@@ -159,6 +168,9 @@ export const removeFromCart = async product => {
 			localStorage.setItem('cartToken', JSON.stringify(data.token))
 		}
 
+		if (data.items.length === 0 && pathname === '/checkout')
+			router.push('/products')
+
 		notifications.show({
 			title: 'Cart updated',
 			message: 'Product has been removed from cart successfully.',
@@ -168,6 +180,7 @@ export const removeFromCart = async product => {
 	} else if (status === 'error' && message === 'jwt expired') {
 		localStorage.removeItem('cartToken')
 		dispatch(emptyCart())
+		if (pathname === '/checkout') router.push('/products')
 	} else {
 		notifications.show({
 			title: 'Error',
@@ -226,7 +239,7 @@ export const loadCart = async (pathname, router) => {
 	}
 }
 
-export const clearCart = async () => {
+export const clearCart = async (pathname, router) => {
 	const session = await getSession()
 	let cartToken = localStorage.getItem('cartToken') || null
 	const userID = session?.user.id || null
@@ -262,9 +275,11 @@ export const clearCart = async () => {
 			color: 'green',
 			icon: <IconCheck />,
 		})
+		if (pathname === '/checkout') router.push('/products')
 	} else if (status === 'error' && message === 'jwt expired') {
 		localStorage.removeItem('cartToken')
 		dispatch(emptyCart())
+		if (pathname === '/checkout') router.push('/products')
 	} else {
 		notifications.show({
 			title: 'Error',

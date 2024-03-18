@@ -24,6 +24,7 @@ import classes from './CartDrawer.module.scss'
 import { clearCart } from '@/redux/features/cart/cartActions'
 import { fetcher, roundMoney } from '@/utils/functions'
 import useSWR from 'swr'
+import { usePathname, useRouter } from 'next/navigation'
 
 const CartDrawer = () => {
 	const [opened, { open, close }] = useDisclosure(false)
@@ -31,6 +32,8 @@ const CartDrawer = () => {
 	const cartPriceTotal = useSelector(totalPriceSelector)
 	const cartItems = useSelector(selectAllCartItems)
 	const loading = useSelector(getLoadingState)
+	const pathname = usePathname()
+	const router = useRouter()
 	let currentRate = 0
 
 	const { data, error, isLoading } = useSWR(
@@ -131,7 +134,7 @@ const CartDrawer = () => {
 								size='md'
 								variant='filled'
 								color='cRed.0'
-								onClick={clearCart}
+								onClick={() => clearCart(pathname, router)}
 								classNames={{
 									root: classes.emptyCartBtnRoot,
 								}}
