@@ -345,3 +345,11 @@ export const fetchRegions = () => {
 	const regions = geoData.map(region => region.name)
 	return regions
 }
+
+export const capitalizeFirstLetter = word => {
+	const regex = /(\b[a-z](?!\s))/g
+
+	return word.replace(regex, x => {
+		return x.toUpperCase()
+	})
+}

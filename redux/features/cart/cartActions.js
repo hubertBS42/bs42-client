@@ -202,6 +202,9 @@ export const loadCart = async (pathname, router) => {
 	const userID = session?.user.id || null
 
 	if (!userID && !cartToken) {
+		if (pathname === '/checkout') {
+			router.push('/products')
+		}
 		// router.push('/products')
 		return
 	}
@@ -211,6 +214,8 @@ export const loadCart = async (pathname, router) => {
 	const { status, message, data } = await fetcher(
 		`/api/cart?cartToken=${cartToken}&userID=${userID}`
 	)
+
+	console.log(data)
 
 	dispatch(setIsLoading(false))
 

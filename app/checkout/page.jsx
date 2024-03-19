@@ -1,4 +1,4 @@
-import { Container, Title } from '@mantine/core'
+import { Box, Container, Title } from '@mantine/core'
 import classes from './page.module.scss'
 import CheckoutForm from '@/components/CheckoutForm/CheckoutForm'
 import { fetcher } from '@/utils/functions'
@@ -16,10 +16,7 @@ const page = async () => {
 		? currency.customRate
 		: currency.history[0].rate
 	return (
-		<Container size='xl' py='xl'>
-			<Title tt='uppercase' order={2} mb='xl'>
-				Checkout
-			</Title>
+		<Container size='xl' py='xl' pb={100}>
 			<CheckoutForm rate={rate} />
 		</Container>
 	)

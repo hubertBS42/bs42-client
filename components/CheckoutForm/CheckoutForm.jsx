@@ -30,7 +30,6 @@ import {
 	emptyCart,
 	getLoadingState,
 	selectAllCartItems,
-	totalCartItemSelector,
 	totalPriceSelector,
 } from '@/redux/features/cart/cartSlice'
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard'
@@ -46,6 +45,8 @@ import isAlpha from 'validator/lib/isAlpha'
 import { useForm, zodResolver } from '@mantine/form'
 import { getSession } from 'next-auth/react'
 import { notifications } from '@mantine/notifications'
+import { usePathname } from 'next/navigation'
+import OrderReceived from '../OrderReceived/OrderReceived'
 
 const schema = z.object({
 	cFName: z
@@ -162,6 +163,7 @@ const CheckoutForm = ({ rate }) => {
 	const [active, setActive] = useState(1)
 	const [submitting, setSubmitting] = useState(false)
 	const [submitted, setSubmitted] = useState(false)
+	const [order, setOrder] = useState(null)
 	const [regions, setRegions] = useState([])
 	const [sTowns, setSTowns] = useState([])
 	const [cTowns, setCTowns] = useState([])
@@ -169,6 +171,7 @@ const CheckoutForm = ({ rate }) => {
 	const cartPriceTotal = useSelector(totalPriceSelector)
 	const loading = useSelector(getLoadingState)
 	const dispatch = useDispatch()
+	const pathname = usePathname()
 
 	const handleRegion = (region, category) => {
 		const extractedTowns = extractTowns(region)
@@ -409,7 +412,7 @@ const CheckoutForm = ({ rate }) => {
 
 		setSubmitting(true)
 
-		const { status, message } = await fetcher(
+		const { status, message, data } = await fetcher(
 			`/api/orders/add?cartToken=${cartToken}&userID=${userID}`,
 			{
 				method: 'POST',
@@ -421,16 +424,17 @@ const CheckoutForm = ({ rate }) => {
 		)
 
 		if (status === 'success') {
-			notifications.show({
-				title: 'Order Placed!',
-				message:
-					'You have successfully placed your order! You will be contacted soon by a statff member.',
-				color: 'green',
-				autoClose: false,
-				icon: <IconCheck />,
-			})
+			// notifications.show({
+			// 	title: 'Order Placed!',
+			// 	message:
+			// 		'You have successfully placed your order! You will be contacted soon by a statff member.',
+			// 	color: 'green',
+			// 	autoClose: false,
+			// 	icon: <IconCheck />,
+			// })
 			localStorage.removeItem('cartToken')
 			dispatch(emptyCart())
+			setOrder(data)
 			setSubmitted(true)
 		} else {
 			notifications.show({
@@ -455,7 +459,7 @@ const CheckoutForm = ({ rate }) => {
 					<Button
 						variant='default'
 						onClick={prevStep}
-						disabled={loading || submitted}
+						disabled={loading || submitted || submitting}
 						classNames={{
 							root: classes.btnRoot,
 						}}
@@ -478,476 +482,494 @@ const CheckoutForm = ({ rate }) => {
 			</Group>
 		)
 	}
+
+	if (submitted) return <OrderReceived order={order} />
 	return (
-		<Grid>
-			<Grid.Col span={{ base: 12, md: 8 }}>
-				<Accordion
-					value={active.toString()}
-					chevron={false}
-					classNames={{
-						control: classes.control,
-					}}
-				>
-					<Accordion.Item key='1' value='1'>
-						<Accordion.Control>
-							<Flex justify='space-between'>
-								<Group>
-									<Flex
-										className={`${classes.sectionLabelNumber} ${
-											active === 1 && classes.active
-										} ${active > 1 && classes.completed}`}
-									>
-										{active > 1 ? (
-											<IconCheck size={18} color='white' stroke={2.5} />
-										) : (
-											<IconNumber1 size={18} stroke={2.5} />
-										)}
-									</Flex>
-									<div>
-										<Title order={4} c='gray.7'>
-											Customer Information
-										</Title>
-										<Text size='sm' c='dimmed' fw={400}>
-											Provide us with the following information.
-										</Text>
-									</div>
-								</Group>
-							</Flex>
-						</Accordion.Control>
-						<Accordion.Panel>
-							<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
-								<TextInput
-									label='First name'
-									withAsterisk
-									size='md'
-									type='text'
-									disabled={loading}
-									required
-									{...form.getInputProps('cFName')}
-								/>
-								<TextInput
-									label='Last name'
-									withAsterisk
-									size='md'
-									type='text'
-									disabled={loading}
-									required
-									{...form.getInputProps('cLName')}
-								/>
-								<TextInput
-									withAsterisk
-									label='Email address'
-									size='md'
-									disabled={loading}
-									required
-									{...form.getInputProps('cEmail')}
-								/>
-								<TextInput
-									withAsterisk
-									label='Phone number'
-									size='md'
-									type='text'
-									disabled={loading}
-									required
-									{...form.getInputProps('cPhone')}
-								/>
-								<Select
-									withAsterisk
-									label='Region'
-									data={regions}
-									size='md'
-									searchable
-									disabled={loading}
-									allowDeselect={false}
-									withCheckIcon={false}
-									{...form.getInputProps('cRegion')}
-									value={form.values.cRegion}
-									onChange={value => handleRegion(value, 'customerInfo')}
-								/>
-								<Select
-									withAsterisk
-									disabled={form.values.cRegion === ''}
-									label='Town'
-									data={cTowns}
-									size='md'
-									searchable
-									allowDeselect={false}
-									withCheckIcon={false}
-									{...form.getInputProps('cTown')}
-								/>
-								<TextInput
-									label='Address'
-									withAsterisk
-									size='md'
-									type='text'
-									disabled={loading}
-									required
-									{...form.getInputProps('cAddress')}
-								/>
-								<TextInput
-									label='Digital Address'
-									withAsterisk
-									size='md'
-									type='text'
-									disabled={loading}
-									required
-									{...form.getInputProps('cDigitalAddress')}
-								/>
-							</SimpleGrid>
-
-							<NextPrevButtons />
-						</Accordion.Panel>
-					</Accordion.Item>
-
-					<Accordion.Item key='2' value='2'>
-						<Accordion.Control>
-							<Flex justify='space-between'>
-								<Group>
-									<Flex
-										className={`${classes.sectionLabelNumber} ${
-											active === 2 && classes.active
-										} ${active > 2 && classes.completed}`}
-									>
-										{active > 2 ? (
-											<IconCheck size={18} color='white' stroke={2.5} />
-										) : (
-											<IconNumber2 size={18} stroke={2.5} />
-										)}
-									</Flex>
-									<div>
-										<Title order={4} c='gray.7'>
-											Shipping Information
-										</Title>
-										<Text size='sm' c='dimmed' fw={400}>
-											Provide us with the following information.
-										</Text>
-									</div>
-								</Group>
-							</Flex>
-						</Accordion.Control>
-						<Accordion.Panel>
-							<Stack spacing='md'>
-								<Radio.Group
-									label='Delivery Method'
-									withAsterisk
-									description='Indicate how you would want to receive your order.'
-									{...form.getInputProps('shippingMethod')}
-									onChange={handleDeliveryMethod}
-								>
-									<Group pt={9}>
-										<Radio
-											value='pickup'
-											label='Pick up'
-											size='xs'
-											styles={{
-												label: {
-													paddingLeft: '8px',
-													fontSize: '15px',
-												},
-											}}
-										/>
-										<Radio
-											value='delivery'
-											label='Delivery'
-											size='xs'
-											styles={{
-												label: {
-													paddingLeft: '8px',
-													fontSize: '15px',
-												},
-											}}
-										/>
+		<>
+			<Title tt='uppercase' order={2} mb='xl'>
+				Checkout
+			</Title>
+			<Grid>
+				<Grid.Col span={{ base: 12, md: 8 }}>
+					<Accordion
+						value={active.toString()}
+						chevron={false}
+						classNames={{
+							control: classes.control,
+						}}
+					>
+						<Accordion.Item key='1' value='1'>
+							<Accordion.Control>
+								<Flex justify='space-between'>
+									<Group>
+										<Flex
+											className={`${classes.sectionLabelNumber} ${
+												active === 1 && classes.active
+											} ${active > 1 && classes.completed}`}
+										>
+											{active > 1 ? (
+												<IconCheck size={18} color='white' stroke={2.5} />
+											) : (
+												<IconNumber1 size={18} stroke={2.5} />
+											)}
+										</Flex>
+										<div>
+											<Title order={4} c='gray.7'>
+												Customer Information
+											</Title>
+											<Text size='sm' c='dimmed' fw={400}>
+												Provide us with the following information.
+											</Text>
+										</div>
 									</Group>
-								</Radio.Group>
+								</Flex>
+							</Accordion.Control>
+							<Accordion.Panel>
+								<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
+									<TextInput
+										label='First name'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cFName')}
+									/>
+									<TextInput
+										label='Last name'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cLName')}
+									/>
+									<TextInput
+										withAsterisk
+										label='Email address'
+										size='md'
+										disabled={loading}
+										required
+										{...form.getInputProps('cEmail')}
+									/>
+									<TextInput
+										withAsterisk
+										label='Phone number'
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cPhone')}
+									/>
+									<Select
+										withAsterisk
+										label='Region'
+										data={regions}
+										size='md'
+										searchable
+										disabled={loading}
+										allowDeselect={false}
+										withCheckIcon={false}
+										{...form.getInputProps('cRegion')}
+										value={form.values.cRegion}
+										onChange={value => handleRegion(value, 'customerInfo')}
+									/>
+									<Select
+										withAsterisk
+										disabled={form.values.cRegion === ''}
+										label='Town'
+										data={cTowns}
+										size='md'
+										searchable
+										allowDeselect={false}
+										withCheckIcon={false}
+										{...form.getInputProps('cTown')}
+									/>
+									<TextInput
+										label='Address'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cAddress')}
+									/>
+									<TextInput
+										label='Digital Address'
+										withAsterisk
+										size='md'
+										type='text'
+										disabled={loading}
+										required
+										{...form.getInputProps('cDigitalAddress')}
+									/>
+								</SimpleGrid>
 
-								{form.values.shippingMethod === 'delivery' && (
-									<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
-										<TextInput
-											label='First name'
-											withAsterisk
-											size='md'
-											type='text'
-											disabled={loading}
-											required
-											{...form.getInputProps('sFName')}
-										/>
-										<TextInput
-											label='Last name'
-											withAsterisk
-											size='md'
-											type='text'
-											disabled={loading}
-											required
-											{...form.getInputProps('sLName')}
-										/>
-										<TextInput
-											withAsterisk
-											label='Email address'
-											size='md'
-											disabled={loading}
-											required
-											{...form.getInputProps('sEmail')}
-										/>
-										<TextInput
-											withAsterisk
-											label='Phone number'
-											size='md'
-											type='text'
-											disabled={loading}
-											required
-											{...form.getInputProps('sPhone')}
-										/>
-										<Select
-											withAsterisk
-											label='Region'
-											data={regions}
-											size='md'
-											searchable
-											disabled={loading}
-											allowDeselect={false}
-											withCheckIcon={false}
-											{...form.getInputProps('sRegion')}
-											value={form.values.sRegion}
-											onChange={value => handleRegion(value, 'shippingInfo')}
-										/>
-										<Select
-											withAsterisk
-											disabled={form.values.sRegion === ''}
-											label='Town'
-											data={sTowns}
-											size='md'
-											searchable
-											allowDeselect={false}
-											withCheckIcon={false}
-											{...form.getInputProps('sTown')}
-										/>
-										<TextInput
-											label='Address'
-											withAsterisk
-											size='md'
-											type='text'
-											disabled={loading}
-											required
-											{...form.getInputProps('sAddress')}
-										/>
-										<TextInput
-											label='Digital Address'
-											withAsterisk
-											size='md'
-											type='text'
-											disabled={loading}
-											required
-											{...form.getInputProps('sDigitalAddress')}
-										/>
-									</SimpleGrid>
-								)}
-							</Stack>
-							<NextPrevButtons />
-						</Accordion.Panel>
-					</Accordion.Item>
+								<NextPrevButtons />
+							</Accordion.Panel>
+						</Accordion.Item>
 
-					<Accordion.Item key='3' value='3'>
-						<Accordion.Control>
-							<Flex justify='space-between'>
-								<Group>
-									<Flex
-										className={`${classes.sectionLabelNumber} ${
-											active === 3 && classes.active
-										} ${active > 3 && classes.completed}`}
-									>
-										{active > 3 ? (
-											<IconCheck size={18} color='white' stroke={2.5} />
-										) : (
-											<IconNumber3 size={18} stroke={2.5} />
-										)}
-									</Flex>
-									<div>
-										<Title order={4} c='gray.7'>
-											Payment Method
-										</Title>
-										<Text size='sm' c='dimmed' fw={400}>
-											Select a payment method.
-										</Text>
-									</div>
-								</Group>
-							</Flex>
-						</Accordion.Control>
-						<Accordion.Panel>
-							<Stack spacing='md'>
-								<Radio.Group
-									withAsterisk
-									{...form.getInputProps('paymentMethod')}
-								>
-									<Group pt={9}>
-										<Radio
-											value='cash'
-											label='Cash'
-											size='xs'
-											styles={{
-												label: {
-													paddingLeft: '8px',
-													fontSize: '15px',
-												},
-											}}
-										/>
-										<Radio
-											value='mobileMoney'
-											label='Mobile Money'
-											disabled
-											size='xs'
-											styles={{
-												label: {
-													paddingLeft: '8px',
-													fontSize: '15px',
-												},
-											}}
-										/>
-										<Radio
-											value='debitCard'
-											label='Debit Card'
-											disabled
-											size='xs'
-											styles={{
-												label: {
-													paddingLeft: '8px',
-													fontSize: '15px',
-												},
-											}}
-										/>
+						<Accordion.Item key='2' value='2'>
+							<Accordion.Control>
+								<Flex justify='space-between'>
+									<Group>
+										<Flex
+											className={`${classes.sectionLabelNumber} ${
+												active === 2 && classes.active
+											} ${active > 2 && classes.completed}`}
+										>
+											{active > 2 ? (
+												<IconCheck size={18} color='white' stroke={2.5} />
+											) : (
+												<IconNumber2 size={18} stroke={2.5} />
+											)}
+										</Flex>
+										<div>
+											<Title order={4} c='gray.7'>
+												Shipping Information
+											</Title>
+											<Text size='sm' c='dimmed' fw={400}>
+												Provide us with the following information.
+											</Text>
+										</div>
 									</Group>
-								</Radio.Group>
-							</Stack>
-							<NextPrevButtons />
-						</Accordion.Panel>
-					</Accordion.Item>
-
-					<Accordion.Item key='4' value='4'>
-						<Accordion.Control>
-							<Flex justify='space-between'>
-								<Group>
-									<Flex
-										className={`${classes.sectionLabelNumber} ${
-											active === 4 && classes.active
-										} ${active > 4 && classes.completed}`}
+								</Flex>
+							</Accordion.Control>
+							<Accordion.Panel>
+								<Stack spacing='md'>
+									<Radio.Group
+										label='Delivery Method'
+										withAsterisk
+										description='Indicate how you would want to receive your order.'
+										{...form.getInputProps('shippingMethod')}
+										onChange={handleDeliveryMethod}
 									>
-										{active > 4 ? (
-											<IconCheck size={18} color='white' stroke={2.5} />
-										) : (
-											<IconNumber4 size={18} stroke={2.5} />
-										)}
-									</Flex>
-									<div>
-										<Title order={4} c='gray.7'>
-											Order Review
-										</Title>
-										<Text size='sm' c='dimmed' fw={400}>
-											Review and confirm your order.
-										</Text>
-									</div>
-								</Group>
-							</Flex>
-						</Accordion.Control>
-						<Accordion.Panel>
-							<Grid>
-								<Grid.Col span={4}>
-									<Stack gap={0}>
-										<Title className={classes.subTitle} order={5}>
-											Customer Information
-										</Title>
-										<Box>
-											<Text className={classes.infoText}>
-												Full name: {form.values.cFName} {form.values.cLName}
-											</Text>
-											<Text className={classes.infoText}>
-												Email: {form.values.cEmail}
-											</Text>
-											<Text className={classes.infoText}>
-												Phone: {form.values.cPhone}
-											</Text>
-										</Box>
-									</Stack>
-								</Grid.Col>
-								<Grid.Col span={4}>
-									<Stack gap={0}>
-										<Title className={classes.subTitle} order={5}>
-											Shipping Information
-										</Title>
-										<Box>
-											<Text className={classes.infoText}>
-												Shipping Method:{' '}
-												{form.values.shippingMethod === 'pickup'
-													? 'Pick up'
-													: 'Delivery'}
-											</Text>
-										</Box>
+										<Group pt={9}>
+											<Radio
+												value='pickup'
+												label='Pick up'
+												size='xs'
+												styles={{
+													label: {
+														paddingLeft: '8px',
+														fontSize: '15px',
+													},
+												}}
+											/>
+											<Radio
+												value='delivery'
+												label='Delivery'
+												size='xs'
+												styles={{
+													label: {
+														paddingLeft: '8px',
+														fontSize: '15px',
+													},
+												}}
+											/>
+										</Group>
+									</Radio.Group>
 
-										{form.values.shippingMethod === 'delivery' && (
+									{form.values.shippingMethod === 'delivery' && (
+										<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
+											<TextInput
+												label='First name'
+												withAsterisk
+												size='md'
+												type='text'
+												disabled={loading}
+												required
+												{...form.getInputProps('sFName')}
+											/>
+											<TextInput
+												label='Last name'
+												withAsterisk
+												size='md'
+												type='text'
+												disabled={loading}
+												required
+												{...form.getInputProps('sLName')}
+											/>
+											<TextInput
+												withAsterisk
+												label='Email address'
+												size='md'
+												disabled={loading}
+												required
+												{...form.getInputProps('sEmail')}
+											/>
+											<TextInput
+												withAsterisk
+												label='Phone number'
+												size='md'
+												type='text'
+												disabled={loading}
+												required
+												{...form.getInputProps('sPhone')}
+											/>
+											<Select
+												withAsterisk
+												label='Region'
+												data={regions}
+												size='md'
+												searchable
+												disabled={loading}
+												allowDeselect={false}
+												withCheckIcon={false}
+												{...form.getInputProps('sRegion')}
+												value={form.values.sRegion}
+												onChange={value => handleRegion(value, 'shippingInfo')}
+											/>
+											<Select
+												withAsterisk
+												disabled={form.values.sRegion === ''}
+												label='Town'
+												data={sTowns}
+												size='md'
+												searchable
+												allowDeselect={false}
+												withCheckIcon={false}
+												{...form.getInputProps('sTown')}
+											/>
+											<TextInput
+												label='Address'
+												withAsterisk
+												size='md'
+												type='text'
+												disabled={loading}
+												required
+												{...form.getInputProps('sAddress')}
+											/>
+											<TextInput
+												label='Digital Address'
+												withAsterisk
+												size='md'
+												type='text'
+												disabled={loading}
+												required
+												{...form.getInputProps('sDigitalAddress')}
+											/>
+										</SimpleGrid>
+									)}
+								</Stack>
+								<NextPrevButtons />
+							</Accordion.Panel>
+						</Accordion.Item>
+
+						<Accordion.Item key='3' value='3'>
+							<Accordion.Control>
+								<Flex justify='space-between'>
+									<Group>
+										<Flex
+											className={`${classes.sectionLabelNumber} ${
+												active === 3 && classes.active
+											} ${active > 3 && classes.completed}`}
+										>
+											{active > 3 ? (
+												<IconCheck size={18} color='white' stroke={2.5} />
+											) : (
+												<IconNumber3 size={18} stroke={2.5} />
+											)}
+										</Flex>
+										<div>
+											<Title order={4} c='gray.7'>
+												Payment Method
+											</Title>
+											<Text size='sm' c='dimmed' fw={400}>
+												Select a payment method.
+											</Text>
+										</div>
+									</Group>
+								</Flex>
+							</Accordion.Control>
+							<Accordion.Panel>
+								<Stack spacing='md'>
+									<Radio.Group
+										withAsterisk
+										{...form.getInputProps('paymentMethod')}
+									>
+										<Group pt={9}>
+											<Radio
+												value='cash'
+												label='Cash'
+												size='xs'
+												styles={{
+													label: {
+														paddingLeft: '8px',
+														fontSize: '15px',
+													},
+												}}
+											/>
+											<Radio
+												value='mobileMoney'
+												label='Mobile Money'
+												disabled
+												size='xs'
+												styles={{
+													label: {
+														paddingLeft: '8px',
+														fontSize: '15px',
+													},
+												}}
+											/>
+											<Radio
+												value='debitCard'
+												label='Debit Card'
+												disabled
+												size='xs'
+												styles={{
+													label: {
+														paddingLeft: '8px',
+														fontSize: '15px',
+													},
+												}}
+											/>
+										</Group>
+									</Radio.Group>
+								</Stack>
+								<NextPrevButtons />
+							</Accordion.Panel>
+						</Accordion.Item>
+
+						<Accordion.Item key='4' value='4'>
+							<Accordion.Control>
+								<Flex justify='space-between'>
+									<Group>
+										<Flex
+											className={`${classes.sectionLabelNumber} ${
+												active === 4 && classes.active
+											} ${active > 4 && classes.completed}`}
+										>
+											{active > 4 ? (
+												<IconCheck size={18} color='white' stroke={2.5} />
+											) : (
+												<IconNumber4 size={18} stroke={2.5} />
+											)}
+										</Flex>
+										<div>
+											<Title order={4} c='gray.7'>
+												Order Review
+											</Title>
+											<Text size='sm' c='dimmed' fw={400}>
+												Review and confirm your order.
+											</Text>
+										</div>
+									</Group>
+								</Flex>
+							</Accordion.Control>
+							<Accordion.Panel>
+								<Grid>
+									<Grid.Col span={4}>
+										<Stack gap={0}>
+											<Title className={classes.subTitle} order={5}>
+												Customer Information
+											</Title>
 											<Box>
 												<Text className={classes.infoText}>
-													Full name: {form.values.sFName} {form.values.sLName}
+													{form.values.cFName} {form.values.cLName}
 												</Text>
 												<Text className={classes.infoText}>
-													Email: {form.values.sEmail}
+													{form.values.cEmail}
 												</Text>
 												<Text className={classes.infoText}>
-													Phone: {form.values.sPhone}
+													{form.values.cPhone}
 												</Text>
 												<Text className={classes.infoText}>
-													Address: {form.values.sAddress}
+													{form.values.cAddress}
 												</Text>
 												<Text className={classes.infoText}>
-													Region: {form.values.sRegion}
+													{form.values.cTown}, {form.values.cRegion}
 												</Text>
 												<Text className={classes.infoText}>
-													Town: {form.values.sTown}
-												</Text>
-												<Text className={classes.infoText}>
-													Digital address: {form.values.sDigitalAddress}
+													{form.values.cDigitalAddress}
 												</Text>
 											</Box>
-										)}
-									</Stack>
-								</Grid.Col>
+										</Stack>
+									</Grid.Col>
+									<Grid.Col span={4}>
+										<Stack gap={0}>
+											<Title className={classes.subTitle} order={5}>
+												Shipping Information
+											</Title>
 
-								<Grid.Col span={4}>
-									<Stack gap={0}>
-										<Title className={classes.subTitle} order={5}>
-											Payment Information
-										</Title>
-										<Box>
-											<Text className={classes.infoText}>
-												Payment Method:{' '}
-												{form.values.paymentMethod === 'cash' && 'Cash'}
-											</Text>
-										</Box>
-									</Stack>
-								</Grid.Col>
+											{form.values.shippingMethod === 'delivery' && (
+												<Box mb='md'>
+													<Text className={classes.infoText}>
+														{form.values.sFName} {form.values.sLName}
+													</Text>
+													<Text className={classes.infoText}>
+														{form.values.sEmail}
+													</Text>
+													<Text className={classes.infoText}>
+														{form.values.sPhone}
+													</Text>
+													<Text className={classes.infoText}>
+														{form.values.sAddress}
+													</Text>
+													<Text className={classes.infoText}>
+														{form.values.sTown}, {form.values.sRegion}
+													</Text>
+													<Text className={classes.infoText}>
+														{form.values.sDigitalAddress}
+													</Text>
+												</Box>
+											)}
 
-								<Grid.Col span={12}>
-									<Stack gap={0}>
-										<Title className={classes.subTitle} order={5}>
-											Products in Cart
-										</Title>
+											<Box>
+												<Text className={classes.infoText}>
+													Shipping Method:{' '}
+													{form.values.shippingMethod === 'pickup'
+														? 'Pick up'
+														: 'Delivery'}
+												</Text>
+											</Box>
+										</Stack>
+									</Grid.Col>
 
-										{cartItems.map((item, i) => (
-											<CheckoutProductCard key={i} item={item} rate={rate} />
-										))}
-									</Stack>
-								</Grid.Col>
-							</Grid>
+									<Grid.Col span={4}>
+										<Stack gap={0}>
+											<Title className={classes.subTitle} order={5}>
+												Payment Information
+											</Title>
+											<Box>
+												<Text className={classes.infoText}>
+													Payment Method:{' '}
+													{form.values.paymentMethod === 'cash' && 'Cash'}
+												</Text>
+											</Box>
+										</Stack>
+									</Grid.Col>
 
-							<NextPrevButtons />
-						</Accordion.Panel>
-					</Accordion.Item>
-				</Accordion>
-			</Grid.Col>
-			<Grid.Col span={{ base: 12, md: 4 }}>
-				<Card radius='sm' className={classes.container} withBorder p='xl'>
-					<Title order={4} c='gray.7' tt='uppercase' mb='md'>
-						Order Summary:
-					</Title>
+									<Grid.Col span={12}>
+										<Stack gap={0}>
+											<Title className={classes.subTitle} order={5}>
+												Products in Cart
+											</Title>
 
-					{/* <TextInput
+											{cartItems.map((item, i) => (
+												<CheckoutProductCard key={i} item={item} rate={rate} />
+											))}
+										</Stack>
+									</Grid.Col>
+								</Grid>
+
+								<NextPrevButtons />
+							</Accordion.Panel>
+						</Accordion.Item>
+					</Accordion>
+				</Grid.Col>
+				<Grid.Col span={{ base: 12, md: 4 }}>
+					<Card
+						radius='sm'
+						className={classes.container}
+						withBorder
+						p='xl'
+					>
+						<Title order={4} c='gray.7' tt='uppercase' mb='md'>
+							Order Summary:
+						</Title>
+
+						{/* <TextInput
 						size='md'
 						mb='md'
 						placeholder='Coupon Code'
@@ -963,52 +985,53 @@ const CheckoutForm = ({ rate }) => {
 						}
 					/> */}
 
-					<Flex justify='space-between'>
-						<Title order={6} c='gray.7'>
-							Subtotal:
-						</Title>
-						<Title order={5} c='gray.7' fw={500}>
-							GHS {roundedPriceTotal}
-						</Title>
-					</Flex>
-
-					{form.values.shippingMethod === 'delivery' && (
-						<Flex justify='space-between' mb='xs'>
+						<Flex justify='space-between'>
 							<Title order={6} c='gray.7'>
-								Delivery:
+								Subtotal:
 							</Title>
 							<Title order={5} c='gray.7' fw={500}>
-								TBD
+								GHS {roundedPriceTotal}
 							</Title>
 						</Flex>
-					)}
 
-					<Flex justify='space-between'>
-						<Title order={4} c='gray.8'>
-							Grand total:
-						</Title>
-						<Title order={4} c='gray.8'>
-							GHS {roundedPriceTotal}
-						</Title>
-					</Flex>
+						{form.values.shippingMethod === 'delivery' && (
+							<Flex justify='space-between' mb='xs'>
+								<Title order={6} c='gray.7'>
+									Delivery:
+								</Title>
+								<Title order={5} c='gray.7' fw={500}>
+									TBD
+								</Title>
+							</Flex>
+						)}
 
-					<Button
-						size='md'
-						mt='md'
-						variant='filled'
-						fullWidth
-						classNames={{
-							root: classes.checkoutBtnRoot,
-						}}
-						loading={loading || submitting}
-						disabled={active !== 4 || submitted}
-						onClick={handleSubmit}
-					>
-						{submitted ? 'Order Placed' : 'Confirm Order'}
-					</Button>
-				</Card>
-			</Grid.Col>
-		</Grid>
+						<Flex justify='space-between'>
+							<Title order={4} c='gray.8'>
+								Grand total:
+							</Title>
+							<Title order={4} c='gray.8'>
+								GHS {roundedPriceTotal}
+							</Title>
+						</Flex>
+
+						<Button
+							size='md'
+							mt='md'
+							variant='filled'
+							fullWidth
+							classNames={{
+								root: classes.checkoutBtnRoot,
+							}}
+							loading={loading || submitting}
+							disabled={active !== 4 || submitted}
+							onClick={handleSubmit}
+						>
+							{submitted ? 'Order Placed' : 'Confirm Order'}
+						</Button>
+					</Card>
+				</Grid.Col>
+			</Grid>
+		</>
 	)
 }
 export default CheckoutForm

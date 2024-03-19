@@ -1,0 +1,12 @@
+.checkoutBtnRoot {
+	font-weight: 700;
+	transition: ease-in 0.3s all;
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+
+	&:hover {
+		background-color: white;
+		color: var(--mantine-color-cRed-0);
+		border: 1px solid var(--mantine-color-cRed-0);
+	}
+}

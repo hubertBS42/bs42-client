@@ -48,6 +48,7 @@ const Header = () => {
 					paddingBottom: '.7em',
 					fontSize: 13,
 					fontWeight: 400,
+					borderBottom: `1px solid ${theme.colors.gray[2]}`,
 				})}
 				visibleFrom='md'
 			>
@@ -92,7 +93,12 @@ const Header = () => {
 				</Container>
 			</Box>
 
-			<Box>
+			<Box
+				bg='white'
+				style={theme => ({
+					borderBottom: `1px solid ${theme.colors.gray[2]}`,
+				})}
+			>
 				<Container size='xl'>
 					<Grid py='.5em'>
 						<Grid.Col
@@ -140,7 +146,9 @@ const Header = () => {
 				</Container>
 			</Box>
 
-			{pathname !== '/products' && <CategoryMenu />}
+			{pathname !== '/products' && pathname !== '/checkout' && (
+				<CategoryMenu />
+			)}
 		</Stack>
 	)
 }
