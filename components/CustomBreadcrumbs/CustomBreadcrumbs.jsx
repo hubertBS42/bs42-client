@@ -10,9 +10,6 @@ import {
 import classes from './CustomBreadcrumbs.module.scss'
 import {
 	findCategoryBySlugWithAncestors,
-	formatCategoriesForHeader,
-	getBrands,
-	getCategories,
 	groupCategories,
 } from '@/utils/functions'
 import {
@@ -21,34 +18,14 @@ import {
 	useSearchParams,
 } from 'next/navigation'
 import FiltersDrawer from '../FiltersDrawer/FiltersDrawer'
-import { useEffect, useState } from 'react'
 
 const CustomBreadcrumbs = ({ categories, brands }) => {
 	const { replace } = useRouter()
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
-	// const [categories, setCategories] = useState([])
-	// const [brands, setBrands] = useState([])
 
 	const params = new URLSearchParams(searchParams)
 	const category = params.get('category')
-
-	// const fetchBrandsAndCategories = async () => {
-	// 	const brandsData = getBrands()
-	// 	const categoriesData = getCategories()
-
-	// 	const [brands, categories] = await Promise.all([
-	// 		brandsData,
-	// 		categoriesData,
-	// 	])
-
-	// 	setCategories(categories.data)
-	// 	setBrands(brands.data)
-	// }
-
-	// useEffect(() => {
-	// 	fetchBrandsAndCategories()
-	// }, [])
 
 	const formattedCategories = groupCategories(categories)
 	const categoryWithAncestors = findCategoryBySlugWithAncestors(

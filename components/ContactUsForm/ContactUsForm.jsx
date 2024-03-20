@@ -16,6 +16,7 @@ import classes from './ContactUsForm.module.scss'
 import { IconCheck, IconSend, IconX } from '@tabler/icons-react'
 import { fetcher } from '@/utils/functions'
 import { notifications } from '@mantine/notifications'
+import { useReCaptcha } from 'next-recaptcha-v3'
 
 const isAlphaWithSpacesAndHyphens = value => {
 	// Allow empty strings
@@ -68,6 +69,7 @@ const schema = z.object({
 const ContactUsForm = () => {
 	const [loading, setLoading] = useState(false)
 	const [sent, setSent] = useState(false)
+	const { executeRecaptcha } = useReCaptcha()
 
 	const form = useForm({
 		validate: zodResolver(schema),
@@ -85,9 +87,11 @@ const ContactUsForm = () => {
 	const handleSubmit = async values => {
 		setLoading(true)
 
+		const token = await executeRecaptcha('form_submit')
+
 		const { status, message } = await fetcher('/api/messages/add', {
 			method: 'POST',
-			body: JSON.stringify(values),
+			body: JSON.stringify({ ...values, recaptchaToken: token }),
 			headers: {
 				'Content-type': 'application/json; charset=UTF-8',
 			},
