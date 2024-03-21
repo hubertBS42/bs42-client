@@ -123,16 +123,6 @@ const schema = z.object({
 		.refine(val => val !== '', {
 			message: 'You must provide your last name.',
 		}),
-	sEmail: z
-		.string()
-		.trim()
-		.email({ message: 'You need to provide a valid email address.' }),
-	sPhone: z
-		.string()
-		.min(10, { message: 'You need to provide a valid phone number.' })
-		.refine(val => isNumeric(val), {
-			message: 'You need to provide a valid phone number.',
-		}),
 	sRegion: z
 		.string()
 		.trim()
@@ -219,8 +209,6 @@ const CheckoutForm = ({ rate }) => {
 			cPhone: '',
 			sFName: '',
 			sLName: '',
-			sEmail: '',
-			sPhone: '',
 			sRegion: '',
 			sTown: '',
 			sAddress: '',
@@ -359,12 +347,16 @@ const CheckoutForm = ({ rate }) => {
 		}
 
 		const preparedData = {
-			customerInfo: {
-				userRef: session?.user ? session.user.id : null,
+			user: session?.user ? session.user.id : null,
+			contact: {
 				firstName: form.values.cFName,
 				lastName: form.values.cLName,
 				email: form.values.cEmail,
 				phone: form.values.cPhone,
+			},
+			billing: {
+				firstName: form.values.cFName,
+				lastName: form.values.cLName,
 				region: form.values.cRegion,
 				town: form.values.cTown,
 				address: form.values.cAddress,
@@ -390,19 +382,12 @@ const CheckoutForm = ({ rate }) => {
 			}),
 			totalPrice: cartPriceTotal,
 			shipping: {
-				address:
-					form.values.shippingMethod === 'delivery'
-						? {
-								firstName: form.values.sFName,
-								lastName: form.values.sLName,
-								email: form.values.sEmail,
-								phone: form.values.sPhone,
-								region: form.values.sRegion,
-								town: form.values.sTown,
-								address: form.values.sAddress,
-								digitalAddress: form.values.sDigitalAddress,
-						  }
-						: null,
+				firstName: form.values.sFName,
+				lastName: form.values.sLName,
+				region: form.values.sRegion,
+				town: form.values.sTown,
+				address: form.values.sAddress,
+				digitalAddress: form.values.sDigitalAddress,
 				method: form.values.shippingMethod,
 			},
 			payment: {
@@ -689,23 +674,6 @@ const CheckoutForm = ({ rate }) => {
 												disabled={loading}
 												required
 												{...form.getInputProps('sLName')}
-											/>
-											<TextInput
-												withAsterisk
-												label='Email address'
-												size='md'
-												disabled={loading}
-												required
-												{...form.getInputProps('sEmail')}
-											/>
-											<TextInput
-												withAsterisk
-												label='Phone number'
-												size='md'
-												type='text'
-												disabled={loading}
-												required
-												{...form.getInputProps('sPhone')}
 											/>
 											<Select
 												withAsterisk
