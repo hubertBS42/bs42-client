@@ -147,8 +147,8 @@ const OrderReceived = ({ order }) => {
 							>
 								Contact
 							</Text>
-							<Text fz={14}>Email: {order.customerInfo.email}</Text>
-							<Text fz={14}>Phone: {order.customerInfo.phone}</Text>
+							<Text fz={14}>Email: {order.contact.email}</Text>
+							<Text fz={14}>Phone: {order.contact.phone}</Text>
 						</Stack>
 					</Stack>
 
@@ -162,13 +162,13 @@ const OrderReceived = ({ order }) => {
 							Billing address
 						</Text>
 						<Text fz={14}>
-							{order.customerInfo.firstName} {order.customerInfo.lastName}
+							{order.billing.firstName} {order.billing.lastName}
 						</Text>
-						<Text fz={14}>{order.customerInfo.address}</Text>
+						<Text fz={14}>{order.billing.address}</Text>
 						<Text fz={14}>
-							{order.customerInfo.town}, {order.customerInfo.region}
+							{order.billing.town}, {order.billing.region}
 						</Text>
-						<Text fz={14}>{order.customerInfo.digitalAddress}</Text>
+						<Text fz={14}>{order.billing.digitalAddress}</Text>
 					</Stack>
 
 					{order.shipping.method === 'delivery' && (
@@ -182,14 +182,13 @@ const OrderReceived = ({ order }) => {
 								Shipping address
 							</Text>
 							<Text fz={14}>
-								{order.shipping.address.firstName}{' '}
-								{order.shipping.address.lastName}
+								{order.shipping.firstName} {order.shipping.lastName}
 							</Text>
-							<Text fz={14}>{order.shipping.address.address}</Text>
+							<Text fz={14}>{order.shipping.address}</Text>
 							<Text fz={14}>
-								{order.shipping.address.town}, {order.shipping.address.region}
+								{order.shipping.town}, {order.shipping.region}
 							</Text>
-							<Text fz={14}>{order.shipping.address.digitalAddress}</Text>
+							<Text fz={14}>{order.shipping.digitalAddress}</Text>
 						</Stack>
 					)}
 				</SimpleGrid>
