@@ -380,7 +380,8 @@ const CheckoutForm = ({ rate }) => {
 					price: item.product.sellPrice,
 				}
 			}),
-			totalPrice: cartPriceTotal,
+			total: cartPriceTotal,
+			subtotal: cartPriceTotal,
 			shipping: {
 				firstName: form.values.sFName,
 				lastName: form.values.sLName,
