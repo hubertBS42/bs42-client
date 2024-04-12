@@ -398,7 +398,7 @@ const CheckoutForm = ({ rate }) => {
 		setSubmitting(true)
 
 		const { status, message, data } = await fetcher(
-			`/api/orders/add?cartToken=${cartToken}&userID=${userID}`,
+			`/api/fronted/orders/add?cartToken=${cartToken}&userID=${userID}`,
 			{
 				method: 'POST',
 				body: JSON.stringify(preparedData),
