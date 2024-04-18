@@ -215,8 +215,6 @@ export const loadCart = async (pathname, router) => {
 		`/api/cart?cartToken=${cartToken}&userID=${userID}`
 	)
 
-	console.log(data)
-
 	dispatch(setIsLoading(false))
 
 	if (status === 'success') {

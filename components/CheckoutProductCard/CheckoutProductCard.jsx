@@ -6,9 +6,9 @@ import classes from './CheckoutProductCard.module.scss'
 import { roundMoney } from '@/utils/functions'
 
 const CheckoutProductCard = ({ item, rate }) => {
-	const roundedSellPrice = roundMoney(
-		item?.product?.sellPrice || item.price * rate
-	)
+	const price = item?.product?.sellPrice || item.price
+	const roundedSellPrice = roundMoney(price * rate)
+
 	return (
 		<Grid
 			align='center'

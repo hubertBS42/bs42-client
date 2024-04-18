@@ -64,7 +64,8 @@ const handler = NextAuth({
 					lastName: user?.lastName,
 					email: user?.email,
 					phone: user?.phone1,
-					shippingAddresses: user?.shippingAddresses,
+					shipping: user?.shipping,
+					billing: user?.billing,
 					profileImg: user?.profileImg?.url || null,
 				}
 			return token
@@ -78,7 +79,8 @@ const handler = NextAuth({
 			session.user.lastName = token.lastName
 			session.user.email = token.email
 			session.user.phone = token.phone
-			session.user.shippingAddresses = token.shippingAddresses
+			session.user.shipping = token.shipping
+			session.user.billing = token.billing
 			session.user.profileImg = token.profileImg
 
 			return session
