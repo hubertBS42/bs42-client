@@ -396,7 +396,7 @@ const CheckoutForm = ({ rate }) => {
 		setSubmitting(true)
 
 		const { status, message, data } = await fetcher(
-			`/api/fronted/orders/add?cartToken=${cartToken}&userID=${userID}`,
+			`/api/frontend/orders/add?cartToken=${cartToken}&userID=${userID}`,
 			{
 				method: 'POST',
 				body: JSON.stringify(preparedData),
@@ -415,7 +415,7 @@ const CheckoutForm = ({ rate }) => {
 			notifications.show({
 				title: 'Order Failed!',
 				message:
-					'Your order could not be placed. Try refreshing the page and try again. If the problem persists, you can contact us via the Contact us page.1',
+					'Your order could not be placed. Try refreshing the page and try again. If the problem persists, you can contact us via the Contact us page.',
 				color: 'red',
 				icon: <IconX />,
 			})

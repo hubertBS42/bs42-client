@@ -15,17 +15,12 @@ import {
 } from '@mantine/core'
 import { IconCircleCheck } from '@tabler/icons-react'
 import CheckoutProductCard from '../CheckoutProductCard/CheckoutProductCard'
-import { useEffect } from 'react'
 import Link from 'next/link'
 import classes from './OrderReceived.module.scss'
 
 const OrderReceived = ({ order }) => {
-	// useEffect(() => {
-	// 	document.body.style.backgroundColor = '#F8F9FA'
-	// 	document.body.style.height = 'auto'
-	// })
 	return (
-		<Stack maw={700} mx='auto'>
+		<Stack maw={800} mx='auto'>
 			<Stack align='center' gap={7}>
 				<IconCircleCheck color='green' size={48} stroke={1.3} />
 				<Text
@@ -97,14 +92,14 @@ const OrderReceived = ({ order }) => {
 					<Flex justify='space-between'>
 						<Text fz={14}>Subtotal:</Text>
 						<Text fz={14} fw={500}>
-							GHS {roundMoney(order.totalPrice * order.rate)}
+							GHS {roundMoney(order.subtotal * order.rate)}
 						</Text>
 					</Flex>
 
 					<Flex justify='space-between'>
 						<Text fz={14}>Total:</Text>
 						<Text fz={14} fw={500}>
-							GHS {roundMoney(order.totalPrice * order.rate)}
+							GHS {roundMoney(order.total * order.rate)}
 						</Text>
 					</Flex>
 				</Stack>
@@ -136,19 +131,22 @@ const OrderReceived = ({ order }) => {
 				>
 					Customer Details
 				</Text>
-				<SimpleGrid spacing='md' cols={{ base: 1, sm: 2 }}>
+				<SimpleGrid spacing='md' cols={{ base: 1, sm: 2, md: 3 }}>
 					<Stack>
 						<Stack gap={0}>
 							<Text
 								ff={rajdhani.style.fontFamily}
 								fw={600}
-								fz={14}
+								fz={15}
 								tt='uppercase'
 							>
 								Contact
 							</Text>
-							<Text fz={14}>Email: {order.contact.email}</Text>
-							<Text fz={14}>Phone: {order.contact.phone}</Text>
+							<Text fz={14}>
+								{order.contact.firstName} {order.contact.lastName}
+							</Text>
+							<Text fz={14}>{order.contact.email}</Text>
+							<Text fz={14}>{order.contact.phone}</Text>
 						</Stack>
 					</Stack>
 
@@ -159,16 +157,16 @@ const OrderReceived = ({ order }) => {
 							fz={14}
 							tt='uppercase'
 						>
-							Billing address
+							Billing
 						</Text>
 						<Text fz={14}>
 							{order.billing.firstName} {order.billing.lastName}
 						</Text>
+						<Text fz={14}>{order.billing.email}</Text>
 						<Text fz={14}>{order.billing.address}</Text>
 						<Text fz={14}>
 							{order.billing.town}, {order.billing.region}
 						</Text>
-						<Text fz={14}>{order.billing.digitalAddress}</Text>
 					</Stack>
 
 					{order.shipping.method === 'delivery' && (
@@ -184,11 +182,11 @@ const OrderReceived = ({ order }) => {
 							<Text fz={14}>
 								{order.shipping.firstName} {order.shipping.lastName}
 							</Text>
+							<Text fz={14}>{order.shipping.phone}</Text>
 							<Text fz={14}>{order.shipping.address}</Text>
 							<Text fz={14}>
 								{order.shipping.town}, {order.shipping.region}
 							</Text>
-							<Text fz={14}>{order.shipping.digitalAddress}</Text>
 						</Stack>
 					)}
 				</SimpleGrid>
