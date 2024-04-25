@@ -23,8 +23,8 @@ const nextConfig = {
 			},
 			{
 				source: '/api/frontend/orders/add',
-				// destination: 'https://portal.bs42.net/api/frontend/orders/add',
-				destination: 'http://localhost:3001/api/frontend/orders/add',
+				destination: 'https://portal.bs42.net/api/frontend/orders/add',
+				// destination: 'http://localhost:3001/api/frontend/orders/add',
 			},
 			{
 				source: '/api/user-account/signin',
