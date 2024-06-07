@@ -151,12 +151,12 @@ const ProductDetailsTopSection = ({ product, rate }) => {
 					</Stack>
 					<Group gap='xl' mb='lg'>
 						<Text className={classes.price}>GHS {roundedSellPrice}</Text>
-						<Flex className={classes.salesHistory} align='center'>
+						{/* <Flex className={classes.salesHistory} align='center'>
 							<IconFlame className={classes.icon} />
 							<Text className={classes.text}>
 								5 sold in the last 24 hours.
 							</Text>
-						</Flex>
+						</Flex> */}
 					</Group>
 
 					<Stack className={classes.metadata} mb='lg'>

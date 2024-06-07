@@ -1,0 +1,18 @@
+.tab {
+	background-color: transparent;
+
+	&[data-active='true'] {
+		border-bottom: 2px solid var(--mantine-color-cRed-0);
+	}
+}
+
+.tabLabel {
+	font-family: var(--font-rajdhani);
+	text-transform: uppercase;
+	font-size: 17px;
+	font-weight: 600;
+}
+
+.tabPanel {
+	padding-top: 1em;
+}

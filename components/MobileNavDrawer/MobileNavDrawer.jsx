@@ -8,6 +8,7 @@ import {
 	IconHome,
 	IconPhoneCall,
 	IconSchool,
+	IconBrandGooglePhotos,
 	IconSend,
 } from '@tabler/icons-react'
 import Link from 'next/link'
@@ -51,6 +52,11 @@ const MobileNavDrawer = () => {
 			label: 'Academy',
 			href: '/academy',
 			icon: <IconSchool size='1.1em' stroke={1.5} />,
+		},
+		{
+			label: 'Projects',
+			href: '/projects',
+			icon: <IconBrandGooglePhotos size='1.1em' stroke={1.5} />,
 		},
 		{
 			label: 'Contact Us',

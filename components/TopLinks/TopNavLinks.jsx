@@ -25,6 +25,9 @@ const TopNavLinks = () => {
 			<Link href='/academy' className={classes.link}>
 				Academy
 			</Link>
+			<Link href='/projects' className={classes.link}>
+				Projects
+			</Link>
 			<Link href='/contact-us' className={classes.link}>
 				Contact Us
 			</Link>
