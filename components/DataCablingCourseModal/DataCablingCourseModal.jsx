@@ -169,6 +169,18 @@ const DataCablingCourseModal = () => {
 									and give you access to our reseller program which will enable
 									you purchase any item from us at a reseller price.
 								</Text>
+
+								<Text>Items to be given to participants after course;</Text>
+
+								<List>
+									<List.Item>Crimping tool</List.Item>
+									<List.Item>30 pcs RJ45</List.Item>
+									<List.Item>Analogue CCTV camera</List.Item>
+									<List.Item>BNC connectors</List.Item>
+									<List.Item>Cable tester</List.Item>
+									<List.Item>CCTV video balun</List.Item>
+									<List.Item>Male and female power connector jack</List.Item>
+								</List>
 							</Stack>
 						</TabsPanel>
 
@@ -193,44 +205,26 @@ const DataCablingCourseModal = () => {
 								<TableTbody>
 									<TableTr>
 										<TableTh>Duration</TableTh>
-										<TableTd>6 months</TableTd>
-										<TableTd>6 months</TableTd>
+										<TableTd>3 days</TableTd>
+										<TableTd>2 days</TableTd>
 									</TableTr>
 
 									<TableTr>
 										<TableTh>Training Days</TableTh>
-										<TableTd>4 days per week</TableTd>
-										<TableTd>Saturdays</TableTd>
+										<TableTd>Wednesday, Thursday, Friday</TableTd>
+										<TableTd>Saturday, Sunday</TableTd>
 									</TableTr>
 
 									<TableTr>
 										<TableTh>Minimum Hours per week</TableTh>
-										<TableTd>8 hours</TableTd>
-										<TableTd>8 hours</TableTd>
+										<TableTd>6 hours</TableTd>
+										<TableTd>6 hours</TableTd>
 									</TableTr>
 
 									<TableTr>
 										<TableTh>Pricing</TableTh>
-										<TableTd>
-											<Stack gap={5}>
-												<Flex gap={5}>
-													<Box fw={700}>Basic:</Box> USD 0.00
-												</Flex>
-												<Flex gap={5}>
-													<Box fw={700}>Advanced:</Box> USD 0.00
-												</Flex>
-											</Stack>
-										</TableTd>
-										<TableTd>
-											<Stack gap={5}>
-												<Flex gap={5}>
-													<Box fw={700}>Basic:</Box> USD 0.00
-												</Flex>
-												<Flex gap={5}>
-													<Box fw={700}>Advanced:</Box> USD 0.00
-												</Flex>
-											</Stack>
-										</TableTd>
+										<TableTd>GHS 400.00</TableTd>
+										<TableTd>GHS 400.00</TableTd>
 									</TableTr>
 								</TableTbody>
 							</Table>
