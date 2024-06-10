@@ -1,4 +1,3 @@
-import GalleryShowcase from '@/components/GalleryShowcase/GalleryShowcase'
 import {
 	Container,
 	SimpleGrid,
@@ -7,6 +6,7 @@ import {
 	Title,
 } from '@mantine/core'
 import ProjectCard from '@/components/ProjectCard/ProjectCard'
+import { projects } from '@/utils/data'
 
 export const metadata = {
 	title: 'Our Projects - BS42.NET',
@@ -28,12 +28,10 @@ const page = () => {
 			</Stack>
 
 			<SimpleGrid cols={{ base: 2, sm: 3, md: 3, lg: 4 }} spacing='sm'>
-				<ProjectCard />
-				<ProjectCard />
-				<ProjectCard />
+				{projects.map((project, i) => (
+					<ProjectCard key={i} project={project} />
+				))}
 			</SimpleGrid>
-
-			{/* <GalleryShowcase /> */}
 		</Container>
 	)
 }

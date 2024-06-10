@@ -570,3 +570,35 @@ export const geoData = [
 		],
 	},
 ]
+
+export const projects = [
+	{
+		location: 'Lashibi, Greater Accra',
+		cardImg:
+			'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
+		isCompleted: true,
+		date: '2023-05-23T13:01:28.316+00:00',
+		media: [
+			{
+				type: 'image',
+				url: 'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
+			},
+			{
+				type: 'image',
+				url: 'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
+			},
+			{
+				type: 'image',
+				url: 'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
+			},
+			{
+				type: 'image',
+				url: 'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
+			},
+			{
+				type: 'video',
+				url: 'https://bs42shopstorage.blob.core.windows.net/testvideos/Video.mov',
+			},
+		],
+	},
+]
