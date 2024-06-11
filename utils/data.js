@@ -573,7 +573,8 @@ export const geoData = [
 
 export const projects = [
 	{
-		location: 'Lashibi, Greater Accra',
+		area: 'Lashibi',
+		region: 'Greater Accra',
 		cardImg:
 			'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
 		isCompleted: true,

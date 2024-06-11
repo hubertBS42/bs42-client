@@ -47,7 +47,7 @@ const ProjectCard = ({ project }) => {
 							<Group gap={5} c='white' align='center'>
 								<IconMapPin size={17} />
 								<Text fz={13} fw={200}>
-									{project.location}
+									{project.area}, {project.region}
 								</Text>
 							</Group>
 							<Group gap={5} c='white' align='center'>
