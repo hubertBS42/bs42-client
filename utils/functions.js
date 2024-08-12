@@ -40,6 +40,15 @@ export const getCategories = async () => {
 	return res.json()
 }
 
+export const getProjects = async () => {
+	const res = await fetch(
+		'https://portal.bs42.net/api/frontend/projects',
+		{ next: { revalidate: 3600 } }
+	)
+
+	return res.json()
+}
+
 export const getActiveCurrency = async () => {
 	const res = await fetch(
 		'https://portal.bs42.net/api/frontend/currency/active',

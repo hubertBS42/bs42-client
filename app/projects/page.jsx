@@ -6,13 +6,14 @@ import {
 	Title,
 } from '@mantine/core'
 import ProjectCard from '@/components/ProjectCard/ProjectCard'
-import { projects } from '@/utils/data'
+import { getProjects } from '@/utils/functions'
 
 export const metadata = {
 	title: 'Our Projects - BS42.NET',
 }
 
-const page = () => {
+const page = async () => {
+	const projects = await getProjects()
 	return (
 		<Container py='xl' size='xl'>
 			<Stack ta='center' gap='sm' mb={50}>

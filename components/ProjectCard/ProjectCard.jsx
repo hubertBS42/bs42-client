@@ -9,7 +9,6 @@ import {
 } from '@mantine/core'
 import { IconCalendarEvent, IconMapPin } from '@tabler/icons-react'
 import Image from 'next/image'
-import testImage from '@/public/images/testImage.jpg'
 import { useState } from 'react'
 
 import ProjectGallery from '../ProjectGallery/ProjectGallery'
@@ -26,8 +25,8 @@ const ProjectCard = ({ project }) => {
 				style={{ cursor: 'pointer' }}
 			>
 				<Image
-					src={project.cardImg}
-					alt={project.location}
+					src={project.cardImg.url}
+					alt={project.title}
 					fill
 					style={{ objectFit: 'cover' }}
 				/>
@@ -47,7 +46,7 @@ const ProjectCard = ({ project }) => {
 							<Group gap={5} c='white' align='center'>
 								<IconMapPin size={17} />
 								<Text fz={13} fw={200}>
-									{project.area}, {project.region}
+									{project.town}, {project.region}
 								</Text>
 							</Group>
 							<Group gap={5} c='white' align='center'>

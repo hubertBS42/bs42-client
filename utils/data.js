@@ -573,6 +573,7 @@ export const geoData = [
 
 export const projects = [
 	{
+		title: 'Lorem Ipsum',
 		area: 'Lashibi',
 		region: 'Greater Accra',
 		cardImg:

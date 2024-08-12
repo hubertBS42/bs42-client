@@ -10,23 +10,6 @@ import 'yet-another-react-lightbox/styles.css'
 import 'yet-another-react-lightbox/plugins/thumbnails.css'
 import 'yet-another-react-lightbox/plugins/counter.css'
 
-// [
-//   {
-//     src: 'https://bs42shopstorage.blob.core.windows.net/testimages/toast t.jpg',
-//   },
-//   {
-//     type: 'video',
-//     width: 1280,
-//     height: 720,
-//     sources: [
-//       {
-//         src: 'https://bs42shopstorage.blob.core.windows.net/testvideos/Video.mov',
-//         type: 'video/mp4',
-//       },
-//     ],
-//   },
-// ]
-
 const ProjectGallery = ({ open, setOpen, media }) => {
 	return (
 		<Lightbox
@@ -45,14 +28,14 @@ const ProjectGallery = ({ open, setOpen, media }) => {
 						height: 720,
 						sources: [
 							{
-								src: item.url,
+								src: item.content.url,
 								type: 'video/mp4',
 							},
 						],
 					}
 				}
 				return {
-					src: item.url,
+					src: item.content.url,
 				}
 			})}
 			render={{ slide: NextJsImage, thumbnail: NextJsImage }}
