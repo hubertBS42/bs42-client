@@ -140,7 +140,7 @@ const ProductDetailsTopSection = ({ product, rate }) => {
 				<Grid.Col span={{ base: 12, sm: 6 }}>
 					<Stack mb='lg'>
 						<Title className={classes.brand}>
-							{product.brand.name} &reg;
+							{product?.brand?.name} &reg;
 						</Title>
 						<Title className={classes.title}>{product.title}</Title>
 						<Group className={classes.rating} gap='xl'>
