@@ -23,7 +23,7 @@ const SpecificProductsShowcase = ({ target }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const [{ products }, { currency }, data] = await Promise.all([
-				fetcher('https://portal.bs42.net/api/frontend/products'),
+				fetcher('https://portal.bs42.net/api/frontend/products/all'),
 				fetcher('https://portal.bs42.net/api/frontend/currency/active'),
 				fetcher('https://portal.bs42.net/api/frontend/categories'),
 			])

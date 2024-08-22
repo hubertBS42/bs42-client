@@ -11,7 +11,7 @@ export const metadata = {
 		'We offer sales, configuration and management of networking systems with guaranteed reliable, high-speed transfer rates. All equipments are tested to meet the highest industry standars. We turn traditional appliances into smart ones by setting them up to be controlled with your phone or smart hub. Set up automation within smart home ecosystems to trigger actions based on specific conditions or schedules.',
 }
 
-export default function Home() {
+export default async function Home() {
 	return (
 		<main>
 			<DesktopMainCarousel />
