@@ -96,7 +96,7 @@ const ProductCard = ({ product, border, rate }) => {
 					mb={5}
 					fz={{ base: '11px', xs: '12px' }}
 				>
-					{product?.brand.name}
+					{product?.brand?.name}
 				</Title>
 
 				<Tooltip
