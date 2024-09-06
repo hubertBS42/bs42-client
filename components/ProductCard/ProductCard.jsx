@@ -25,6 +25,15 @@ const ProductCard = ({ product, border, rate }) => {
 		(20 / 100) * product?.sellPrice * rate
 	)
 
+	let inStock = false
+
+	if (
+		product?.inventory?.length > 0 &&
+		product.inventory.some(item => item.count > 0)
+	) {
+		inStock = true
+	}
+
 	const handleAdd = async () => {
 		setLoading(true)
 		await addToCart(product)
@@ -47,7 +56,7 @@ const ProductCard = ({ product, border, rate }) => {
 					/>
 					<Stack
 						align='flex-end'
-						spacing={5}
+						gap={3}
 						className={classes.badgesWrapper}
 					>
 						{getDateDifference(product.createdAt) <= 7 && (
@@ -74,7 +83,7 @@ const ProductCard = ({ product, border, rate }) => {
 							</Badge>
 						)}
 
-						{product.countInStock < 1 && (
+						{!inStock && (
 							<Badge
 								radius='xs'
 								size='sm'
@@ -136,11 +145,11 @@ const ProductCard = ({ product, border, rate }) => {
 					variant='outline'
 					color='gray.5'
 					className={classes.addToCartBtn}
-					disabled={product.countInStock < 1}
+					disabled={!inStock}
 					onClick={handleAdd}
 					loading={loading}
 				>
-					{product.countInStock < 1 ? 'Sold Out' : 'Add to Cart'}
+					{inStock ? 'Add to Cart' : 'Sold Out'}
 				</Button>
 			</Stack>
 		</Card>
