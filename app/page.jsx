@@ -17,9 +17,9 @@ export default async function Home() {
 			<DesktopMainCarousel />
 			<MobileMainCarousel />
 			<FeaturedProductsShowcase />
-			<SpecificProductsShowcase target='Networking' />
-			<SpecificProductsShowcase target='Security' />
-			<SpecificProductsShowcase target='Smart Homes' />
+			<SpecificProductsShowcase target='networking' />
+			<SpecificProductsShowcase target='security' />
+			<SpecificProductsShowcase target='smart-homes' />
 			<YouMightLike />
 			<BlogsSection />
 		</main>

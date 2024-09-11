@@ -37,14 +37,12 @@ const CartDrawer = () => {
 	let currentRate = 0
 
 	const { data, error, isLoading } = useSWR(
-		'https://portal.bs42.net/api/frontend/currency/active',
+		'https://portal.bs42.net/api/currencies/current-rate',
 		fetcher
 	)
 
 	if (!isLoading && !error) {
-		currentRate = data.currency.isCustomRate
-			? data.currency.customRate
-			: data.currency.history[0].rate
+		currentRate = data.rate
 	}
 
 	const roundedPriceTotal = roundMoney(cartPriceTotal * currentRate)

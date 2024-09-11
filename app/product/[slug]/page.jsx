@@ -14,16 +14,12 @@ export async function generateMetadata({ params: { slug } }) {
 }
 
 const ProductDetails = async ({ params: { slug } }) => {
-	const [{ product }, { currency }] = await Promise.all([
+	const [{ product }, { rate }] = await Promise.all([
 		fetcher(`https://portal.bs42.net/api/products/${slug}`, {
 			cache: 'no-store',
 		}),
-		fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+		fetcher('https://portal.bs42.net/api/currencies/current-rate'),
 	])
-
-	const rate = currency.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
 
 	return (
 		<>

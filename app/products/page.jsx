@@ -3,9 +3,9 @@ import { Box, Container, Flex, Stack } from '@mantine/core'
 import classes from './page.module.scss'
 import CategoriesCard from '@/components/CategoriesCard/CategoriesCard'
 import {
-	getActiveCurrency,
 	getBrands,
 	getCategories,
+	getCurrentRate,
 } from '@/utils/functions'
 import PriceCard from '@/components/PriceCard/PriceCard'
 import BrandsCard from '@/components/BrandsCard/BrandsCard'
@@ -37,15 +37,13 @@ export async function generateMetadata({ searchParams }) {
 const ProductsPage = async () => {
 	const brandsData = getBrands()
 	const categoriesData = getCategories()
-	const currencyData = getActiveCurrency()
+	const rateData = getCurrentRate()
 
-	const [{ brands }, { categories }, { currency }] = await Promise.all(
-		[brandsData, categoriesData, currencyData]
-	)
-
-	const rate = currency.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
+	const [{ brands }, { categories }, { rate }] = await Promise.all([
+		brandsData,
+		categoriesData,
+		rateData,
+	])
 
 	const prices = [
 		{ label: 'Under GHS1000', min: null, max: 1000 },

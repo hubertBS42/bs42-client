@@ -13,20 +13,16 @@ const YouMightLike = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const [{ products }, { currency }] = await Promise.all([
+			const [{ products }, { rate }] = await Promise.all([
 				fetcher(
 					'https://portal.bs42.net/api/frontend/products?sortBy=oldest&limit=10'
 				),
-				fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+				fetcher('https://portal.bs42.net/api/currencies/current-rate'),
 			])
 
 			setProducts(products)
 
-			if (currency.isCustomRate) {
-				setRate(currency.customRate)
-			} else {
-				setRate(currency.history[0].rate)
-			}
+			setRate(rate)
 		}
 
 		fetchData()

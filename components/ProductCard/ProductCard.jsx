@@ -25,14 +25,7 @@ const ProductCard = ({ product, border, rate }) => {
 		(20 / 100) * product?.sellPrice * rate
 	)
 
-	let inStock = false
-
-	if (
-		product?.inventory?.length > 0 &&
-		product.inventory.some(item => item.count > 0)
-	) {
-		inStock = true
-	}
+	const inStock = product.count
 
 	const handleAdd = async () => {
 		setLoading(true)

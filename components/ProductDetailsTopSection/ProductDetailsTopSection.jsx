@@ -31,19 +31,11 @@ const ProductDetailsTopSection = ({ product, rate }) => {
 	const [embla, setEmbla] = useState(null)
 	const [loading, setLoading] = useState(false)
 	const [quantity, setQuantity] = useState(1)
-	// const currency = useSelector(getCurrency)
 	const curQuantity = useSelector(
 		productQtyInCartSelector(product._id)
 	)
 
-	let inStock = false
-
-	if (
-		product?.inventory?.length > 0 &&
-		product.inventory.some(item => item.count > 0)
-	) {
-		inStock = true
-	}
+	let inStock = product.count
 
 	useEffect(() => {
 		if (curQuantity) {
@@ -190,7 +182,7 @@ const ProductDetailsTopSection = ({ product, rate }) => {
 					<Stack>
 						<Group className={classes.metadata}>
 							<Text className={classes.metadataTitle}>Current Stock:</Text>
-							{/* <Text className={classes.value}>{product.inventor}</Text> */}
+							<Text className={classes.value}>{product.count}</Text>
 						</Group>
 
 						<Flex align='flex-end' gap={20}>
@@ -209,7 +201,7 @@ const ProductDetailsTopSection = ({ product, rate }) => {
 								onChange={handleChange}
 								disabled={loading || !inStock}
 								min={1}
-								max={product.countInStock}
+								max={product.count}
 							/>
 
 							{inStock ? (

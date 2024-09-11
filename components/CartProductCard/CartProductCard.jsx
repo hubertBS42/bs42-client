@@ -26,6 +26,8 @@ const CartProductCard = ({ item, rate }) => {
 	const pathname = usePathname()
 	const router = useRouter()
 
+	console.log(item)
+
 	const handleChange = useDebouncedCallback(async quantity => {
 		setLoading(true)
 		await modifyCart(item.product, quantity, pathname, router)
@@ -79,7 +81,7 @@ const CartProductCard = ({ item, rate }) => {
 						onChange={handleChange}
 						disabled={loading}
 						min={0}
-						max={item.product.countInStock}
+						max={item.product.count}
 					/>
 					<Text className={classes.price}> @ GHS {roundedSellPrice}</Text>
 				</Flex>

@@ -49,9 +49,9 @@ export const getProjects = async () => {
 	return res.json()
 }
 
-export const getActiveCurrency = async () => {
+export const getCurrentRate = async () => {
 	const res = await fetch(
-		'https://portal.bs42.net/api/frontend/currency/active',
+		'https://portal.bs42.net/api/currencies/current-rate',
 		{ next: { revalidate: 3600 } }
 	)
 

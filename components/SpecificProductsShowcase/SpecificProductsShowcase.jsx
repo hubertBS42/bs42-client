@@ -22,9 +22,11 @@ const SpecificProductsShowcase = ({ target }) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const [{ products }, { currency }, data] = await Promise.all([
-				fetcher('https://portal.bs42.net/api/frontend/products/all'),
-				fetcher('https://portal.bs42.net/api/frontend/currency/active'),
+			const [{ products }, { rate }, data] = await Promise.all([
+				fetcher(
+					`https://portal.bs42.net/api/frontend/products?category=${target}&limit=10&sortBy=newest`
+				),
+				fetcher('https://portal.bs42.net/api/currencies/current-rate'),
 				fetcher('https://portal.bs42.net/api/frontend/categories'),
 			])
 			const groupedCategories = groupCategories(data.categories)
@@ -32,27 +34,25 @@ const SpecificProductsShowcase = ({ target }) => {
 
 			setCategories(groupedCategories)
 
-			if (currency.isCustomRate) {
-				setRate(currency.customRate)
-			} else {
-				setRate(currency.history[0].rate)
-			}
+			setRate(rate)
 		}
 
 		fetchData()
 	}, [])
 
 	const category = categories.find(
-		category => category.name === target
+		category => category.slug === target
 	)
 
-	const categoryIds = extractCategoryIds(category)
+	// const categoryIds = extractCategoryIds(category)
 
-	const filteredProducts = products
-		.filter(product => categoryIds.includes(product.category._id))
-		.slice(0, 10)
+	// const filteredProducts = products
+	// 	.filter(product => categoryIds.includes(product.category._id))
+	// 	.slice(0, 10)
 
-	const slides = filteredProducts.map(product => (
+	// console.log(filteredProducts)
+
+	const slides = products.map(product => (
 		<Carousel.Slide key={product._id}>
 			<ProductCard product={product} rate={rate} />
 		</Carousel.Slide>
