@@ -27,4 +27,10 @@
 		font-size: 11px;
 		color: var(--mantine-color-gray-8);
 	}
+
+	.badgeRoot {
+		font-family: var(--font-arimo);
+		text-transform: capitalize;
+		font-weight: 100;
+	}
 }

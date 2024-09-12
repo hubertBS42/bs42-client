@@ -26,8 +26,6 @@ const CartProductCard = ({ item, rate }) => {
 	const pathname = usePathname()
 	const router = useRouter()
 
-	console.log(item)
-
 	const handleChange = useDebouncedCallback(async quantity => {
 		setLoading(true)
 		await modifyCart(item.product, quantity, pathname, router)

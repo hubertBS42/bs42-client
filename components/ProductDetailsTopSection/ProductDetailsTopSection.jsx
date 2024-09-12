@@ -163,7 +163,9 @@ const ProductDetailsTopSection = ({ product, rate }) => {
 					<Stack className={classes.metadata} mb='lg'>
 						<Group>
 							<Text className={classes.metadataTitle}>SKU:</Text>
-							<Text className={classes.value}>N/A</Text>
+							<Text className={classes.value}>
+								{product.sku === '' ? 'N/A' : product.sku}
+							</Text>
 						</Group>
 
 						<Group>
