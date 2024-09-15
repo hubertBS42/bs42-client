@@ -95,7 +95,7 @@ const CartTable = ({ rate }) => {
 					onChange={quantity => handleChange(item.product, quantity)}
 					disabled={loading}
 					min={0}
-					max={item.product.countInStock}
+					max={item.product.count}
 				/>
 			</Table.Td>
 			<Table.Td>

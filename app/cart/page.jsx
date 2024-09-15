@@ -11,13 +11,9 @@ export const metadata = {
 }
 
 const page = async () => {
-	const { currency } = await fetcher(
-		'https://portal.bs42.net/api/frontend/currency/active'
+	const { rate } = await fetcher(
+		'https://portal.bs42.net/api/currencies/current-rate'
 	)
-
-	const rate = currency.isCustomRate
-		? currency.customRate
-		: currency.history[0].rate
 
 	return (
 		<Container py='xl' size='xl'>
