@@ -1,16 +1,17 @@
 import ProductDetailsBottomSection from '@/components/ProductDetailsBottomSection/ProductDetailsBottomSection'
 import ProductDetailsTopSection from '@/components/ProductDetailsTopSection/ProductDetailsTopSection'
 import { fetcher } from '@/utils/functions'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata({ params: { slug } }) {
 	const { product } = await fetcher(
 		`https://portal.bs42.net/api/products/${slug}`,
 		{ cache: 'no-store' }
 	)
-
-	return {
-		title: `${product.title} - BS42.NET`,
-	}
+	if (product)
+		return {
+			title: `${product.title} - BS42.NET`,
+		}
 }
 
 const ProductDetails = async ({ params: { slug } }) => {
@@ -20,6 +21,8 @@ const ProductDetails = async ({ params: { slug } }) => {
 		}),
 		fetcher('https://portal.bs42.net/api/currencies/current-rate'),
 	])
+
+	if (!product) return notFound()
 
 	return (
 		<>
