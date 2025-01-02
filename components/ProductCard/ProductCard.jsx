@@ -1,12 +1,17 @@
 'use client'
 
-import { addToCart } from '@/redux/features/cart/cartActions'
+import {
+	addToCart,
+	modifyCart,
+} from '@/redux/features/cart/cartActions'
 import { getDateDifference, roundMoney } from '@/utils/functions'
 import {
 	Badge,
 	Button,
 	Card,
+	Flex,
 	Group,
+	NumberInput,
 	Rating,
 	Stack,
 	Text,
@@ -16,20 +21,40 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import classes from './ProductCard.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { productQtyInCartSelector } from '@/redux/features/cart/cartSlice'
 
 const ProductCard = ({ product, border, rate }) => {
 	const [loading, setLoading] = useState(false)
+	const [quantity, setQuantity] = useState(1)
 	const roundedSellPrice = roundMoney(product?.sellPrice * rate)
 	const roundedDiscountPrice = roundMoney(
 		(20 / 100) * product?.sellPrice * rate
 	)
+	const curQuantity = useSelector(
+		productQtyInCartSelector(product._id)
+	)
 
 	const inStock = product.count
 
+	useEffect(() => {
+		if (curQuantity) {
+			setQuantity(curQuantity)
+		}
+	}, [curQuantity])
+
+	const handleChange = value => setQuantity(value)
+
+	// const handleAdd = async () => {
+	// 		setLoading(true)
+	// 		await modifyCart(product, quantity)
+	// 		setLoading(false)
+	// 	}
+
 	const handleAdd = async () => {
 		setLoading(true)
-		await addToCart(product)
+		await modifyCart(product, quantity)
 		setLoading(false)
 	}
 
@@ -133,17 +158,39 @@ const ProductCard = ({ product, border, rate }) => {
 						GHS {roundedSellPrice}
 					</Text>
 				)}
-				<Button
-					size='md'
-					variant='outline'
-					color='gray.5'
-					className={classes.addToCartBtn}
-					disabled={!inStock}
-					onClick={handleAdd}
-					loading={loading}
-				>
-					{inStock ? 'Add to Cart' : 'Sold Out'}
-				</Button>
+				<Flex gap='xs' justify='center' direction='column'>
+					<NumberInput
+						// classNames={{
+						// 	label: classes.numberInputLabel,
+						// 	input: classes.numberInputInput,
+						// 	root: classes.numberInputRoot,
+						// }}
+						allowNegative={false}
+						clampBehavior='strict'
+						allowDecimal={false}
+						size='md'
+						value={quantity}
+						onChange={handleChange}
+						disabled={loading || !inStock}
+						min={1}
+						max={product.count}
+					/>
+					<Button
+						size='md'
+						variant='outline'
+						color='gray.5'
+						className={classes.addToCartBtn}
+						disabled={!inStock}
+						onClick={handleAdd}
+						loading={loading}
+					>
+						{inStock
+							? curQuantity
+								? 'Update cart'
+								: 'Add to Cart'
+							: 'Sold Out'}
+					</Button>
+				</Flex>
 			</Stack>
 		</Card>
 	)

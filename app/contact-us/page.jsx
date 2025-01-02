@@ -17,6 +17,9 @@ import {
 } from '@tabler/icons-react'
 import classes from './page.module.scss'
 import Link from 'next/link'
+import ukFlag from '@/public/images/united-kingdom.png'
+import ghanaFlag from '@/public/images/ghana.png'
+import Image from 'next/image'
 
 export const metadata = {
 	title: 'Contact Us - BS42.NET',
@@ -79,11 +82,29 @@ const page = () => {
 								<IconPhoneCall stroke={2} size={20} />
 								<Stack gap={5}>
 									<Title order={4} className={classes.subtitle}>
-										Phone Number
+										Phone Numbers
 									</Title>
-									<Link href='tel:+233534930002'>
-										<Text c='gray' fz={13} maw={360} mb='md'>
+									<Link href='tel:+233534930002' style={{ display: 'flex' }}>
+										<Text
+											c='gray'
+											fz={13}
+											maw={360}
+											style={{ display: 'flex', alignItems: 'center', gap: 5 }}
+										>
+											<Image alt='Ghanaian flag' src={ghanaFlag} width={20} />
 											+233-53-493-0002
+										</Text>
+									</Link>
+									<Link href='tel:+442079890708' style={{ display: 'flex' }}>
+										<Text
+											c='gray'
+											fz={13}
+											maw={360}
+											mb='md'
+											style={{ display: 'flex', alignItems: 'center', gap: 5 }}
+										>
+											<Image alt='UK flag' src={ukFlag} width={20} />
+											+44-207-989-0708
 										</Text>
 									</Link>
 								</Stack>
